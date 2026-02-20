@@ -26,7 +26,7 @@
 - Safe by default: `git status/diff/log`. Push only on user request and per repo/skill rules.
 - If no explicit request, write the commit message yourself.
 - If no explicit user request, commit only changes you made in this session.
-- Commits: Conventional Commits (`feat|fix|refactor|build|ci|chore|docs|style|perf|test`). Keep commits atomic.
+- Commits: Conventional Commits (`feat|fix|refactor|build|ci|chore|docs|style|perf|test`).
 - `git checkout` ok for PR review / explicit request.
 - Branch changes require user consent.
 - Destructive ops forbidden unless explicit (`reset --hard`, `clean`, `restore`, `rm`, …).
