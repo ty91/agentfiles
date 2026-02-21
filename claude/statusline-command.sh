@@ -40,14 +40,12 @@ if git -C "$cwd" rev-parse --git-dir > /dev/null 2>&1; then
     fi
 fi
 
-# Get current time
-current_time=$(date +"%H:%M")
-
-# Context color based on usage
+# Context: show remaining percentage
 used_int=${used_pct%.*}
-if [ "$used_int" -ge 80 ] 2>/dev/null; then
+remaining=$((100 - used_int))
+if [ "$remaining" -le 20 ] 2>/dev/null; then
     ctx_color=$RED
-elif [ "$used_int" -ge 60 ] 2>/dev/null; then
+elif [ "$remaining" -le 50 ] 2>/dev/null; then
     ctx_color=$YELLOW
 else
     ctx_color=$GREEN
@@ -60,9 +58,8 @@ if [ -n "$git_info" ]; then
     output="${output} ${git_info}"
 fi
 
-output="${output} ctx:${ctx_color}${used_pct}%${RESET}"
+output="${output} ctx:${ctx_color}${remaining}% left${RESET}"
 output="${output} ${MAGENTA}${model}${RESET}"
-output="${output} ${current_time}"
 
 if [ "$todo_count" -gt 0 ] 2>/dev/null; then
     output="${output} ${CYAN}todo:${todo_count}${RESET}"
