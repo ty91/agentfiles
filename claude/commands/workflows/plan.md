@@ -22,31 +22,6 @@ Do not proceed until you have a clear feature description from the user.
 
 ### 0. Idea Refinement
 
-**Check for brainstorm output first:**
-
-Before asking questions, look for recent brainstorm documents in `docs/brainstorms/` that match this feature:
-
-```bash
-ls -la docs/brainstorms/*.md 2>/dev/null | head -10
-```
-
-**Relevance criteria:** A brainstorm is relevant if:
-- The topic (from filename or YAML frontmatter) semantically matches the feature description
-- Created within the last 14 days
-- If multiple candidates match, use the most recent one
-
-**If a relevant brainstorm exists:**
-1. Read the brainstorm document
-2. Announce: "Found brainstorm from [date]: [topic]. Using as context for planning."
-3. Extract key decisions, chosen approach, and open questions
-4. **Skip the idea refinement questions below** - the brainstorm already answered WHAT to build
-5. Use brainstorm decisions as input to the research phase
-
-**If multiple brainstorms could match:**
-Use **AskUserQuestion tool** to ask which brainstorm to use, or whether to proceed without one.
-
-**If no brainstorm found (or not relevant), run idea refinement:**
-
 Refine the idea through collaborative dialogue using the **AskUserQuestion tool**:
 
 - Ask questions one at a time to understand the idea fully
@@ -126,11 +101,12 @@ Think like a product manager - what would make this issue clear and actionable? 
 
 **Title & Categorization:**
 
-- [ ] Draft clear, searchable issue title using conventional format (e.g., `feat: Add user authentication`, `fix: Cart total calculation`)
+- [ ] Draft clear, searchable issue title (e.g., `Add user authentication`, `Fix cart total calculation`)
 - [ ] Determine issue type: enhancement, bug, refactor
-- [ ] Convert title to filename: add today's date prefix, strip prefix colon, kebab-case, add `-plan` suffix
-  - Example: `feat: Add User Authentication` → `2026-01-21-feat-add-user-authentication-plan.md`
-  - Keep it descriptive (3-5 words after prefix) so plans are findable by context
+- [ ] Convert title to filename: 5-digit sequential number prefix, kebab-case
+  - Find the highest existing number in `docs/plans/` and increment by 1 (start at `00001` if empty)
+  - Example: `Add User Authentication` → `00012-add-user-authentication.md`
+  - Keep it descriptive (3-5 words) so plans are findable by context
 
 **Stakeholder Analysis:**
 
@@ -471,26 +447,25 @@ end
 mkdir -p docs/plans/
 ```
 
-Use the Write tool to save the complete plan to `docs/plans/YYYY-MM-DD-<type>-<descriptive-name>-plan.md`. This step is mandatory and cannot be skipped.
+Use the Write tool to save the complete plan to `docs/plans/NNNNN-<descriptive-name>.md`. This step is mandatory and cannot be skipped.
 
 Confirm: "Plan written to docs/plans/[filename]"
 
 
 ## Output Format
 
-**Filename:** Use the date and kebab-case filename from Step 2 Title & Categorization.
+**Filename:** Use the sequential number and kebab-case filename from Step 2 Title & Categorization.
 
 ```
-docs/plans/YYYY-MM-DD-<type>-<descriptive-name>-plan.md
+docs/plans/NNNNN-<descriptive-name>.md
 ```
 
 Examples:
-- ✅ `docs/plans/2026-01-15-feat-user-authentication-flow-plan.md`
-- ✅ `docs/plans/2026-02-03-fix-checkout-race-condition-plan.md`
-- ✅ `docs/plans/2026-03-10-refactor-api-client-extraction-plan.md`
-- ❌ `docs/plans/2026-01-15-feat-thing-plan.md` (not descriptive - what "thing"?)
-- ❌ `docs/plans/2026-01-15-feat-new-feature-plan.md` (too vague - what feature?)
-- ❌ `docs/plans/2026-01-15-feat: user auth-plan.md` (invalid characters - colon and space)
-- ❌ `docs/plans/feat-user-auth-plan.md` (missing date prefix)
+- ✅ `docs/plans/00012-add-user-authentication.md`
+- ✅ `docs/plans/00013-fix-checkout-race-condition.md`
+- ✅ `docs/plans/00014-refactor-api-client-extraction.md`
+- ❌ `docs/plans/00012-thing.md` (not descriptive - what "thing"?)
+- ❌ `docs/plans/00012-new-feature.md` (too vague - what feature?)
+- ❌ `docs/plans/add-user-auth.md` (missing number prefix)
 
 NEVER CODE! Just research and write the plan.
