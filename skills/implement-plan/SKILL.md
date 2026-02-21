@@ -18,12 +18,14 @@ This command takes a work document (plan, specification, or todo file) and execu
 **Argument:** `#$ARGUMENTS`
 
 1. **If argument is provided:**
-   - If it looks like a number (e.g. `1`, `12`, `00001`), zero-pad it to 5 digits and find the matching file in `docs/plans/` whose filename starts with that number prefix (e.g. `1` → `00001-*.md`). Use the Glob tool to search for `docs/plans/<padded>-*.md`.
+   - If it looks like a date (e.g. `2026-02-21`), find matching files in `docs/plans/` using Glob: `docs/plans/<date>-*.md`.
+   - If it looks like a keyword (e.g. `authentication`, `checkout`), find matching files using Glob: `docs/plans/*-*<keyword>*.md`.
    - If it looks like a file path, use it directly.
-   - If no matching file is found, tell the user and ask for a valid plan number or path.
+   - If multiple files match, list them and ask the user to choose one.
+   - If no matching file is found, tell the user and ask for a valid date, keyword, or path.
 
 2. **If no argument is provided:**
-   - Ask the user: "Which plan should I execute? Please provide a plan number (e.g. `1`, `00012`) or a file path."
+   - Ask the user: "Which plan should I execute? Please provide a date (e.g. `2026-02-21`), a keyword (e.g. `authentication`), or a file path."
    - Do not proceed until a valid plan file is identified.
 
 ## Execution Workflow
