@@ -136,9 +136,15 @@ date: YYYY-MM-DD
 
 [Describe the full integration check]
 
-**Verification:**
+**Deliverables:**
 
-- [ ] [Tests / typecheck / lint / etc.]
+- [ ] [Concrete output — endpoint, component, script, etc.]
+
+**Acceptance Criteria:**
+
+- [ ] [User-facing behavior — "when X, then Y"]
+- [ ] [Non-functional requirements — performance, security, etc.]
+- [ ] All tests pass, typecheck, lint
 
 ## Context
 
@@ -176,7 +182,7 @@ date: YYYY-MM-DD
 Fill in the template sections with research findings:
 
 - Use code examples with syntax highlighting and `file:line` references
-- All verification checkboxes must be unchecked (`- [ ]`) — they are checked off during implementation
+- All checkboxes (Verification, Deliverables, Acceptance Criteria) must be unchecked (`- [ ]`) — they are checked off during implementation
 - Populate the Files to Change table with every file that will be created or modified
 - Include Key References from the consolidated research (Step 1.6)
 
