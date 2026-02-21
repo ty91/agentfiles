@@ -51,11 +51,13 @@ Run these agents **in parallel** to gather local context:
 - Task conventions-researcher(feature_description)
 - Task code-flow-researcher(feature_description)
 - Task git-history-analyzer(feature_description)
+- (Optional) Task general-purpose(model: sonnet) — for context not covered by the agents above (e.g., build/lint status, dependency analysis, external docs, API specs). Only spawn when the feature description implies needs beyond code conventions, flow, and history.
 
 **What to look for:**
 - **Conventions research:** existing patterns, CLAUDE.md guidance, coding standards, project rules
 - **Code flow research:** code structure, module boundaries, execution flow, data flow relevant to the feature
 - **Git history research:** recent changes in the affected area, reverted approaches, rationale behind current design decisions, change frequency and stability
+- **General-purpose research (if spawned):** build/lint health, dependency compatibility, external API documentation, or other contextual factors specific to the feature
 
 These findings inform the next step.
 
