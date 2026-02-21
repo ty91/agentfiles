@@ -3,7 +3,7 @@ name: conventions-researcher
 description: "Discovers project rules, coding standards, and established patterns. Use when you need to understand how code should be written in a project — conventions, style, templates, and existing patterns to follow."
 tools: Read, Glob, Grep, Bash
 disallowedTools: Edit, Write
-model: inherit
+model: sonnet
 ---
 
 <examples>

@@ -3,7 +3,7 @@ name: best-practices-researcher
 description: "Researches and synthesizes external best practices, documentation, and examples for any technology or framework. Use when you need industry standards, community conventions, or implementation guidance."
 tools: Read, Glob, Grep, Bash, WebSearch, WebFetch
 disallowedTools: Edit, Write
-model: inherit
+model: sonnet
 ---
 
 <examples>
