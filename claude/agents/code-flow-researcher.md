@@ -3,7 +3,7 @@ name: code-flow-researcher
 description: "Analyzes code structure and traces how specific code works. Use when you need to understand project architecture, module boundaries, execution flow, or data flow before planning or implementation."
 tools: Read, Glob, Grep, Bash
 disallowedTools: Edit, Write
-model: inherit
+model: sonnet
 ---
 
 <examples>
