@@ -137,7 +137,77 @@ This command takes a work document (plan, specification, or todo file) and execu
 
    Stage only relevant files (not `git add .`) and commit with Conventional Commits format.
 
-2. **Update Plan Status**
+### Phase 5: Code Review Loop
+
+Run 2 rounds of automated code review to catch issues before completion. Each round invokes the `/code-review` skill which spawns 6 specialized review agents in parallel.
+
+1. **Round 1: Initial Review**
+
+   Invoke `/code-review` to run the full 6-agent parallel review against `main`. Wait for the synthesized P0/P1/P2 report.
+
+   Update the Progress Log:
+   ```
+   - YYYY-MM-DD: Code review round 1 — P0: N, P1: N, P2: N — Verdict: [verdict]
+   ```
+
+2. **Triage Round 1 Findings**
+
+   Process the merged review report by category:
+
+   | Category | Action |
+   |----------|--------|
+   | **P0 (Must Fix)** | Fix immediately. Commit each fix individually. |
+   | **P1 (Should Fix)** — actionable and straightforward | Fix and commit. |
+   | **P1 (Should Fix)** — deferrable (non-merge-blocker) | Record in `docs/tech-debt-tracker.md`. |
+   | **P2 (Consider)** | Record in `docs/tech-debt-tracker.md` if worth tracking; otherwise skip. |
+
+   **Tech Debt Tracker format** — create `docs/tech-debt-tracker.md` if it does not exist:
+
+   ```markdown
+   # Tech Debt Tracker
+
+   | Date | File | Severity | Finding | Source | Reason Deferred |
+   |------|------|----------|---------|--------|-----------------|
+   | YYYY-MM-DD | `path/to/file:line` | P1 | Description | [Reviewer tag] | Reason |
+   ```
+
+   Append new rows to the bottom of the table. Do not remove existing entries.
+
+   After fixing, update the Progress Log:
+   ```
+   - YYYY-MM-DD: Round 1 fixes applied — N issues fixed, N deferred to tech-debt-tracker
+   ```
+
+3. **Round 2: Verification Review**
+
+   Invoke `/code-review` again. This round catches regressions from Round 1 fixes and issues missed initially.
+
+   Update the Progress Log:
+   ```
+   - YYYY-MM-DD: Code review round 2 — P0: N, P1: N, P2: N — Verdict: [verdict]
+   ```
+
+   If Round 2 finds new P0 issues, fix them immediately and commit. Record any new deferrable P1/P2 in `docs/tech-debt-tracker.md`.
+
+4. **Decision Gate**
+
+   - **0 P0 findings** → Proceed to Phase 6.
+   - **P0 findings remain after fixes** → Stop. Report remaining blockers to the user. Do **not** proceed to Phase 6.
+
+   **P1 findings do not block the gate.** Only P0 (Must Fix) findings are merge blockers.
+
+   Update the Progress Log:
+   ```
+   - YYYY-MM-DD: Review gate — PASSED (0 P0 remaining)
+   ```
+   or:
+   ```
+   - YYYY-MM-DD: Review gate — BLOCKED (N P0 remaining) — reported to user
+   ```
+
+### Phase 6: Completion
+
+1. **Update Plan Status**
 
    If the input document has YAML frontmatter with a `status` field, update it to `completed`:
    ```
@@ -149,9 +219,10 @@ This command takes a work document (plan, specification, or todo file) and execu
    - YYYY-MM-DD: Implementation completed
    ```
 
-3. **Notify User**
-   - Summarize what was completed
-   - Note any follow-up work needed
+2. **Summarize to User**
+   - List what was completed (steps, features, key commits)
+   - Note any items recorded in `docs/tech-debt-tracker.md` as follow-up work
+   - Note any other follow-up work identified during implementation
    - Do **not** push or create a PR automatically — wait for the user to request it
 
 ---
@@ -198,6 +269,8 @@ Before wrapping up, verify:
 - [ ] Linting passes
 - [ ] Code follows existing patterns
 - [ ] Commit messages follow conventional format
+- [ ] Code review loop completed (2 rounds, 0 P0 remaining)
+- [ ] Tech debt tracker updated (if any findings were deferred)
 - [ ] Plan status updated and Progress Log entries added
 
 ## Common Pitfalls to Avoid
@@ -208,3 +281,4 @@ Before wrapping up, verify:
 - **Forgetting to check off plan items** - Track progress or lose track of what's done
 - **80% done syndrome** - Finish the feature, don't move on early
 - **Over-reviewing simple changes** - Save reviewer agents for complex work
+- **Infinite review loops** - The review loop is strictly 2 rounds. If P0 blockers remain after Round 2, report to the user instead of running more rounds
