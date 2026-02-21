@@ -1,0 +1,15 @@
+{
+  "targets": {
+    "claude": "~/.claude/skills",
+    "codex": "~/.codex/skills"
+  },
+  "skills": {
+    "brainstorming":       ["claude"],
+    "code-review":         ["codex"],
+    "document-review":     ["claude"],
+    "jira":                ["claude", "codex"],
+    "karpathy-guidelines": ["claude", "codex"],
+    "pr":                  ["claude"],
+    "readability-review":  ["claude"]
+  }
+}
