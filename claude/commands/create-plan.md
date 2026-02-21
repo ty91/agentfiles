@@ -53,6 +53,10 @@ Run these agents **in parallel** to gather local context:
 - Task git-history-analyzer(feature_description)
 - (Optional) Task general-purpose(model: sonnet) — for context not covered by the agents above (e.g., build/lint status, dependency analysis, external docs, API specs). Only spawn when the feature description implies needs beyond code conventions, flow, and history.
 
+**Multiple instances:** When a feature spans distinct areas (e.g., auth + payments, frontend + backend API), spawn separate instances of the same agent type with focused prompts per area. Each instance should target one specific area so results stay focused and actionable.
+
+- Example: a feature touching both auth and billing modules → spawn `code-flow-researcher(auth flow)` + `code-flow-researcher(billing flow)` separately
+
 **What to look for:**
 - **Conventions research:** existing patterns, CLAUDE.md guidance, coding standards, project rules
 - **Code flow research:** code structure, module boundaries, execution flow, data flow relevant to the feature
