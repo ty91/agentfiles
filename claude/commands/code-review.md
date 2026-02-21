@@ -5,7 +5,7 @@ description: Review code changes between current branch and main
 
 # Review Code Changes
 
-You review all code changes between the current branch and main using the `code-reviewer` subagent.
+Review all code changes between the current branch and main using 4 specialized review agents in parallel, then synthesize findings into a unified P0/P1/P2 report.
 
 ## Context
 
@@ -17,9 +17,9 @@ You review all code changes between the current branch and main using the `code-
 
 If on main/master branch, respond with:
 ```
-You are on the main branch. The /review command reviews changes between your feature branch and main.
+You are on the main branch. The /code-review command reviews changes between your feature branch and main.
 
-Please checkout a feature branch first, then run /review again.
+Please checkout a feature branch first, then run /code-review again.
 ```
 Then stop - do not proceed with the review.
 
@@ -33,13 +33,13 @@ If on a feature branch, gather the following context:
 
 ## Review Process
 
-### Step 1: Spawn code-reviewer Agent
+### Step 1: Spawn 4 Review Agents in Parallel
 
-Use the Task tool to spawn a `code-reviewer` agent with the following context:
+Use the Task tool to spawn all 4 agents **in a single message** so they run concurrently. Pass each agent the same git context but with its own review focus.
+
+**Shared context for all agents:**
 
 ```
-Review Mode: Branch diff review (no plan alignment required)
-
 Branch: [current branch name]
 Base: main
 
@@ -52,42 +52,77 @@ Files changed:
 Instructions:
 1. Run `git diff main...HEAD` (or master...HEAD) to get the full diff
 2. If there are uncommitted changes, also run `git diff HEAD`
-3. Read modified files as needed for context
-4. Focus on: code quality, security vulnerabilities, adherence to project patterns
-5. Do NOT evaluate against any plan - this is a standalone branch review
-6. Produce a code review report using your standard format (Critical Issues, Warnings, Suggestions)
+3. Read modified files as needed for full context
+4. Do NOT evaluate against any plan - this is a standalone branch review
+5. Produce your standard review report with P0/P1/P2 findings
 ```
 
-### Step 2: Report Results
+**Agent-specific prompts:**
 
-After the code-reviewer agent completes:
+| # | subagent_type | Review Focus |
+|---|---------------|--------------|
+| 1 | code-reviewer | Code quality, security vulnerabilities, correctness, error handling |
+| 2 | readability-reviewer | Cognitive load, readability (C1-C6 principles) |
+| 3 | code-simplicity-reviewer | YAGNI violations, unnecessary complexity, redundancy |
+| 4 | architecture-strategist | Architectural patterns, SOLID principles, dependency structure |
 
-1. Display the full code review report to the user
-2. Summarize key findings:
-   - Number of critical issues found
-   - Number of warnings
-   - Number of suggestions
+### Step 2: Synthesize Results
+
+After all 4 agents complete, synthesize their findings into a single unified report:
+
+1. **Collect** all findings from the 4 reports
+2. **Classify** each finding into P0, P1, or P2
+3. **Deduplicate** — if multiple reviewers flagged the same issue, merge into one finding and note all sources
+4. **Tag** each finding with its reviewer source:
+   - `[Quality]` — from code-reviewer
+   - `[Readability]` — from readability-reviewer
+   - `[Simplicity]` — from code-simplicity-reviewer
+   - `[Architecture]` — from architecture-strategist
+5. **Determine verdict**:
+   - **PASS**: 0 P0, few or no P1
+   - **NEEDS WORK**: any P0, or many P1
+   - **SIGNIFICANT ISSUES**: multiple P0
 
 ## Output Format
 
-The final output should include:
-
 ```markdown
-## Branch Code Review: [branch-name]
+## Code Review: [branch-name]
 
-### Summary
+### Overview
 - Commits reviewed: [count]
 - Files changed: [count]
-- Critical issues: [count]
-- Warnings: [count]
-- Suggestions: [count]
+- Reviewers: code-reviewer, readability-reviewer, code-simplicity-reviewer, architecture-strategist
 
-### Full Review Report
-[code-reviewer output]
+### P0 — Must Fix
+1. **[File:Line]** `[Source]` — [Issue description]
+   - [Details / fix guidance]
+
+(or "No P0 issues found.")
+
+### P1 — Should Fix
+1. **[File:Line]** `[Source]` — [Issue description]
+   - [Details / recommendation]
+
+(or "No P1 issues found.")
+
+### P2 — Consider
+- **[File:Line]** `[Source]` — [Issue description]
+
+(or "No P2 issues found.")
+
+### Summary
+
+| Severity | Count |
+|----------|-------|
+| P0       | N     |
+| P1       | N     |
+| P2       | N     |
+
+**Verdict: [PASS / NEEDS WORK / SIGNIFICANT ISSUES]**
 ```
 
 ## Important Notes
 
-- This is a **read-only** review - no files will be modified
-- The review focuses on code quality, not plan alignment
-- Use this command to get feedback before creating a PR
+- This is a **read-only** review — no files will be modified
+- The review covers 4 perspectives: quality, readability, simplicity, architecture
+- Use this command to get comprehensive feedback before creating a PR

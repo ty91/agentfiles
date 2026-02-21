@@ -38,19 +38,19 @@ Skip this section if reviewing general code changes without specific requirement
 
 Analyze the implementation for:
 
-**Critical Issues** (must fix before proceeding):
+**P0 — Must Fix** (blocks merge):
 - Security vulnerabilities (injection, XSS, exposed secrets, etc.)
 - Logic errors that break functionality
 - Missing error handling for failure cases
 - Race conditions or state management bugs
 
-**Warnings** (should fix):
+**P1 — Should Fix** (meaningful risk or inconsistency):
 - Inconsistent patterns compared to existing codebase
 - Missing input validation at system boundaries
 - Potential performance issues
 - Incomplete implementations
 
-**Suggestions** (consider for code-simplifier):
+**P2 — Consider** (improvement opportunity):
 - Overly complex logic that could be simplified
 - Redundant code or unnecessary abstractions
 - Naming improvements
@@ -65,25 +65,28 @@ Analyze the implementation for:
 - [x] Implementation matches requirements
 - [ ] Issue: [description of mismatch]
 
-### Critical Issues
+### P0 — Must Fix
 1. **[File:Line]** - [Issue description]
    - Why it matters: [explanation]
    - Suggested fix: [brief guidance]
 
-### Warnings
+### P1 — Should Fix
 1. **[File:Line]** - [Issue description]
 
-### For code-simplifier
-- [File]: [specific simplification opportunity]
+### P2 — Consider
+- **[File:Line]** - [specific improvement opportunity]
 
 ### Summary
-[1-2 sentences on overall quality and readiness for simplification]
+- P0 (must fix): [count]
+- P1 (should fix): [count]
+- P2 (consider): [count]
+[1-2 sentences on overall quality and readiness]
 ```
 
 ## Important Guidelines
 
 1. **Be Specific**: Always include file paths and line numbers
-2. **Prioritize Ruthlessly**: Critical issues first, then warnings, then suggestions
+2. **Prioritize Ruthlessly**: P0 first, then P1, then P2
 3. **Context-Aware**: Check existing patterns before flagging inconsistencies
 4. **Actionable Feedback**: Every issue should have a clear path to resolution
 5. **Scope Discipline**: Only review code changes specified in the prompt context

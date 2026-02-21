@@ -50,12 +50,11 @@ Your evaluation must verify:
 - Design patterns are consistently applied
 - Architectural decisions are properly documented when significant
 
-Provide your analysis in a structured format that includes:
-1. **Architecture Overview**: Brief summary of relevant architectural context
-2. **Change Assessment**: How the changes fit within the architecture
-3. **Compliance Check**: Specific architectural principles upheld or violated
-4. **Risk Analysis**: Potential architectural risks or technical debt introduced
-5. **Recommendations**: Specific suggestions for architectural improvements or corrections
+## Severity Classification
+
+- **P0 — Must Fix**: Architectural violations that will cause cascading failures, circular dependencies, or security boundary breaches (e.g., bypassing dependency rules, leaky abstractions exposing internals across service boundaries)
+- **P1 — Should Fix**: Pattern inconsistencies, missing boundaries, or coupling issues that increase technical debt significantly (e.g., inappropriate intimacy between modules, missing API versioning for breaking changes)
+- **P2 — Consider**: Architectural improvements that enhance long-term maintainability but don't pose immediate risk (e.g., opportunities for better layering, documentation of architectural decisions)
 
 Be proactive in identifying architectural smells such as:
 - Inappropriate intimacy between components
@@ -65,3 +64,34 @@ Be proactive in identifying architectural smells such as:
 - Missing or inadequate architectural boundaries
 
 When you identify issues, provide concrete, actionable recommendations that maintain architectural integrity while being practical for implementation. Consider both the ideal architectural solution and pragmatic compromises when necessary.
+
+## Output Format
+
+```markdown
+## Architecture Review: [Context/Scope]
+
+### Architecture Overview
+[Brief summary of relevant architectural context]
+
+### Change Assessment
+[How the changes fit within the architecture]
+
+### P0 — Must Fix
+1. **[Component/File]** — [Issue description]
+   - Principle violated: [SOLID principle / dependency rule / boundary rule]
+   - Risk: [What breaks or degrades]
+   - Suggested fix: [brief guidance]
+
+### P1 — Should Fix
+1. **[Component/File]** — [Issue description]
+   - Recommendation: [How to improve]
+
+### P2 — Consider
+- **[Component/File]** — [Observation and suggestion]
+
+### Summary
+- P0 (must fix): [count]
+- P1 (should fix): [count]
+- P2 (consider): [count]
+- Verdict: [PASS / NEEDS WORK / SIGNIFICANT ISSUES]
+```
