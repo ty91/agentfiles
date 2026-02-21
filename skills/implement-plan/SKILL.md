@@ -30,52 +30,21 @@ This command takes a work document (plan, specification, or todo file) and execu
 
 ### Phase 1: Quick Start
 
-1. **Read Plan and Clarify**
+1. **Read Plan**
 
    - Read the work document completely
    - Review any references or links provided in the plan
-   - If anything is unclear or ambiguous, ask clarifying questions now
-   - Get user approval to proceed
-   - **Do not skip this** - better to ask questions now than build the wrong thing
+   - The plan is already reviewed and approved — proceed without asking clarifying questions
 
-2. **Setup Environment**
+2. **Confirm Environment**
 
-   First, check the current branch:
-
-   ```bash
-   current_branch=$(git branch --show-current)
-   default_branch=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@')
-
-   # Fallback if remote HEAD isn't set
-   if [ -z "$default_branch" ]; then
-     default_branch=$(git rev-parse --verify origin/main >/dev/null 2>&1 && echo "main" || echo "master")
-   fi
-   ```
-
-   **If already on a feature branch** (not the default branch):
-   - Ask: "Continue working on `[current_branch]`, or create a new branch?"
-   - If continuing, proceed to step 3
-   - If creating new, follow Option A below
-
-   **If on the default branch**, choose how to proceed:
-
-   **Option A: Create a new branch**
-   ```bash
-   git pull origin [default_branch]
-   git checkout -b feature-branch-name
-   ```
-   Use a meaningful name based on the work (e.g., `feat/user-authentication`, `fix/email-validation`).
-
-   **Option B: Continue on the default branch**
-   - Requires explicit user confirmation
-   - Only proceed after user explicitly says "yes, commit to [default_branch]"
-   - Never commit directly to the default branch without explicit permission
+   - Work on the current branch as-is (the user has already set the correct branch)
+   - Run `git branch --show-current` to note the branch name for reference
 
 3. **Review Task List**
    - The plan's `## Implementation Steps` checkboxes are the single source of truth for progress
    - Read through all steps and their verification checkboxes
    - Identify dependencies and execution order
-   - If the plan lacks clear steps or checkboxes, ask the user before proceeding
 
 ### Phase 2: Execute
 
@@ -191,8 +160,8 @@ This command takes a work document (plan, specification, or todo file) and execu
 
 ### Start Fast, Execute Faster
 
-- Get clarification once at the start, then execute
-- Don't wait for perfect understanding - ask questions and move
+- The plan is pre-reviewed — jump straight into execution
+- Don't wait for perfect understanding - read the plan and move
 - The goal is to **finish the feature**, not create perfect process
 
 ### The Plan is Your Guide
@@ -224,7 +193,6 @@ This command takes a work document (plan, specification, or todo file) and execu
 
 Before wrapping up, verify:
 
-- [ ] All clarifying questions asked and answered
 - [ ] All plan checkboxes checked off
 - [ ] Tests pass (run project's test command)
 - [ ] Linting passes
@@ -235,7 +203,6 @@ Before wrapping up, verify:
 ## Common Pitfalls to Avoid
 
 - **Analysis paralysis** - Don't overthink, read the plan and execute
-- **Skipping clarifying questions** - Ask now, not after building wrong thing
 - **Ignoring plan references** - The plan has links for a reason
 - **Testing at the end** - Test continuously or suffer later
 - **Forgetting to check off plan items** - Track progress or lose track of what's done
