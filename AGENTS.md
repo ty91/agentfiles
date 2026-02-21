@@ -8,7 +8,6 @@
 
 ## Code Quality
 
-- Comments in code are in English.
 - Use existing code style conventions and patterns in the codebase.
 - File size: target <~500 LOC for production code. Split or refactor as needed.
 - Bugs: add regression test when it fits.
@@ -46,7 +45,13 @@
 - Unrecognized changes: assume other agent; keep going; focus your changes. If it causes issues, stop + ask user.
 - Leave breadcrumb notes in thread.
 
-## Language/Stack Notes
+## Language
+
+- Code comments: English.
+- User-facing communication (conversations, docs): Korean unless instructed otherwise.
+- Inter-agent communication: English.
+
+## Stack Notes
 
 - TypeScript: prefer `type` over `interface`. Keep files small; follow existing patterns.
 
