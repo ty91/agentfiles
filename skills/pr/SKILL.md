@@ -32,40 +32,23 @@ Create a GitHub pull request for the current branch.
 - Use the following PR template. Fill in the relevant sections based on the commits and diff:
 
 ```markdown
-## 📋 Summary
-<!-- 이 PR이 무엇을 하는지 간단히 설명해주세요 -->
+## Summary
+<!-- 이 PR이 무엇을 왜 하는지 설명. 관련 이슈가 있으면 링크 포함 (예: Fixes #123) -->
 
 
-## 🔗 Related Issue
-<!-- 관련 이슈 링크 (예: Fixes #123, Closes #456) -->
+## Test Plan
+<!-- 변경 사항을 어떻게 검증할 수 있는지 -->
 
-
-## 🔄 Type of Change
-- [ ] 🐛 Bug fix
-- [ ] ✨ New feature
-- [ ] 💥 Breaking change
-- [ ] 📝 Documentation update
-- [ ] ♻️ Refactoring
-- [ ] 🧪 Test update
-
-## 📝 Changes
-<!-- 주요 변경 사항을 나열해주세요 -->
--
--
-
-## 🧪 How to Test
-<!-- 테스트 방법을 설명해주세요 -->
-1.
-2.
-
-## ✅ Checklist
-- [ ] 코드가 프로젝트 스타일 가이드를 따름
-- [ ] Self-review 완료
-- [ ] 필요한 문서 업데이트 완료
-- [ ] 테스트 추가/수정 완료
-- [ ] 로컬에서 테스트 통과 확인
 ```
 
-### 4. Done
+### 4. Verify
+
+- Run `gh pr view --json url,baseRefName,body` and check:
+  - PR URL is valid.
+  - Base branch is the default branch.
+  - Summary and Test Plan sections are filled in (not just template placeholders).
+- If any check fails, fix the issue or inform the user.
+
+### 5. Done
 
 - Return the PR URL to the user.
