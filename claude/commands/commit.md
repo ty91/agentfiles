@@ -14,3 +14,4 @@ description: Create a git commit
 
 - Based on the above changes, create git commits. ALWAYS write semantic commit messages in English (eg. `feat: add user authentication with JWT tokens`)
 - If the changes contain multiple unrelated modifications, split them into separate commits for better clarity and history tracking.
+- Only commit changes you made in this session. Do not commit pre-existing uncommitted changes.
