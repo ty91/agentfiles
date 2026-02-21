@@ -178,9 +178,9 @@ date: YYYY-MM-DD
 
 - Draft clear, searchable issue title (e.g., `Add user authentication`, `Fix cart total calculation`)
 - Determine issue type: feat, fix, refactor
-- Convert title to filename: 5-digit sequential number prefix, kebab-case
-  - Find the highest existing number in `docs/plans/` and increment by 1 (start at `00001` if empty)
-  - Example: `Add User Authentication` → `00012-add-user-authentication.md`
+- Convert title to filename: `YYYY-MM-DD-<descriptive-name>.md` (kebab-case)
+  - Use today's date as the prefix
+  - Example: `Add User Authentication` → `2026-02-21-add-user-authentication.md`
   - Keep it descriptive (3-5 words) so plans are findable by context
 
 ### 3. Write Content
@@ -209,7 +209,7 @@ Fill in the template sections with research findings:
 mkdir -p docs/plans/
 ```
 
-Use the Write tool to save the complete plan to `docs/plans/NNNNN-<descriptive-name>.md`. This step is mandatory and cannot be skipped.
+Use the Write tool to save the complete plan to `docs/plans/YYYY-MM-DD-<descriptive-name>.md`. This step is mandatory and cannot be skipped.
 
 Confirm: "Plan written to docs/plans/[filename]"
 
@@ -227,18 +227,20 @@ Wait for the agent to complete, then confirm: "Design specification added to doc
 
 ## Output Format
 
-**Filename:** Use the sequential number and kebab-case filename from Step 2 Title & Categorization.
+**Filename:** Use today's date and kebab-case descriptive name from Step 2 Title & Categorization.
 
 ```
-docs/plans/NNNNN-<descriptive-name>.md
+docs/plans/YYYY-MM-DD-<descriptive-name>.md
 ```
 
 Examples:
-- ✅ `docs/plans/00012-add-user-authentication.md`
-- ✅ `docs/plans/00013-fix-checkout-race-condition.md`
-- ✅ `docs/plans/00014-refactor-api-client-extraction.md`
-- ❌ `docs/plans/00012-thing.md` (not descriptive - what "thing"?)
-- ❌ `docs/plans/00012-new-feature.md` (too vague - what feature?)
-- ❌ `docs/plans/add-user-auth.md` (missing number prefix)
+- ✅ `docs/plans/2026-02-21-add-user-authentication.md`
+- ✅ `docs/plans/2026-02-21-fix-checkout-race-condition.md`
+- ✅ `docs/plans/2026-02-21-refactor-api-client-extraction.md`
+
+**Bad examples:**
+- ❌ `docs/plans/2026-02-21-thing.md` (not descriptive - what "thing"?)
+- ❌ `docs/plans/2026-02-21-new-feature.md` (too vague - what feature?)
+- ❌ `docs/plans/add-user-auth.md` (missing date prefix)
 
 NEVER CODE! Just research and write the plan.
