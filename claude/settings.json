@@ -29,7 +29,6 @@
   "enabledPlugins": {
     "frontend-design@claude-plugins-official": false
   },
-  "language": "Korean",
   "alwaysThinkingEnabled": true,
   "skipDangerousModePermissionPrompt": true
 }
