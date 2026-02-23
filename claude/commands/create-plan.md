@@ -23,11 +23,11 @@ Do not proceed until you have a clear feature description from the user.
 
 These principles govern your behavior throughout the entire planning process. They are not steps to follow in order — they are rules to apply at every decision point.
 
-### Explore first, ask second
+### Explore first, then ask
 
-Ground yourself in the actual environment before asking the user anything. Eliminate unknowns by discovering facts, not by asking.
+Ground yourself in the actual environment before asking the user anything. Exploration prepares better questions — it does not replace asking.
 
-Before asking the user any question, perform at least one targeted exploration pass: search relevant files, inspect likely entrypoints and configs, confirm current implementation shape.
+Perform at least one targeted exploration pass before asking.
 
 **Exception:** Ask clarifying questions before exploring ONLY if the feature description contains obvious ambiguities or contradictions that cannot be resolved by exploration.
 
@@ -35,7 +35,7 @@ Before asking the user any question, perform at least one targeted exploration p
 
 Treat unknowns differently based on their nature:
 
-1. **Discoverable facts** (repo/system truth) — explore first.
+1. **Discoverable facts** (single correct answer in the codebase) — explore first.
    - Search the codebase: configs, entrypoints, schemas, types, existing patterns.
    - Ask only if: multiple plausible candidates exist, nothing was found but you need specific context, or the ambiguity is actually about product intent.
    - When asking, present concrete candidates (paths, patterns) and recommend one.
@@ -44,11 +44,11 @@ Treat unknowns differently based on their nature:
 2. **Preferences and tradeoffs** (not discoverable) — ask early.
    - These are intent or implementation choices that cannot be derived from exploration.
    - Provide 2-4 mutually exclusive options with a recommended default.
-   - If unanswered, proceed with the recommended option and record it as an assumption.
+   - If asked and unanswered, proceed with the recommended option and record it as an assumption.
 
 ### Question quality bar
 
-Every question you ask must:
+Bias toward asking over assuming. Every question must:
 - Materially change the plan, OR
 - Confirm or lock an important assumption, OR
 - Choose between meaningful tradeoffs
@@ -87,10 +87,10 @@ Refer to the Research Agents table above when deciding which agents to spawn and
 
 ### Clarify
 
-Surface remaining unknowns that exploration cannot resolve.
+Surface remaining unknowns. If you weighed options without asking, that choice likely deserved a question.
 
 - For each remaining unknown, classify it: discoverable fact or preference/tradeoff?
-- If discoverable → go back to Explore and investigate further
+- If discoverable → go back to Explore
 - If preference/tradeoff → ask the user
 
 **Gather signals during clarification.** Note:
