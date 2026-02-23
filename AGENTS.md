@@ -71,3 +71,7 @@
 ### pnpm
 
 - JavaScript/TypeScript deps: use `pnpm` only.
+
+### browser
+
+- Web automation: see `docs/tools/browser.md` for agent reference.
