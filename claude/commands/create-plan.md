@@ -141,7 +141,7 @@ date: YYYY-MM-DD
 
 ### Step 1. [Step Title]
 
-[Describe what needs to be done in prose]
+[Desired end state and constraints — reference APIs/patterns by name, not implementation code]
 
 **Verification:**
 
@@ -217,6 +217,7 @@ Verify the plan before writing to disk. Every item must pass.
 - [ ] An implementer can execute this plan without making design decisions
 - [ ] Ambiguous areas are resolved or explicitly called out with chosen defaults
 - [ ] Approach rationale is documented (why this approach, not alternatives)
+- [ ] Steps describe intent and constraints, not copy-paste code (snippets ≤10 lines OK for contracts or ambiguous patterns)
 
 **Correctness:**
 - [ ] File paths reference real files (verified during exploration)
@@ -271,4 +272,4 @@ Examples:
 - ❌ `docs/plans/2026-02-21-new-feature.md` (too vague - what feature?)
 - ❌ `docs/plans/add-user-auth.md` (missing date prefix)
 
-NEVER CODE! Just research and write the plan.
+Your task is complete when the plan file is written to disk. Stop. Do not offer to implement, do not ask to proceed, do not write code.
