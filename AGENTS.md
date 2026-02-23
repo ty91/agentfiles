@@ -48,7 +48,7 @@
 ## Language
 
 - Code comments: English.
-- User-facing communication (conversations, docs): Korean unless instructed otherwise.
+- User-facing communication (conversations, docs): English unless instructed otherwise.
 - Inter-agent communication: English.
 
 ## Stack Notes
