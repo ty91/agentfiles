@@ -32,6 +32,8 @@ This command takes a work document (plan, specification, or todo file) and execu
 
 ### Phase 1: Quick Start
 
+**Do NOT pause to summarize your approach or ask for confirmation. Start executing immediately.**
+
 1. **Read Plan**
 
    - Read the work document completely
