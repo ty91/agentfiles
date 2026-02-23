@@ -74,4 +74,4 @@
 
 ### browser
 
-- Web automation: see `docs/tools/browser.md` for agent reference.
+- Web automation: see `~/.agents/docs/tools/browser.md` for agent reference.
