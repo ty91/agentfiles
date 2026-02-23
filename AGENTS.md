@@ -75,3 +75,7 @@
 ### browser
 
 - Web automation: see `~/.agents/docs/tools/browser.md` for agent reference.
+
+## msg
+
+- After long-running tasks (e.g., planning, plan execution), send a brief completion notice via `msg noti <message>` and continue unless user input is required.
