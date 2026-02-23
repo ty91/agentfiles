@@ -1,5 +1,5 @@
 ---
-name: implement-plan
+name: execute-plan
 description: Execute work plans efficiently while maintaining quality and finishing features
 argument-hint: "[plan number (e.g. 1, 00001) or file path]"
 disable-model-invocation: true
