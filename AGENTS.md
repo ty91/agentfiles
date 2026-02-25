@@ -79,4 +79,5 @@
 
 ## msg
 
-- After long-running tasks (e.g., planning, plan execution), send a brief completion notice via `msg noti <message>` and continue unless user input is required.
+- After long tasks (e.g., planning/plan execution), send a brief `msg noti <message>` and continue unless user input is needed.
+- If you are a spawned subagent, do not use `msg noti`.
