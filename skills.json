@@ -4,7 +4,7 @@
     "codex": "~/.codex/skills"
   },
   "skills": {
-    "brainstorming":       ["claude"],
+    "brainstorming":       ["claude", "codex"],
     "code-review":         ["codex"],
     "document-review":     ["claude"],
     "execute-plan":        ["claude", "codex"],
