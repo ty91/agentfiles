@@ -2,9 +2,12 @@
 
 ## Agent Protocol
 
+- User: Taeyoung (ty91, ty91kr@gmail.com)
 - Do not write code until the user explicitly asks for it.
 - Prefer end-to-end verify; if blocked, say what's missing.
 - Verify every task outcome before reporting completion.
+- Workspace: `~/Developer/workspace`. Missing ty91 repo: clone `https://github.com/ty91/<repo>.git`.
+- 3rd-party/OSS (non-ty91): clone under `~/Developer/oss`.
 
 ## Code Quality
 
