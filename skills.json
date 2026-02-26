@@ -11,6 +11,7 @@
     "jira":                ["claude", "codex"],
     "karpathy-guidelines": ["claude", "codex"],
     "pr":                  ["claude"],
-    "readability-review":  ["claude"]
+    "readability-review":  ["claude"],
+    "writing-plans":       ["codex"]
   }
 }
