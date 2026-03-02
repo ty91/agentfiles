@@ -16,10 +16,26 @@ Transform feature descriptions, bug reports, or improvement ideas into well-stru
 
 Input can come from a direct user message or skill arguments.
 
-- If arguments are provided (`#$ARGUMENTS`), treat them as the initial feature description.
-- If arguments are missing or empty, ask the user: "What would you like to plan? Please describe the feature, bug fix, or improvement you have in mind."
+- If arguments are provided (`#$ARGUMENTS`), treat them as the initial feature description (explicit override).
+- If arguments are missing or empty, resolve input in this order:
+  1. Locate the most recent brainstorming output at `docs/plans/*-design.md` and use it as the primary input.
+  2. If multiple design docs are plausible candidates, show the candidates and ask the user to pick one.
+  3. If no design doc is found, ask the user: "What would you like to plan? Please describe the feature, bug fix, or improvement you have in mind."
 
-Do not proceed until you have a clear feature description from the user.
+Do not proceed until you have a clear feature description from user input, a validated design doc, or both.
+
+### Design Doc Metadata Check (When Using Brainstorming Output)
+
+When the input source is a design doc from brainstorming, inspect frontmatter metadata first:
+
+- `status: approved`
+- `approved_at: <date-time>`
+- `source: brainstorming`
+
+If metadata is missing or incomplete:
+- Prefer proceeding if the design content is still decision-useful.
+- Ask only the minimum clarification needed.
+- Record missing metadata and any fallback assumptions in the final plan notes.
 
 ## Core Principles
 
@@ -119,6 +135,9 @@ Surface remaining unknowns. If you weighed options without asking, that choice l
 - For each remaining unknown, classify it: discoverable fact or preference/tradeoff?
 - If discoverable → go back to Explore
 - If preference/tradeoff → ask the user
+- If an approved brainstorming design doc is selected, use **delta clarification only**:
+  - Do not restart full requirements interviews.
+  - Ask only for unresolved design questions, conflicts with newer user instructions, or required missing details for implementation planning.
 
 **Gather signals during clarification.** Note:
 - **User's familiarity**: Do they know the codebase patterns? Are they pointing to examples?
@@ -164,6 +183,10 @@ date: YYYY-MM-DD
 
 [Chosen approach and rationale]
 
+### Decision Trace
+
+- [Decision] — Source: `docs/plans/<design-doc>.md:line`
+
 ## Implementation Steps
 
 ### Step 1. [Step Title]
@@ -191,6 +214,11 @@ date: YYYY-MM-DD
 - [ ] All tests pass, typecheck, lint
 
 ## Context
+
+### Source Design Doc
+
+- Path: `docs/plans/<topic>-design.md` (or `none`)
+- Metadata: `status=<value>, approved_at=<value>, source=<value>`
 
 ### Files to Change
 
@@ -229,6 +257,7 @@ Fill in the template using everything gathered during the planning loop:
 - All checkboxes (Verification, Deliverables, Acceptance Criteria) must be unchecked (`- [ ]`) — they are checked off during implementation
 - Populate the Files to Change table with every file that will be created or modified
 - Include Key References from exploration (file paths, related issues/PRs, and documentation URLs if external research was done)
+- Include Source Design Doc details and map major decisions with traceable references
 
 ## Quality Gate
 
@@ -250,6 +279,10 @@ Verify the plan before writing to disk. Every item must pass.
 - [ ] File paths reference real files (verified during exploration)
 - [ ] Referenced patterns match what actually exists in the codebase
 - [ ] No contradictions between sections
+- [ ] Source design doc is recorded in Context (or explicitly marked as none)
+- [ ] Plan decisions are consistent with the source design doc (or deviations are explicitly justified)
+- [ ] Open questions from the source design doc are resolved or carried forward as explicit assumptions
+- [ ] If no source design doc is used, the reason and fallback validation path are documented in Notes
 
 **Formatting:**
 - [ ] All checkboxes are unchecked
