@@ -77,6 +77,23 @@ digraph brainstorming {
 
 **Documentation:**
 - Write the validated design to `docs/plans/YYYY-MM-DD-<topic>-design.md`
+- Start every design doc with YAML frontmatter in this format:
+
+  ```yaml
+  ---
+  title: "<Design Title>"
+  type: design
+  status: approved
+  date: YYYY-MM-DD
+  approved_at: YYYY-MM-DDTHH:mm:ssZ
+  source: brainstorming
+  ---
+  ```
+
+- Frontmatter rules:
+  - Use `type: design` and `source: brainstorming` exactly.
+  - Set `status: draft` until the user approves the design, then update to `status: approved`.
+  - Set `approved_at` when approval is given (leave blank or omit while still draft).
 - Use elements-of-style:writing-clearly-and-concisely skill if available
 - Commit the design document to git
 
