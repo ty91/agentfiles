@@ -302,18 +302,6 @@ Use the Write tool to save the complete plan to `docs/plans/YYYY-MM-DD-<descript
 
 Confirm: "Plan written to docs/plans/[filename]"
 
-## Design Specification (Conditional)
-
-**If the plan involves frontend UI** (pages, components, layouts, visual interfaces):
-
-Spawn the frontend-designer agent with the plan file path. The agent will read the plan, analyze the codebase's existing design patterns, and insert a `## Design Specification` section into the plan file (between `## Proposed Solution` and `## Implementation Steps`).
-
-- Task frontend-designer(plan_file_path)
-
-Wait for the agent to complete, then confirm: "Design specification added to docs/plans/[filename]"
-
-**Skip this step** if the plan is purely backend, infrastructure, or has no visual component.
-
 ## Output Format
 
 **Filename:** Use today's date and kebab-case descriptive name from Title & Categorization.
