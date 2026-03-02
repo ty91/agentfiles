@@ -61,15 +61,12 @@ Questions must NOT be answerable by non-mutating exploration. Prefer multiple-ch
 
 Use Codex subagents aggressively during research. For non-trivial planning, spawn multiple focused subagents in parallel instead of doing all exploration in a single thread.
 
-| Subagent | Use when |
-|----------|----------|
-| `architecture-strategist` | Validate architecture fit, boundaries, layering, and contract impact |
-| `maintainability-reviewer` | Identify coupling/cohesion risks, modularity issues, change amplification |
-| `code-simplicity-reviewer` | Check YAGNI adherence and remove overengineering from the proposed approach |
-| `readability-reviewer` | Stress-test naming, structure, and cognitive complexity in planned changes |
-| `security-reviewer` | Analyze auth/data/security risk areas and required safeguards |
-| `test-flakiness-reviewer` | Validate test strategy for determinism, isolation, and CI reliability |
-| `frontend-designer` (conditional) | Plan UI/UX direction and constraints for frontend-heavy work |
+When assigning subagents, split research by concern so each subagent owns one clear area:
+- architecture and boundaries
+- maintainability and simplicity
+- security/privacy and compliance risk
+- test strategy and reliability
+- UI/UX constraints (frontend tasks only)
 
 ### Research Priorities
 
@@ -109,7 +106,7 @@ Investigate the feature using direct tools and Codex subagents.
 - Spawn focused subagents based on what you actually need to learn
 - Track what you discovered and what remains unknown
 
-Refer to the subagent table above when deciding which subagents to spawn and when.
+Use the subagent concern areas above when deciding which subagents to spawn and when.
 
 ### Clarify
 
