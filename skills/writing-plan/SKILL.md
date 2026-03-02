@@ -89,6 +89,10 @@ When researching, cover these areas explicitly:
 
 ### Subagent Operating Rules
 
+- Prefer `explorer` for codebase and git-history fact-finding.
+- Use `default` to synthesize findings, resolve ambiguities, and produce planning decisions.
+- Use `awaiter` whenever you must wait on long-running checks or monitoring.
+- Avoid `worker` during planning research unless a non-editing execution task cannot be handled by `explorer`/`default`.
 - Spawn focused subagents with narrow scopes (one risk/domain per subagent).
 - Run independent investigations in parallel, then synthesize into one decision-ready plan.
 - If findings conflict, call it out, choose a safer default, and document the tradeoff.
@@ -103,7 +107,7 @@ Cycle through Explore and Clarify until you reach the sufficiency gate. There is
 Investigate the feature using direct tools and Codex subagents.
 
 - Read relevant code, configs, and documentation directly
-- Spawn focused subagents based on what you actually need to learn
+- Spawn focused subagents based on what you actually need to learn (prefer `explorer` and `default`)
 - Track what you discovered and what remains unknown
 
 Use the subagent concern areas above when deciding which subagents to spawn and when.
