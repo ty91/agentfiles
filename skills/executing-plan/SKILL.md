@@ -18,21 +18,27 @@ This command takes a work document (plan, specification, or todo file) and execu
 **Argument:** `#$ARGUMENTS`
 
 1. **If argument is provided:**
-   - If it looks like a date (e.g. `2026-02-21`), find matching files in `docs/plans/` using Glob: `docs/plans/<date>-*.md`.
-   - If it looks like a keyword (e.g. `authentication`, `checkout`), find matching files using Glob: `docs/plans/*-*<keyword>*.md`.
-   - If it looks like a file path, use it directly.
+   - Date (e.g. `2026-02-21`): match `docs/plans/<date>-*.md`.
+   - Keyword (e.g. `authentication`, `checkout`): match `docs/plans/*-*<keyword>*.md`.
+   - File path: use directly.
    - If multiple files match, list them and ask the user to choose one.
-   - If no matching file is found, tell the user and ask for a valid date, keyword, or path.
+   - If no file matches, ask for a valid date, keyword, or path.
 
 2. **If no argument is provided:**
-   - Ask the user: "Which plan should I execute? Please provide a date (e.g. `2026-02-21`), a keyword (e.g. `authentication`), or a file path."
-   - Do not proceed until a valid plan file is identified.
+   - Try session handoff first:
+     - Find the latest assistant message matching `Plan written to docs/plans/<filename>.md`.
+     - If exactly one candidate exists and the file is present, ask:
+       "I found `docs/plans/<filename>.md` from this session. Execute this plan? (yes/no)"
+     - `yes` → use that file.
+     - `no`, missing/invalid candidate, or multiple candidates → ask for date, keyword, or file path (list candidates if multiple).
+
+Do not proceed until a valid plan file is identified and explicitly confirmed by the user.
 
 ## Execution Workflow
 
 ### Phase 1: Quick Start
 
-**Do NOT pause to summarize your approach or ask for confirmation. Start executing immediately.**
+**Do NOT pause to summarize your approach or ask for confirmation. Start executing immediately after Resolve Plan File confirmation (the only allowed pre-execution confirmation).**
 
 1. **Read Plan**
 

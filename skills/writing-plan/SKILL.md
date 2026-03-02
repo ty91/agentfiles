@@ -300,7 +300,7 @@ mkdir -p docs/plans/
 
 Use the Write tool to save the complete plan to `docs/plans/YYYY-MM-DD-<descriptive-name>.md`. This step is mandatory and cannot be skipped.
 
-Confirm: "Plan written to docs/plans/[filename]"
+Confirm exactly: "Plan written to docs/plans/<filename>.md"
 
 ## Output Format
 
