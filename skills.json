@@ -9,7 +9,7 @@
     "document-review":     ["claude"],
     "executing-plan":      ["codex"],
     "jira":                ["claude", "codex"],
-    "karpathy-guidelines": ["claude", "codex"],
+    "karpathy-guidelines": ["claude"],
     "pr":                  ["claude"],
     "readability-review":  ["claude"],
     "writing-plan":        ["codex"]
