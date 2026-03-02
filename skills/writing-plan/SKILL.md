@@ -320,4 +320,10 @@ Examples:
 - ❌ `docs/plans/2026-02-21-new-feature.md` (too vague - what feature?)
 - ❌ `docs/plans/add-user-auth.md` (missing date prefix)
 
-Your task is complete when the plan file is written to disk. Stop. Do not offer to implement, do not ask to proceed, do not write code.
+## Commit Plan File
+
+After writing the plan file, commit it before finishing:
+- Stage only the plan file under `docs/plans/` (do not use `git add .`).
+- Create one Conventional Commit (recommended: `docs(plan): add <descriptive-name> plan`).
+
+Your task is complete when the plan file is written to disk and committed. Stop. Do not offer to implement, do not ask to proceed, do not write code.
