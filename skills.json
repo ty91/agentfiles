@@ -12,7 +12,6 @@
     "karpathy-guidelines": ["claude", "codex"],
     "pr":                  ["claude"],
     "readability-review":  ["claude"],
-    "writing-plan":        ["codex"],
-    "writing-plans":       ["codex"]
+    "writing-plan":        ["codex"]
   }
 }
