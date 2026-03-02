@@ -57,21 +57,45 @@ Bias toward asking over assuming. Every question must:
 
 Questions must NOT be answerable by non-mutating exploration. Prefer multiple-choice with a recommended option when natural choices exist.
 
-## Research Agents
+## Research Strategy (Codex Subagents)
 
-These agents are available as tools. Use them selectively based on what you need to learn — you do not need to run all of them, and you do not need to run them all at once.
+Use Codex subagents aggressively during research. For non-trivial planning, spawn multiple focused subagents in parallel instead of doing all exploration in a single thread.
 
-| Agent | Use when |
-|-------|----------|
-| `conventions-researcher` | You need to understand project rules, coding standards, existing patterns |
-| `code-flow-researcher` | You need to trace code structure, module boundaries, execution flow, data flow |
-| `git-history-analyzer` | You need historical context: recent changes, reverted approaches, design rationale |
-| `best-practices-researcher` | You need external/industry best practices — **always use for high-risk topics** (security, payments, external APIs, data privacy) |
-| `general-purpose` (model: sonnet) | Context not covered above: build/lint status, dependency analysis, external docs, API specs |
+| Subagent | Use when |
+|----------|----------|
+| `architecture-strategist` | Validate architecture fit, boundaries, layering, and contract impact |
+| `maintainability-reviewer` | Identify coupling/cohesion risks, modularity issues, change amplification |
+| `code-simplicity-reviewer` | Check YAGNI adherence and remove overengineering from the proposed approach |
+| `readability-reviewer` | Stress-test naming, structure, and cognitive complexity in planned changes |
+| `security-reviewer` | Analyze auth/data/security risk areas and required safeguards |
+| `test-flakiness-reviewer` | Validate test strategy for determinism, isolation, and CI reliability |
+| `frontend-designer` (conditional) | Plan UI/UX direction and constraints for frontend-heavy work |
 
-**Multiple instances:** When a feature spans distinct areas (e.g., auth + payments, frontend + backend API), spawn separate instances of the same agent type with focused prompts per area. Each instance should target one specific area so results stay focused and actionable.
+### Research Priorities
 
-Run agents in parallel when possible.
+When researching, cover these areas explicitly:
+
+1. **Codebase research**
+   - Map entrypoints, data flow, and module boundaries.
+   - Find existing patterns to reuse and constraints to respect.
+   - Identify concrete files likely to be created/modified and affected tests.
+
+2. **Git history research**
+   - Review recent relevant commits, reversions, and related changes.
+   - Capture rationale behind previous decisions and known pitfalls.
+   - Prefer stable patterns that survived prior iterations.
+
+3. **External research (when needed)**
+   - Use for unstable or high-risk domains (security, compliance, external APIs, recent standards).
+   - Prefer primary sources (official docs/specs) over secondary summaries.
+   - Record source links and publication/update dates in plan notes when they materially influence decisions.
+
+### Subagent Operating Rules
+
+- Spawn focused subagents with narrow scopes (one risk/domain per subagent).
+- Run independent investigations in parallel, then synthesize into one decision-ready plan.
+- If findings conflict, call it out, choose a safer default, and document the tradeoff.
+- Do not ask the user questions that can be resolved by codebase or git-history exploration.
 
 ## Planning Loop
 
@@ -79,13 +103,13 @@ Cycle through Explore and Clarify until you reach the sufficiency gate. There is
 
 ### Explore
 
-Investigate the feature using direct tools and research agents.
+Investigate the feature using direct tools and Codex subagents.
 
 - Read relevant code, configs, and documentation directly
-- Spawn research agents selectively based on what you actually need to learn
+- Spawn focused subagents based on what you actually need to learn
 - Track what you discovered and what remains unknown
 
-Refer to the Research Agents table above when deciding which agents to spawn and when.
+Refer to the subagent table above when deciding which subagents to spawn and when.
 
 ### Clarify
 
