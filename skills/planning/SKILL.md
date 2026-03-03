@@ -36,13 +36,13 @@ You MUST complete these tasks in order:
 
 ## Key Principles
 
-- **Explore before ask** - investigate discoverable facts first
+- **Explore before ask** - investigate discoverable facts first; never ask the user for discoverable facts
 - **Two kinds of unknowns** - `discoverable fact` (explore) vs `preference/tradeoff` (ask)
-- **Ask only when needed** - if no unresolved `preference/tradeoff` unknowns remain, skip asking and proceed
-- **One question at a time** - ask one high-impact question per message
-- **Option-first clarification** - when asking, provide 2-4 options with a recommended default
+- **Ask proactively for preferences** - unresolved `preference/tradeoff` unknowns must be asked
+- **One question at a time** - ask one high-impact `preference/tradeoff` question per message
+- **Option-first clarification** - when asking, provide 2-4 options with a recommended provisional default
 - **Parallel exploration by default** - during Explore context, delegate independent research tracks to subagents in parallel; the main agent coordinates and synthesizes
-- **No open unknowns before writing** - pass clarity gate before drafting final plan
+- **No open unknowns before writing** - pass clarity gate with all `preference/tradeoff` unknowns user-confirmed or explicitly delegated
 - **Planning only** - no implementation actions during this skill
 
 ## Process Flow
@@ -85,8 +85,8 @@ digraph planning {
 **Clarify unknowns:**
 - Classify each unknown as either `discoverable fact` or `preference/tradeoff`
 - Discoverable facts: explore the environment instead of asking
-- Preferences/tradeoffs: ask the user with 2-4 options and a recommended default
-- If no unresolved `preference/tradeoff` unknowns remain, skip clarification questions and move to the clarity gate
+- Preferences/tradeoffs: ask the user with 2-4 options and a recommended provisional default
+- If no unresolved `preference/tradeoff` unknowns remain and each one is user-confirmed or explicitly delegated, skip clarification questions and move to the clarity gate
 - Ask one question per message; avoid questions answerable by exploration
 
 ## Clarity Gate
@@ -96,10 +96,10 @@ Do not write the plan until every item passes:
 - [ ] Goal and success criteria are explicit
 - [ ] Scope is clear (in/out)
 - [ ] Approach is chosen with rationale
-- [ ] Key tradeoffs are resolved
+- [ ] Key tradeoffs are explicitly user-confirmed or explicitly delegated
 - [ ] Affected files and code flow are identified
 - [ ] High-risk areas are researched
-- [ ] No open unknowns remain
+- [ ] No unresolved unknowns or silent defaults remain
 - [ ] Implementer will not need to make design decisions
 
 ## Plan Template
