@@ -37,6 +37,15 @@ You MUST create a task for each item and complete them in order:
 5. **Write and validate plan** - fill template and pass quality gate
 6. **Write and commit plan file** - save to `docs/plans/YYYY-MM-DD-<descriptive-name>.md` and commit
 
+## Key Principles
+
+- **Explore before ask** - investigate discoverable facts first
+- **Two kinds of unknowns** - `discoverable fact` (explore) vs `preference/tradeoff` (ask)
+- **One question at a time** - ask one high-impact question per message
+- **Option-first clarification** - when asking, provide 2-4 options with a recommended default
+- **No open unknowns before writing** - pass clarity gate before drafting final plan
+- **Planning only** - no implementation actions during this skill
+
 ## Process Flow
 
 ```dot
