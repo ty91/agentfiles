@@ -3,7 +3,7 @@
 ```markdown
 ---
 title: [Issue Title]
-type: [feat|fix|refactor]
+type: [feat|fix|refactor|docs|chore|perf|test]
 status: active
 date: YYYY-MM-DD
 ---
