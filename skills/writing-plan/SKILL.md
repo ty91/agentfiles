@@ -35,7 +35,7 @@ When the input source is a design doc from brainstorming, inspect frontmatter me
 If metadata is missing or incomplete:
 - Prefer proceeding if the design content is still decision-useful.
 - Ask only the minimum clarification needed.
-- Record missing metadata and any fallback assumptions in the final plan notes.
+- Record missing metadata and any clarifications gathered in the final plan notes.
 
 ## Core Principles
 
@@ -64,13 +64,14 @@ Treat unknowns differently based on their nature:
 2. **Preferences and tradeoffs** (not discoverable) — ask early.
    - These are intent or implementation choices that cannot be derived from exploration.
    - Provide 2-4 mutually exclusive options with a recommended default.
-   - If asked and unanswered, proceed with the recommended option and record it as an assumption.
+   - If required preference/tradeoff questions are unanswered, stay in Clarify and re-ask.
+   - Do not proceed to plan writing until every required preference/tradeoff answer is explicit.
 
 ### Question quality bar
 
 Bias toward asking over assuming. Every question must:
 - Materially change the plan, OR
-- Confirm or lock an important assumption, OR
+- Confirm or lock an important requirement or decision, OR
 - Choose between meaningful tradeoffs
 
 Questions must NOT be answerable by non-mutating exploration. Prefer multiple-choice with a recommended option when natural choices exist.
@@ -160,9 +161,10 @@ You may loop between Explore and Clarify as many times as needed.
 - [ ] Goal and success criteria are clear
 - [ ] Approach is chosen with rationale
 - [ ] Scope is defined (in and out)
-- [ ] Key tradeoffs are resolved (or recorded as assumptions with chosen defaults)
+- [ ] Key tradeoffs are explicitly resolved
 - [ ] Affected files and code flow are identified
 - [ ] High-risk areas have been researched
+- [ ] No open decisions or assumptions remain
 - [ ] The implementer will not need to make design decisions
 
 If any item fails, return to Explore or Clarify.
@@ -277,7 +279,8 @@ Verify the plan before writing to disk. Every item must pass.
 
 **Decision completeness:**
 - [ ] An implementer can execute this plan without making design decisions
-- [ ] Ambiguous areas are resolved or explicitly called out with chosen defaults
+- [ ] Ambiguous areas are explicitly resolved before plan finalization
+- [ ] No open decisions or assumptions remain
 - [ ] Approach rationale is documented (why this approach, not alternatives)
 - [ ] Steps describe intent and constraints, not copy-paste code (snippets ≤10 lines OK for contracts or ambiguous patterns)
 
@@ -287,7 +290,7 @@ Verify the plan before writing to disk. Every item must pass.
 - [ ] No contradictions between sections
 - [ ] Source design doc is recorded in Context (or explicitly marked as none)
 - [ ] Plan decisions are consistent with the source design doc (or deviations are explicitly justified)
-- [ ] Open questions from the source design doc are resolved or carried forward as explicit assumptions
+- [ ] Open questions from the source design doc are resolved before plan finalization
 - [ ] If no source design doc is used, the reason and fallback validation path are documented in Notes
 
 **Formatting:**
