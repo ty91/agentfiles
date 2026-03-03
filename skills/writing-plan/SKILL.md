@@ -49,6 +49,8 @@ Perform at least one targeted exploration pass before asking.
 
 **Exception:** Ask clarifying questions before exploring ONLY if the feature description contains obvious ambiguities or contradictions that cannot be resolved by exploration.
 
+**Without a design doc:** When no brainstorming design doc is available, user intent, scope, and success criteria are not yet established. Clarify these with the user before deep exploration — brief orientation-level exploration is fine, but do not defer requirement questions until after full codebase research.
+
 ### Two kinds of unknowns
 
 Treat unknowns differently based on their nature:
@@ -138,6 +140,10 @@ Surface remaining unknowns. If you weighed options without asking, that choice l
 - If an approved brainstorming design doc is selected, use **delta clarification only**:
   - Do not restart full requirements interviews.
   - Ask only for unresolved design questions, conflicts with newer user instructions, or required missing details for implementation planning.
+- If no design doc is available, actively clarify in the first Clarify pass:
+  - Goal and success criteria
+  - Scope boundaries (what is in and out)
+  - Key constraints or preferences the user has
 
 **Gather signals during clarification.** Note:
 - **User's familiarity**: Do they know the codebase patterns? Are they pointing to examples?
