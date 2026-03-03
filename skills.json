@@ -10,6 +10,7 @@
     "executing-plan":      ["codex"],
     "jira":                ["claude", "codex"],
     "karpathy-guidelines": ["claude"],
+    "planning":            ["codex"],
     "pr":                  ["claude"],
     "readability-review":  ["claude"],
     "writing-plan":        ["codex"]
