@@ -42,7 +42,7 @@ You MUST complete these tasks in order:
 - **One question at a time** - ask one high-impact `preference/tradeoff` question per message
 - **Option-first clarification** - when asking, provide 2-4 options with a recommended provisional default
 - **Parallel exploration by default** - during Explore context, delegate independent research tracks to subagents in parallel; the main agent coordinates and synthesizes
-- **No open unknowns before writing** - pass clarity gate with all `preference/tradeoff` unknowns user-confirmed or explicitly delegated
+- **No open unknowns before writing** - pass clarity gate with all `preference/tradeoff` unknowns user-confirmed or explicitly delegated, and no silent defaults
 - **Planning only** - no implementation actions during this skill
 
 ## Process Flow
@@ -99,7 +99,7 @@ Do not write the plan until every item passes:
 - [ ] Key tradeoffs are explicitly user-confirmed or explicitly delegated
 - [ ] Affected files and code flow are identified
 - [ ] High-risk areas are researched
-- [ ] No unresolved unknowns or silent defaults remain
+- [ ] No unresolved unknowns remain
 - [ ] Implementer will not need to make design decisions
 
 ## Plan Template
