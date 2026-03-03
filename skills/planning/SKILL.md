@@ -28,19 +28,17 @@ Do NOT take implementation actions (no coding, no scaffolding, no implementation
 
 ## Checklist
 
-You MUST create a task for each item and complete them in order:
+You MUST complete these tasks in order:
 
-1. **Explore project context** - codebase, git history, docs, and existing patterns
-2. **Ask clarifying questions** - one at a time, focused on unresolved intent/tradeoffs
-3. **Iterate Explore/Clarify** - loop until no unknowns remain
-4. **Pass clarity gate** - lock scope, approach, and success criteria
-5. **Write and validate plan** - fill template and pass quality gate
-6. **Write and commit plan file** - save to `docs/plans/YYYY-MM-DD-<descriptive-name>.md` and commit
+1. **Pass clarity gate** - lock scope, approach, success criteria, and resolve all unknowns
+2. **Write and validate plan** - fill template and pass quality gate
+3. **Write and commit plan file** - save to `docs/plans/YYYY-MM-DD-<descriptive-name>.md` and commit
 
 ## Key Principles
 
 - **Explore before ask** - investigate discoverable facts first
 - **Two kinds of unknowns** - `discoverable fact` (explore) vs `preference/tradeoff` (ask)
+- **Ask only when needed** - if no unresolved `preference/tradeoff` unknowns remain, skip asking and proceed
 - **One question at a time** - ask one high-impact question per message
 - **Option-first clarification** - when asking, provide 2-4 options with a recommended default
 - **No open unknowns before writing** - pass clarity gate before drafting final plan
@@ -86,6 +84,7 @@ digraph planning {
 - Classify each unknown as either `discoverable fact` or `preference/tradeoff`
 - Discoverable facts: explore the environment instead of asking
 - Preferences/tradeoffs: ask the user with 2-4 options and a recommended default
+- If no unresolved `preference/tradeoff` unknowns remain, skip clarification questions and move to the clarity gate
 - Ask one question per message; avoid questions answerable by exploration
 
 ## Clarity Gate
