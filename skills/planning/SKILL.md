@@ -41,6 +41,7 @@ You MUST complete these tasks in order:
 - **Ask only when needed** - if no unresolved `preference/tradeoff` unknowns remain, skip asking and proceed
 - **One question at a time** - ask one high-impact question per message
 - **Option-first clarification** - when asking, provide 2-4 options with a recommended default
+- **Parallel exploration by default** - during Explore context, delegate independent research tracks to subagents in parallel; the main agent coordinates and synthesizes
 - **No open unknowns before writing** - pass clarity gate before drafting final plan
 - **Planning only** - no implementation actions during this skill
 
@@ -75,6 +76,7 @@ digraph planning {
 ## The Process
 
 **Explore first:**
+- Split exploration into independent research tracks and run them via parallel subagents; main agent should focus on coordination and synthesis
 - Map entrypoints, data flow, module boundaries, and reusable patterns
 - Identify concrete files likely to be created/modified and affected tests
 - Review relevant recent commits/reversions for prior decisions and pitfalls
