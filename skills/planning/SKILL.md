@@ -45,13 +45,14 @@ Treat unknowns differently based on their nature:
 2. **Preferences and tradeoffs** (not discoverable) — ask early.
    - These are intent or implementation choices that cannot be derived from exploration.
    - Provide 2-4 mutually exclusive options with a recommended default.
-   - If asked and unanswered, proceed with the recommended option and record it as an assumption.
+   - Keep clarifying until each required preference/tradeoff is explicit.
+   - Do not proceed while any unknown remains unresolved.
 
 ### Question quality bar
 
 Bias toward asking over assuming. Every question must:
 - Materially change the plan, OR
-- Confirm or lock an important assumption, OR
+- Confirm or lock an important requirement or decision, OR
 - Choose between meaningful tradeoffs
 
 Questions must NOT be answerable by non-mutating exploration. Prefer multiple-choice with a recommended option when natural choices exist.
@@ -108,10 +109,10 @@ When researching, cover these areas explicitly:
 
 You MUST create a task for each of these items and complete them in order:
 
-1. **Explore project context** - check files, docs, recent commits, and relevant patterns
+1. **Explore project context** - check context, codebase, git history, best practices, docs, and relevant patterns
 2. **Ask clarifying questions** - one at a time, understand purpose/constraints/success criteria
-3. **Propose 2-3 approaches** - with trade-offs and your recommendation
-4. **Iterate Explore/Clarify** - loop until the sufficiency gate is decision complete
+3. **Iterate Explore/Clarify** - loop until all unknowns (discoverable facts and preferences/tradeoffs) are resolved
+4. **Pass clarity gate** - verify the planning inputs are decision clear with no open unknowns
 5. **Write and validate plan** - fill the plan template and pass the quality gate
 6. **Write and commit plan file** - save to `docs/plans/YYYY-MM-DD-<descriptive-name>.md` and commit
 
@@ -120,22 +121,23 @@ You MUST create a task for each of these items and complete them in order:
 ```dot
 digraph planning {
     "Resolve feature description" [shape=box];
-    "Explore context and codebase" [shape=box];
+    "Explore context + codebase + git history + best practices + docs" [shape=box];
     "Ask clarifying questions (one at a time)" [shape=box];
-    "Propose 2-3 approaches" [shape=box];
-    "Sufficiency gate" [shape=diamond];
+    "Any unknowns remaining? (discoverable facts / preferences-tradeoffs)" [shape=diamond];
+    "Clarity gate" [shape=diamond];
     "Write plan content" [shape=box];
     "Quality gate" [shape=diamond];
     "Write plan file" [shape=box];
     "Commit plan file" [shape=box];
     "Complete" [shape=doublecircle];
 
-    "Resolve feature description" -> "Explore context and codebase";
-    "Explore context and codebase" -> "Ask clarifying questions (one at a time)";
-    "Ask clarifying questions (one at a time)" -> "Propose 2-3 approaches";
-    "Propose 2-3 approaches" -> "Sufficiency gate";
-    "Sufficiency gate" -> "Explore context and codebase" [label="not decision complete"];
-    "Sufficiency gate" -> "Write plan content" [label="decision complete"];
+    "Resolve feature description" -> "Explore context + codebase + git history + best practices + docs";
+    "Explore context + codebase + git history + best practices + docs" -> "Ask clarifying questions (one at a time)";
+    "Ask clarifying questions (one at a time)" -> "Any unknowns remaining? (discoverable facts / preferences-tradeoffs)";
+    "Any unknowns remaining? (discoverable facts / preferences-tradeoffs)" -> "Explore context + codebase + git history + best practices + docs" [label="yes"];
+    "Any unknowns remaining? (discoverable facts / preferences-tradeoffs)" -> "Clarity gate" [label="no"];
+    "Clarity gate" -> "Explore context + codebase + git history + best practices + docs" [label="fail"];
+    "Clarity gate" -> "Write plan content" [label="pass"];
     "Write plan content" -> "Quality gate";
     "Quality gate" -> "Write plan content" [label="fail"];
     "Quality gate" -> "Write plan file" [label="pass"];
@@ -146,7 +148,7 @@ digraph planning {
 
 ## Planning Loop
 
-Cycle through Explore and Clarify until you reach the sufficiency gate. There is no fixed order or fixed number of iterations — use your judgment.
+Cycle through Explore and Clarify until all unknowns are resolved. There is no fixed order or fixed number of iterations — use your judgment.
 
 ### Explore
 
@@ -165,6 +167,7 @@ Surface remaining unknowns. If you weighed options without asking, that choice l
 - For each remaining unknown, classify it: discoverable fact or preference/tradeoff?
 - If discoverable → go back to Explore
 - If preference/tradeoff → ask the user
+- Keep looping until no unknowns remain in either category
 
 **Gather signals during clarification.** Note:
 - **User's familiarity**: Do they know the codebase patterns? Are they pointing to examples?
@@ -174,22 +177,17 @@ Surface remaining unknowns. If you weighed options without asking, that choice l
 
 You may loop between Explore and Clarify as many times as needed.
 
-### Exploring approaches
+### Clarity Gate
 
-- Propose 2-3 different approaches with trade-offs
-- Present options conversationally with your recommendation and reasoning
-- Lead with your recommended option and explain why
-
-### Sufficiency Gate
-
-**Do not proceed to write the plan until the spec is decision complete.** Check:
+**Do not proceed to write the plan until all unknowns are resolved and the spec is decision clear.** Check:
 
 - [ ] Goal and success criteria are clear
 - [ ] Approach is chosen with rationale
 - [ ] Scope is defined (in and out)
-- [ ] Key tradeoffs are resolved (or recorded as assumptions with chosen defaults)
+- [ ] Key tradeoffs are explicitly resolved
 - [ ] Affected files and code flow are identified
 - [ ] High-risk areas have been researched
+- [ ] No open unknowns remain (discoverable facts and preferences/tradeoffs)
 - [ ] The implementer will not need to make design decisions
 
 If any item fails, return to Explore or Clarify.
