@@ -81,7 +81,6 @@ digraph planning {
 - Identify concrete files likely to be created/modified and affected tests
 - Review relevant recent commits/reversions for prior decisions and pitfalls
 - Do external research only when risk is high or information is unstable; prefer primary sources
-- Run independent investigations in parallel; if findings conflict, choose the safer default and record the rationale and tradeoffs in the plan
 
 **Clarify unknowns:**
 - Classify each unknown as either `discoverable fact` or `preference/tradeoff`
