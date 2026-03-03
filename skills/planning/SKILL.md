@@ -104,6 +104,46 @@ When researching, cover these areas explicitly:
 - If findings conflict, call it out, choose a safer default, and document the tradeoff.
 - Do not ask the user questions that can be resolved by codebase or git-history exploration.
 
+## Checklist
+
+You MUST create a task for each of these items and complete them in order:
+
+1. **Explore project context** - check files, docs, recent commits, and relevant patterns
+2. **Ask clarifying questions** - one at a time, understand purpose/constraints/success criteria
+3. **Propose 2-3 approaches** - with trade-offs and your recommendation
+4. **Iterate Explore/Clarify** - loop until the sufficiency gate is decision complete
+5. **Write and validate plan** - fill the plan template and pass the quality gate
+6. **Write and commit plan file** - save to `docs/plans/YYYY-MM-DD-<descriptive-name>.md` and commit
+
+## Process Flow
+
+```dot
+digraph planning {
+    "Resolve feature description" [shape=box];
+    "Explore context and codebase" [shape=box];
+    "Ask clarifying questions (one at a time)" [shape=box];
+    "Propose 2-3 approaches" [shape=box];
+    "Sufficiency gate" [shape=diamond];
+    "Write plan content" [shape=box];
+    "Quality gate" [shape=diamond];
+    "Write plan file" [shape=box];
+    "Commit plan file" [shape=box];
+    "Complete" [shape=doublecircle];
+
+    "Resolve feature description" -> "Explore context and codebase";
+    "Explore context and codebase" -> "Ask clarifying questions (one at a time)";
+    "Ask clarifying questions (one at a time)" -> "Propose 2-3 approaches";
+    "Propose 2-3 approaches" -> "Sufficiency gate";
+    "Sufficiency gate" -> "Explore context and codebase" [label="not decision complete"];
+    "Sufficiency gate" -> "Write plan content" [label="decision complete"];
+    "Write plan content" -> "Quality gate";
+    "Quality gate" -> "Write plan content" [label="fail"];
+    "Quality gate" -> "Write plan file" [label="pass"];
+    "Write plan file" -> "Commit plan file";
+    "Commit plan file" -> "Complete";
+}
+```
+
 ## Planning Loop
 
 Cycle through Explore and Clarify until you reach the sufficiency gate. There is no fixed order or fixed number of iterations — use your judgment.
