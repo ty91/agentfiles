@@ -176,7 +176,7 @@ If any item fails, return to Explore or Clarify.
 ```markdown
 ---
 title: [Issue Title]
-type: [feat|fix|refactor]
+type: [feat|fix|refactor|docs|chore|perf|test]
 status: active
 date: YYYY-MM-DD
 ---
@@ -251,7 +251,7 @@ date: YYYY-MM-DD
 **Title & Categorization:**
 
 - Draft clear, searchable issue title (e.g., `Add user authentication`, `Fix cart total calculation`)
-- Determine issue type: feat, fix, refactor
+- Determine issue type: feat, fix, refactor, docs, chore, perf, test
 - Convert title to filename: `YYYY-MM-DD-<descriptive-name>.md` (kebab-case)
   - Use today's date as the prefix
   - Example: `Add User Authentication` → `2026-02-21-add-user-authentication.md`
