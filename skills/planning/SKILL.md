@@ -93,7 +93,6 @@ digraph planning {
 - Use `default` to synthesize findings and resolve ambiguities
 - Use `awaiter` when waiting on long-running checks or monitoring
 - Avoid `worker` during planning unless a non-editing execution task truly requires it
-- Split investigations by concern (architecture, maintainability, security/compliance, testing, UI/UX)
 - Run independent investigations in parallel; if findings conflict, choose the safer default and document tradeoffs
 
 ## Clarity Gate
