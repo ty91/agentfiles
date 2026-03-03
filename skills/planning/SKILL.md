@@ -78,7 +78,7 @@ digraph planning {
 - Map entrypoints, data flow, module boundaries, and reusable patterns
 - Identify concrete files likely to be created/modified and affected tests
 - Review relevant recent commits/reversions for prior decisions and pitfalls
-- Do external research only when risk is high or information is unstable; prefer primary sources
+- When external facts materially affect planning decisions, research them early and keep scope tight; prefer primary sources
 
 **Clarify unknowns:**
 - Classify each unknown as either `discoverable fact` or `preference/tradeoff`
