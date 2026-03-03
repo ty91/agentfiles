@@ -76,24 +76,20 @@ digraph planning {
 
 ## The Process
 
-**Explore first:**
-- Map entrypoints, data flow, module boundaries, and reusable patterns
-- Identify concrete files likely to be created/modified and affected tests
-- Review relevant recent commits/reversions for prior decisions and pitfalls
-- Do external research only when risk is high or information is unstable; prefer primary sources
+**Explore first (use subagents in parallel):**
+- Run independent research tracks in parallel, then synthesize into one decision-ready direction
+- conventions: project rules, coding standards, and existing patterns to reuse
+- code flow: code structure, module boundaries, execution flow, and data flow
+- git history: recent changes, reverted approaches, and historical design rationale
+- best practices: external/industry practices; always include for high-risk topics (security, payments, external APIs, data privacy)
+- others: dependency analysis, external docs, API specs, and related references when useful
+- If findings conflict, choose the safer default and document tradeoffs
 
 **Clarify unknowns:**
 - Classify each unknown as either `discoverable fact` or `preference/tradeoff`
 - Discoverable facts: explore the environment instead of asking
 - Preferences/tradeoffs: ask the user with 2-4 options and a recommended default
 - Ask one question per message; avoid questions answerable by exploration
-
-**Subagent operating rules (keep concise, use aggressively when helpful):**
-- Use `explorer` for codebase and git-history fact-finding
-- Use `default` to synthesize findings and resolve ambiguities
-- Use `awaiter` when waiting on long-running checks or monitoring
-- Avoid `worker` during planning unless a non-editing execution task truly requires it
-- Run independent investigations in parallel; if findings conflict, choose the safer default and document tradeoffs
 
 ## Clarity Gate
 
