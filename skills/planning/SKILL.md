@@ -4,116 +4,37 @@ description: Transform feature descriptions into well-structured project plans f
 argument-hint: "[feature description, bug report, or improvement idea]"
 ---
 
-# Create a plan for a new feature or bug fix
+# Create a Plan for a New Feature or Bug Fix
 
-## Introduction
+## Overview
 
-**Note: The current year is 2026.** Use this when dating plans and searching for recent documentation.
+Turn a feature description, bug report, or improvement idea into one executable markdown plan.
 
-Transform feature descriptions, bug reports, or improvement ideas into well-structured markdown plan files that follow project conventions and best practices.
+**Note: The current year is 2026.** Use real dates when naming files and validating recent references.
 
 ## Feature Description
 
 <feature_description> #$ARGUMENTS </feature_description>
 
-**If the feature description above is empty, ask the user:** "What would you like to plan? Please describe the feature, bug fix, or improvement you have in mind."
+If the feature description is empty, ask:
+"What would you like to plan? Please describe the feature, bug fix, or improvement you have in mind."
 
-Do not proceed until you have a clear feature description from the user.
+Do not proceed without a clear feature description.
 
-## Core Principles
-
-These principles govern your behavior throughout the entire planning process. They are not steps to follow in order — they are rules to apply at every decision point.
-
-### Explore first, then ask
-
-Ground yourself in the actual environment before asking the user anything. Exploration prepares better questions — it does not replace asking.
-
-Perform at least one targeted exploration pass before asking.
-
-**Exception:** Ask clarifying questions before exploring ONLY if the feature description contains obvious ambiguities or contradictions that cannot be resolved by exploration.
-
-### Two kinds of unknowns
-
-Treat unknowns differently based on their nature:
-
-1. **Discoverable facts** (single correct answer in the codebase) — explore first.
-   - Search the codebase: configs, entrypoints, schemas, types, existing patterns.
-   - Ask only if: multiple plausible candidates exist, nothing was found but you need specific context, or the ambiguity is actually about product intent.
-   - When asking, present concrete candidates (paths, patterns) and recommend one.
-   - Never ask questions you can answer from the environment.
-
-2. **Preferences and tradeoffs** (not discoverable) — ask early.
-   - These are intent or implementation choices that cannot be derived from exploration.
-   - Provide 2-4 mutually exclusive options with a recommended default.
-   - Keep clarifying until each required preference/tradeoff is explicit.
-   - Do not proceed while any unknown remains unresolved.
-
-### Question quality bar
-
-Bias toward asking over assuming. Every question must:
-- Materially change the plan, OR
-- Confirm or lock an important requirement or decision, OR
-- Choose between meaningful tradeoffs
-
-Questions must NOT be answerable by non-mutating exploration. Prefer multiple-choice with a recommended option when natural choices exist.
-
-### One question at a time
-
-Don't overwhelm with multiple questions.
-
-- Only one question per message - if a topic needs more exploration, break it into multiple questions
-- Prefer multiple choice questions when possible, but open-ended is fine too
-
-## Research Strategy (Codex Subagents)
-
-Use Codex subagents aggressively during research. For non-trivial planning, spawn multiple focused subagents in parallel instead of doing all exploration in a single thread.
-
-When assigning subagents, split research by concern so each subagent owns one clear area:
-- architecture and boundaries
-- maintainability and simplicity
-- security/privacy and compliance risk
-- test strategy and reliability
-- UI/UX constraints (frontend tasks only)
-
-### Research Priorities
-
-When researching, cover these areas explicitly:
-
-1. **Codebase research**
-   - Map entrypoints, data flow, and module boundaries.
-   - Find existing patterns to reuse and constraints to respect.
-   - Identify concrete files likely to be created/modified and affected tests.
-
-2. **Git history research**
-   - Review recent relevant commits, reversions, and related changes.
-   - Capture rationale behind previous decisions and known pitfalls.
-   - Prefer stable patterns that survived prior iterations.
-
-3. **External research (when needed)**
-   - Use for unstable or high-risk domains (security, compliance, external APIs, recent standards).
-   - Prefer primary sources (official docs/specs) over secondary summaries.
-   - Record source links and publication/update dates in plan notes when they materially influence decisions.
-
-### Subagent Operating Rules
-
-- Prefer `explorer` for codebase and git-history fact-finding.
-- Use `default` to synthesize findings, resolve ambiguities, and produce planning decisions.
-- Use `awaiter` whenever you must wait on long-running checks or monitoring.
-- Avoid `worker` during planning research unless a non-editing execution task cannot be handled by `explorer`/`default`.
-- Spawn focused subagents with narrow scopes (one risk/domain per subagent).
-- Run independent investigations in parallel, then synthesize into one decision-ready plan.
-- If findings conflict, call it out, choose a safer default, and document the tradeoff.
-- Do not ask the user questions that can be resolved by codebase or git-history exploration.
+<HARD-GATE>
+Do NOT write the final plan file until all unknowns are resolved and the clarity gate passes.
+Do NOT take implementation actions (no coding, no scaffolding, no implementation skills).
+</HARD-GATE>
 
 ## Checklist
 
-You MUST create a task for each of these items and complete them in order:
+You MUST create a task for each item and complete them in order:
 
-1. **Explore project context** - check context, codebase, git history, best practices, docs, and relevant patterns
-2. **Ask clarifying questions** - one at a time, understand purpose/constraints/success criteria
-3. **Iterate Explore/Clarify** - loop until all unknowns (discoverable facts and preferences/tradeoffs) are resolved
-4. **Pass clarity gate** - verify the planning inputs are decision clear with no open unknowns
-5. **Write and validate plan** - fill the plan template and pass the quality gate
+1. **Explore project context** - codebase, git history, docs, and existing patterns
+2. **Ask clarifying questions** - one at a time, focused on unresolved intent/tradeoffs
+3. **Iterate Explore/Clarify** - loop until no unknowns remain
+4. **Pass clarity gate** - lock scope, approach, and success criteria
+5. **Write and validate plan** - fill template and pass quality gate
 6. **Write and commit plan file** - save to `docs/plans/YYYY-MM-DD-<descriptive-name>.md` and commit
 
 ## Process Flow
@@ -121,78 +42,63 @@ You MUST create a task for each of these items and complete them in order:
 ```dot
 digraph planning {
     "Resolve feature description" [shape=box];
-    "Explore context + codebase + git history + best practices + docs" [shape=box];
-    "Ask clarifying questions (one at a time)" [shape=box];
-    "Any unknowns remaining? (discoverable facts / preferences-tradeoffs)" [shape=diamond];
+    "Explore context" [shape=box];
+    "Clarify unknowns" [shape=box];
+    "Unknowns remaining?" [shape=diamond];
     "Clarity gate" [shape=diamond];
-    "Write plan content" [shape=box];
+    "Write plan" [shape=box];
     "Quality gate" [shape=diamond];
-    "Write plan file" [shape=box];
-    "Commit plan file" [shape=box];
+    "Write file + commit" [shape=box];
     "Complete" [shape=doublecircle];
 
-    "Resolve feature description" -> "Explore context + codebase + git history + best practices + docs";
-    "Explore context + codebase + git history + best practices + docs" -> "Ask clarifying questions (one at a time)";
-    "Ask clarifying questions (one at a time)" -> "Any unknowns remaining? (discoverable facts / preferences-tradeoffs)";
-    "Any unknowns remaining? (discoverable facts / preferences-tradeoffs)" -> "Explore context + codebase + git history + best practices + docs" [label="yes"];
-    "Any unknowns remaining? (discoverable facts / preferences-tradeoffs)" -> "Clarity gate" [label="no"];
-    "Clarity gate" -> "Explore context + codebase + git history + best practices + docs" [label="fail"];
-    "Clarity gate" -> "Write plan content" [label="pass"];
-    "Write plan content" -> "Quality gate";
-    "Quality gate" -> "Write plan content" [label="fail"];
-    "Quality gate" -> "Write plan file" [label="pass"];
-    "Write plan file" -> "Commit plan file";
-    "Commit plan file" -> "Complete";
+    "Resolve feature description" -> "Explore context";
+    "Explore context" -> "Clarify unknowns";
+    "Clarify unknowns" -> "Unknowns remaining?";
+    "Unknowns remaining?" -> "Explore context" [label="yes"];
+    "Unknowns remaining?" -> "Clarity gate" [label="no"];
+    "Clarity gate" -> "Explore context" [label="fail"];
+    "Clarity gate" -> "Write plan" [label="pass"];
+    "Write plan" -> "Quality gate";
+    "Quality gate" -> "Write plan" [label="fail"];
+    "Quality gate" -> "Write file + commit" [label="pass"];
+    "Write file + commit" -> "Complete";
 }
 ```
 
-## Planning Loop
+## The Process
 
-Cycle through Explore and Clarify until all unknowns are resolved. There is no fixed order or fixed number of iterations — use your judgment.
+**Explore first:**
+- Map entrypoints, data flow, module boundaries, and reusable patterns
+- Identify concrete files likely to be created/modified and affected tests
+- Review relevant recent commits/reversions for prior decisions and pitfalls
+- Do external research only when risk is high or information is unstable; prefer primary sources
 
-### Explore
+**Clarify unknowns:**
+- Classify each unknown as either `discoverable fact` or `preference/tradeoff`
+- Discoverable facts: explore the environment instead of asking
+- Preferences/tradeoffs: ask the user with 2-4 options and a recommended default
+- Ask one question per message; avoid questions answerable by exploration
 
-Investigate the feature using direct tools and Codex subagents.
+**Subagent operating rules (keep concise, use aggressively when helpful):**
+- Use `explorer` for codebase and git-history fact-finding
+- Use `default` to synthesize findings and resolve ambiguities
+- Use `awaiter` when waiting on long-running checks or monitoring
+- Avoid `worker` during planning unless a non-editing execution task truly requires it
+- Split investigations by concern (architecture, maintainability, security/compliance, testing, UI/UX)
+- Run independent investigations in parallel; if findings conflict, choose the safer default and document tradeoffs
 
-- Read relevant code, configs, and documentation directly
-- Spawn focused subagents based on what you actually need to learn (prefer `explorer` and `default`)
-- Track what you discovered and what remains unknown
+## Clarity Gate
 
-Use the subagent concern areas above when deciding which subagents to spawn and when.
+Do not write the plan until every item passes:
 
-### Clarify
-
-Surface remaining unknowns. If you weighed options without asking, that choice likely deserved a question.
-
-- For each remaining unknown, classify it: discoverable fact or preference/tradeoff?
-- If discoverable → go back to Explore
-- If preference/tradeoff → ask the user
-- Keep looping until no unknowns remain in either category
-
-**Gather signals during clarification.** Note:
-- **User's familiarity**: Do they know the codebase patterns? Are they pointing to examples?
-- **User's intent**: Speed vs thoroughness? Exploration vs execution?
-- **Topic risk**: Security, payments, external APIs warrant more caution
-- **Uncertainty level**: Is the approach clear or open-ended?
-
-You may loop between Explore and Clarify as many times as needed.
-
-### Clarity Gate
-
-**Do not proceed to write the plan until all unknowns are resolved and the spec is decision clear.** Check:
-
-- [ ] Goal and success criteria are clear
+- [ ] Goal and success criteria are explicit
+- [ ] Scope is clear (in/out)
 - [ ] Approach is chosen with rationale
-- [ ] Scope is defined (in and out)
-- [ ] Key tradeoffs are explicitly resolved
+- [ ] Key tradeoffs are resolved
 - [ ] Affected files and code flow are identified
-- [ ] High-risk areas have been researched
-- [ ] No open unknowns remain (discoverable facts and preferences/tradeoffs)
-- [ ] The implementer will not need to make design decisions
-
-If any item fails, return to Explore or Clarify.
-
-**Announce when ready.** Brief summary of findings and approach, then proceed. The user can redirect if needed.
+- [ ] High-risk areas are researched
+- [ ] No open unknowns remain
+- [ ] Implementer will not need to make design decisions
 
 ## Plan Template
 
@@ -208,7 +114,7 @@ date: YYYY-MM-DD
 
 ## Overview
 
-[What and why — describe the goal concisely]
+[What and why]
 
 ## Proposed Solution
 
@@ -218,26 +124,26 @@ date: YYYY-MM-DD
 
 ### Step 1. [Step Title]
 
-[Desired end state and constraints — reference APIs/patterns by name, not implementation code]
+[Desired end state and constraints]
 
 **Verification:**
 
-- [ ] [Condition that confirms this step is complete]
+- [ ] [Completion condition]
 
 ---
 
 ### Step N. Final Verification
 
-[Describe the full integration check]
+[Full integration check]
 
 **Deliverables:**
 
-- [ ] [Concrete output — endpoint, component, script, etc.]
+- [ ] [Concrete output]
 
 **Acceptance Criteria:**
 
-- [ ] [User-facing behavior — "when X, then Y"]
-- [ ] [Non-functional requirements — performance, security, etc.]
+- [ ] [User-facing behavior]
+- [ ] [Non-functional requirements]
 - [ ] All tests pass, typecheck, lint
 
 ## Context
@@ -251,97 +157,39 @@ date: YYYY-MM-DD
 
 ### Key References
 
-- `path/to/file:line` — description
+- `path/to/file:line` - description
 
 ### Notes
 
-- [Caveats or things to watch out for during implementation]
+- [Implementation caveats]
 
 ## Progress Log
 
 - YYYY-MM-DD: Plan created
 ```
 
-**Title & Categorization:**
-
-- Draft clear, searchable issue title (e.g., `Add user authentication`, `Fix cart total calculation`)
-- Determine issue type: feat, fix, refactor
-- Convert title to filename: `YYYY-MM-DD-<descriptive-name>.md` (kebab-case)
-  - Use today's date as the prefix
-  - Example: `Add User Authentication` → `2026-02-21-add-user-authentication.md`
-  - Keep it descriptive (3-5 words) so plans are findable by context
-
-## Write Plan
-
-Fill in the template using everything gathered during the planning loop:
-
-- Use code examples with syntax highlighting and `file:line` references
-- All checkboxes (Verification, Deliverables, Acceptance Criteria) must be unchecked (`- [ ]`) — they are checked off during implementation
-- Populate the Files to Change table with every file that will be created or modified
-- Include Key References from exploration (file paths, related issues/PRs, and documentation URLs if external research was done)
-
 ## Quality Gate
 
-Verify the plan before writing to disk. Every item must pass.
+Verify before writing to disk:
 
-**Completeness:**
-- [ ] Title is searchable and descriptive
-- [ ] All template sections are filled in (no placeholder text, no TODOs)
-- [ ] Files to Change table is complete with Action, File, and Step
-- [ ] Every implementation step has a Verification section
+- [ ] Title is clear and searchable
+- [ ] No placeholders or TODO text remain
+- [ ] Every step has verification criteria
+- [ ] Files-to-change table is complete
+- [ ] No contradictions across sections
+- [ ] Paths/patterns were verified during exploration
+- [ ] All checkboxes remain unchecked (`- [ ]`)
 
-**Decision completeness:**
-- [ ] An implementer can execute this plan without making design decisions
-- [ ] Ambiguous areas are resolved or explicitly called out with chosen defaults
-- [ ] No open decisions or assumptions remain
-- [ ] Approach rationale is documented (why this approach, not alternatives)
-- [ ] Steps describe intent and constraints, not copy-paste code (snippets ≤10 lines OK for contracts or ambiguous patterns)
+## Write and Commit
 
-**Correctness:**
-- [ ] File paths reference real files (verified during exploration)
-- [ ] Referenced patterns match what actually exists in the codebase
-- [ ] No contradictions between sections
-
-**Formatting:**
-- [ ] All checkboxes are unchecked
-- [ ] Code examples use correct syntax highlighting
-
-If any item fails, fix it before proceeding.
-
-## Write Plan File
-
-**REQUIRED: Write the plan file to disk before presenting any options.**
-
-```bash
-mkdir -p docs/plans/
-```
-
-Use the Write tool to save the complete plan to `docs/plans/YYYY-MM-DD-<descriptive-name>.md`. This step is mandatory and cannot be skipped.
-
-Confirm: "Plan written to docs/plans/[filename]"
-
-## Output Format
-
-**Filename:** Use today's date and kebab-case descriptive name from Title & Categorization.
-
-```
-docs/plans/YYYY-MM-DD-<descriptive-name>.md
-```
+**Filename:** `docs/plans/YYYY-MM-DD-<descriptive-name>.md` (kebab-case, descriptive)
 
 Examples:
-- ✅ `docs/plans/2026-02-21-add-user-authentication.md`
-- ✅ `docs/plans/2026-02-21-fix-checkout-race-condition.md`
-- ✅ `docs/plans/2026-02-21-refactor-api-client-extraction.md`
+- `docs/plans/2026-02-21-add-user-authentication.md`
+- `docs/plans/2026-02-21-fix-checkout-race-condition.md`
 
-**Bad examples:**
-- ❌ `docs/plans/2026-02-21-thing.md` (not descriptive - what "thing"?)
-- ❌ `docs/plans/2026-02-21-new-feature.md` (too vague - what feature?)
-- ❌ `docs/plans/add-user-auth.md` (missing date prefix)
+After writing the file:
+- Stage only the plan file under `docs/plans/` (do not use `git add .`)
+- Create one Conventional Commit (recommended: `docs(plan): add <descriptive-name> plan`)
 
-## Commit Plan File
-
-After writing the plan file, commit it before finishing:
-- Stage only the plan file under `docs/plans/` (do not use `git add .`).
-- Create one Conventional Commit (recommended: `docs(plan): add <descriptive-name> plan`).
-
-Your task is complete when the plan file is written to disk and committed. Stop. Do not offer to implement, do not ask to proceed, do not write code.
+Your task is complete when the plan file is written and committed. Stop there.
