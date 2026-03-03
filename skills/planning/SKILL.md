@@ -81,19 +81,13 @@ digraph planning {
 - Identify concrete files likely to be created/modified and affected tests
 - Review relevant recent commits/reversions for prior decisions and pitfalls
 - Do external research only when risk is high or information is unstable; prefer primary sources
+- Run independent investigations in parallel; if findings conflict, choose the safer default and record the rationale and tradeoffs in the plan
 
 **Clarify unknowns:**
 - Classify each unknown as either `discoverable fact` or `preference/tradeoff`
 - Discoverable facts: explore the environment instead of asking
 - Preferences/tradeoffs: ask the user with 2-4 options and a recommended default
 - Ask one question per message; avoid questions answerable by exploration
-
-**Subagent operating rules (keep concise, use aggressively when helpful):**
-- Use `explorer` for codebase and git-history fact-finding
-- Use `default` to synthesize findings and resolve ambiguities
-- Use `awaiter` when waiting on long-running checks or monitoring
-- Avoid `worker` during planning unless a non-editing execution task truly requires it
-- Run independent investigations in parallel; if findings conflict, choose the safer default and record the rationale and tradeoffs in the plan
 
 ## Clarity Gate
 
