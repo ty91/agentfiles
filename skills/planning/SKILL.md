@@ -103,7 +103,7 @@ Do not write the plan until every item passes:
 
 ## Plan Template
 
-Use the template at `skills/planning/PLAN_TEMPLATE.md`.
+Use the template at `./PLAN_TEMPLATE.md`.
 Do not inline or rewrite a different structure unless the user explicitly asks for a custom format.
 
 ## Quality Gate
