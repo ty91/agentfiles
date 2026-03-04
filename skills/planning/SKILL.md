@@ -8,7 +8,7 @@ argument-hint: "[feature description, bug report, or improvement idea]"
 
 ## Introduction
 
-**Note: The current year is 2026.** Use real dates when naming files and validating recent references.
+**Note: The current year is 2026.** Use this when dating plans and searching for recent documentation.
 
 Transform feature descriptions, bug reports, or improvement ideas into well-structured markdown plan files that follow project conventions and best practices.
 
@@ -21,6 +21,8 @@ Transform feature descriptions, bug reports, or improvement ideas into well-stru
 Do not proceed until you have a clear feature description from the user.
 
 ## Core Principles
+
+**Default: ask over assume.** When you weigh options internally without asking, that is usually a sign you should have asked. Exploration reduces *bad* questions — it should not eliminate questions.
 
 These principles govern your behavior throughout the entire planning process. They are not steps to follow in order — they are rules to apply at every decision point.
 
@@ -40,7 +42,7 @@ Treat unknowns differently based on their nature:
    - Search the codebase: configs, entrypoints, schemas, types, existing patterns.
    - Ask only if: multiple plausible candidates exist, nothing was found but you need specific context, or the ambiguity is actually about product intent.
    - When asking, present concrete candidates (paths, patterns) and recommend one.
-   - Never ask questions you can answer from the environment.
+   - If the codebase shows a single unambiguous answer, use it. Otherwise, present what you found and ask.
 
 2. **Preferences and tradeoffs** (not discoverable) — ask early.
    - These are intent or implementation choices that cannot be derived from exploration.
@@ -54,11 +56,11 @@ Bias toward asking over assuming. Every question must:
 - Confirm or lock an important assumption, OR
 - Choose between meaningful tradeoffs
 
-Questions must NOT be answerable by non-mutating exploration. Prefer multiple-choice with a recommended option when natural choices exist.
+Questions must NOT be answerable by non-mutating exploration.
 
 ### One question at a time
 
-Ask one high-impact preference/tradeoff question per message. Do not bundle multiple unresolved preference questions in one message.
+Ask one question per message to avoid overwhelming the user. If a topic needs deeper exploration, break it into multiple sequential questions. Prefer multiple-choice with a recommended option when natural choices exist.
 
 ## Planning Loop
 
@@ -68,7 +70,7 @@ Cycle through Explore and Clarify until you reach the sufficiency gate. There is
 
 Investigate the feature using direct tools and targeted exploration.
 
-- Split exploration into independent research tracks and run them via parallel subagents; main agent should focus on coordination and synthesis
+- Split exploration into independent research tracks and run them in parallel; focus on coordination and synthesis
 - Map entrypoints, data flow, module boundaries, and reusable patterns
 - Identify concrete files likely to be created/modified and affected tests
 - Review relevant recent commits/reversions for prior decisions and pitfalls
@@ -81,8 +83,7 @@ Surface remaining unknowns. If you weighed options without asking, that choice l
 
 - For each remaining unknown, classify it: discoverable fact or preference/tradeoff?
 - If discoverable → go back to Explore
-- If preference/tradeoff → ask the user with 2-4 options and a recommended default
-- Ask one question per message; avoid questions answerable by exploration
+- If preference/tradeoff → ask the user
 
 **Gather signals during clarification.** Note:
 - **User's familiarity**: Do they know the codebase patterns? Are they pointing to examples?
@@ -102,7 +103,6 @@ You may loop between Explore and Clarify as many times as needed.
 - [ ] Key tradeoffs are resolved (or recorded as assumptions with chosen defaults)
 - [ ] Affected files and code flow are identified
 - [ ] High-risk areas have been researched
-- [ ] No unresolved unknowns remain
 - [ ] The implementer will not need to make design decisions
 
 If any item fails, return to Explore or Clarify.
@@ -239,20 +239,6 @@ After writing the file:
 - Create one Conventional Commit (recommended: `docs(plan): add <descriptive-name> plan`)
 
 Confirm: "Plan written to docs/plans/[filename]"
-
-## Design Specification (Conditional)
-
-**If the plan involves frontend UI** (pages, components, layouts, visual interfaces):
-
-Insert a `## Design Specification` section into the plan file between `## Proposed Solution` and `## Implementation Steps`.
-
-The section should capture:
-- Visual direction and information hierarchy
-- Component-level behavior and states
-- Responsiveness and accessibility considerations
-- Reuse of existing design patterns/tokens in the codebase
-
-**Skip this step** if the plan is purely backend, infrastructure, or has no visual component.
 
 ## Output Format
 
