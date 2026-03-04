@@ -21,6 +21,8 @@ Do not proceed until you have a clear feature description from the user.
 
 ## Core Principles
 
+**Default: ask over assume.** When you weigh options internally without asking, that is usually a sign you should have asked. Exploration reduces *bad* questions — it should not eliminate questions.
+
 These principles govern your behavior throughout the entire planning process. They are not steps to follow in order — they are rules to apply at every decision point.
 
 **Always use the `AskUserQuestion` tool when asking the user questions.** Prefer multiple-choice with a recommended option when natural choices exist.
@@ -41,7 +43,7 @@ Treat unknowns differently based on their nature:
    - Search the codebase: configs, entrypoints, schemas, types, existing patterns.
    - Ask only if: multiple plausible candidates exist, nothing was found but you need specific context, or the ambiguity is actually about product intent.
    - When asking, present concrete candidates (paths, patterns) and recommend one.
-   - Never ask questions you can answer from the environment.
+   - If the codebase shows a single unambiguous answer, use it. Otherwise, present what you found and ask.
 
 2. **Preferences and tradeoffs** (not discoverable) — ask early.
    - These are intent or implementation choices that cannot be derived from exploration.
