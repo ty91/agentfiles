@@ -23,6 +23,8 @@ Do not proceed until you have a clear feature description from the user.
 
 These principles govern your behavior throughout the entire planning process. They are not steps to follow in order — they are rules to apply at every decision point.
 
+**Always use the `AskUserQuestion` tool when asking the user questions.** Prefer multiple-choice with a recommended option when natural choices exist.
+
 ### Explore first, then ask
 
 Ground yourself in the actual environment before asking the user anything. Exploration prepares better questions — it does not replace asking.
@@ -53,23 +55,7 @@ Bias toward asking over assuming. Every question must:
 - Confirm or lock an important assumption, OR
 - Choose between meaningful tradeoffs
 
-Questions must NOT be answerable by non-mutating exploration. Prefer multiple-choice with a recommended option when natural choices exist.
-
-## Research Agents
-
-These agents are available as tools. Use them selectively based on what you need to learn — you do not need to run all of them, and you do not need to run them all at once.
-
-| Agent | Use when |
-|-------|----------|
-| `conventions-researcher` | You need to understand project rules, coding standards, existing patterns |
-| `code-flow-researcher` | You need to trace code structure, module boundaries, execution flow, data flow |
-| `git-history-analyzer` | You need historical context: recent changes, reverted approaches, design rationale |
-| `best-practices-researcher` | You need external/industry best practices — **always use for high-risk topics** (security, payments, external APIs, data privacy) |
-| `general-purpose` (model: sonnet) | Context not covered above: build/lint status, dependency analysis, external docs, API specs |
-
-**Multiple instances:** When a feature spans distinct areas (e.g., auth + payments, frontend + backend API), spawn separate instances of the same agent type with focused prompts per area. Each instance should target one specific area so results stay focused and actionable.
-
-Run agents in parallel when possible.
+Questions must NOT be answerable by non-mutating exploration.
 
 ## Planning Loop
 
@@ -77,13 +63,16 @@ Cycle through Explore and Clarify until you reach the sufficiency gate. There is
 
 ### Explore
 
-Investigate the feature using direct tools and research agents.
+Investigate the feature using direct tools and targeted exploration.
 
-- Read relevant code, configs, and documentation directly
-- Spawn research agents selectively based on what you actually need to learn
+- Spawn research agents in parallel for independent research tracks; main agent should focus on coordination and synthesis
+  - Leverage specialized agents: `conventions-researcher`, `code-flow-researcher`, `git-history-analyzer`, `best-practices-researcher`
+  - For needs not covered by specialized agents (build/lint status, dependency analysis, external docs, API specs), use `Explore` or `general-purpose` agents
+- Map entrypoints, data flow, module boundaries, and reusable patterns
+- Identify concrete files likely to be created/modified and affected tests
+- Review relevant recent commits/reversions for prior decisions and pitfalls
+- When external facts materially affect planning decisions, research them early and keep scope tight; prefer primary sources
 - Track what you discovered and what remains unknown
-
-Refer to the Research Agents table above when deciding which agents to spawn and when.
 
 ### Clarify
 
@@ -230,7 +219,7 @@ Verify the plan before writing to disk. Every item must pass.
 
 If any item fails, fix it before proceeding.
 
-## Write Plan File
+## Write and Commit Plan File
 
 **REQUIRED: Write the plan file to disk before presenting any options.**
 
@@ -238,21 +227,13 @@ If any item fails, fix it before proceeding.
 mkdir -p docs/plans/
 ```
 
-Use the Write tool to save the complete plan to `docs/plans/YYYY-MM-DD-<descriptive-name>.md`. This step is mandatory and cannot be skipped.
+Write the complete plan to `docs/plans/YYYY-MM-DD-<descriptive-name>.md`.
+
+After writing the file:
+- Stage only the plan file under `docs/plans/` (do not use `git add .`)
+- Create one Conventional Commit (recommended: `docs(plan): add <descriptive-name> plan`)
 
 Confirm: "Plan written to docs/plans/[filename]"
-
-## Design Specification (Conditional)
-
-**If the plan involves frontend UI** (pages, components, layouts, visual interfaces):
-
-Spawn the frontend-designer agent with the plan file path. The agent will read the plan, analyze the codebase's existing design patterns, and insert a `## Design Specification` section into the plan file (between `## Proposed Solution` and `## Implementation Steps`).
-
-- Task frontend-designer(plan_file_path)
-
-Wait for the agent to complete, then confirm: "Design specification added to docs/plans/[filename]"
-
-**Skip this step** if the plan is purely backend, infrastructure, or has no visual component.
 
 ## Output Format
 
