@@ -7,12 +7,12 @@
     "brainstorming":       ["claude"],
     "code-review":         ["codex"],
     "document-review":     ["claude"],
-    "executing-plan":      ["codex"],
+    "executing-plan":      ["claude", "codex"],
     "jira":                ["claude", "codex"],
-    "karpathy-guidelines": ["claude"],
+    "karpathy-guidelines": [],
     "planning":            ["codex"],
     "pr":                  ["claude"],
-    "readability-review":  ["claude"],
+    "readability-review":  [],
     "writing-plan":        []
   }
 }
