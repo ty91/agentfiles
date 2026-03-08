@@ -1,4 +1,4 @@
-# AGENTS.md
+# Global Context
 
 ## Agent Protocol
 
@@ -54,8 +54,8 @@
 
 ## Documentation
 
-- 설계/아키텍처/가이드 등 현재 상태를 설명하는 문서는 항상 최신 repo 스냅샷 기준으로 쓴다. `오늘부터`, `지금부터`, `앞으로`, `이제` 같은 상대적 시점 표현은 쓰지 않는다.
-- 계획/제안 문서는 예외로 할 수 있지만, 현재 상태 문서와 구분되게 쓴다.
+- Docs that describe the current state of the repo (design, architecture, guides, etc.) must always reflect the latest repo snapshot. Do not use relative time phrases like `starting today`, `from now on`, `going forward`, or `now`.
+- Plans and proposals may be exceptions, but keep them clearly distinct from current-state docs.
 - Document updates: preserve the existing language of the document. Do not translate or switch languages.
 
 ## Language
