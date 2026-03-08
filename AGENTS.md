@@ -2,12 +2,16 @@
 
 ## Agent Protocol
 
-- User: Taeyoung (ty91, ty91kr@gmail.com)
+- User: Taeyoung (태영)
 - Do not write code until the user explicitly asks for it.
 - Prefer end-to-end verify; if blocked, say what's missing.
 - Verify every task outcome before reporting completion.
 - Workspace: `~/Developer/workspace`. Missing ty91 repo: clone `https://github.com/ty91/<repo>.git`.
 - 3rd-party/OSS (non-ty91): clone under `~/Developer/oss`.
+
+## Important Locations
+
+- Obsidian vault: `$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Second Brain`
 
 ## Code Quality
 
@@ -50,9 +54,7 @@
 
 ## Language
 
-- Code comments: English.
-- User-facing communication (chat/docs): Korean unless instructed otherwise.
-- Inter-agent communication: English.
+- Default: polite Korean (chat/docs/comments)
 - Document updates: preserve the existing language of the document. Do not translate or switch languages.
 
 ## Stack Notes
