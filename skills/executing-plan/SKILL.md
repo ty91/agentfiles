@@ -77,16 +77,6 @@ Do not proceed until a valid plan file is identified and explicitly confirmed by
 
    **Step commits are mandatory.** Each completed step gets its own commit. Use Conventional Commits format and stage only files related to the step (not `git add .`).
 
-   **Agent Delegation**: For implementation tasks, delegate to the appropriate engineer agent via the Task tool:
-
-   | Agent | Expertise |
-   |-------|-----------|
-   | **frontend-engineer** | React, TypeScript, CSS/Tailwind, state management, component design |
-   | **backend-engineer** | Python (FastAPI, Django), Node.js (Express, NestJS), APIs, databases |
-   | **general-engineer** | Configuration, scripts, CI/CD, documentation, cross-cutting concerns |
-
-   When delegating, provide the plan file path and the specific step to implement. The agent will read all necessary context from the plan.
-
 2. **Follow Existing Patterns**
 
    - The plan should reference similar code - read those files first
