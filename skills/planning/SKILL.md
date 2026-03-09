@@ -1,6 +1,6 @@
 ---
 name: planning
-description: Transform feature descriptions into well-structured project plans following conventions
+description: Transform feature descriptions into well-structured project plans following conventions; use only when the user explicitly mentions this skill
 argument-hint: "[feature description, bug report, or improvement idea]"
 ---
 
