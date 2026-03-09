@@ -111,7 +111,7 @@ If any item fails, return to Explore or Clarify.
 
 ## Plan Template
 
-Use `PLAN_TEMPLATE.md` in this skill directory as the source of truth for the plan template. Keep the generated plan structure identical to that file.
+Use `./PLAN_TEMPLATE.md` in this skill directory as the source of truth for the plan template. Keep the generated plan structure identical to that file.
 
 **Title & Categorization:**
 
