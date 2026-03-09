@@ -16,15 +16,11 @@ Accept these review targets:
 - `A..B` — review the exact diff `A..B`
 - `A...B` — review `merge-base(A, B)..B`
 - `A` — review `A...HEAD`
-- no target provided:
-  - if current branch is not the default branch, review `default-branch...HEAD`
-  - if current branch is the default branch, review `HEAD~1..HEAD`
 
-Determine the default branch in this order:
+If no target is provided, stop and ask the user to provide one.
+Examples: `main...feature/login`, `release..hotfix`, `HEAD~3..HEAD`, `HEAD~3...HEAD`
 
-1. `origin/HEAD`
-2. `main`
-3. `master`
+The default branch is always `main`.
 
 If any ref cannot be resolved, stop and report the invalid ref.
 
@@ -86,7 +82,7 @@ Code Review: [target]
 
 **Overview**
 - Current branch: [branch-name]
-- Requested target: [input or default]
+- Requested target: [input]
 - Resolved review range: [LEFT..RIGHT]
 - Commits reviewed: [count]
 - Files changed: [count]
