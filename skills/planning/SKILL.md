@@ -190,6 +190,7 @@ date: YYYY-MM-DD
 
 Fill in the template using everything gathered during the planning loop:
 
+- Write plan content in concise, polite Korean, except for section headings
 - Use code examples with syntax highlighting and `file:line` references
 - All checkboxes (Verification, Deliverables, Acceptance Criteria) must be unchecked (`- [ ]`) — they are checked off during implementation
 - Populate the Files to Change table with every file that will be created or modified
