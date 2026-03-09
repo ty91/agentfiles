@@ -145,10 +145,10 @@ Run 2 rounds of automated code review to catch issues before completion. Each ro
    |----------|--------|
    | **P0 (Must Fix)** | Fix immediately. Commit each fix individually. |
    | **P1 (Should Fix)** — actionable and straightforward | Fix and commit. |
-   | **P1 (Should Fix)** — deferrable (non-merge-blocker) | Record in `docs/tech-debt-tracker.md`. |
-   | **P2 (Consider)** | Record in `docs/tech-debt-tracker.md` if worth tracking; otherwise skip. |
+   | **P1 (Should Fix)** — deferrable (non-merge-blocker) | Record in `docs/plans/tech-debt-tracker.md`. |
+   | **P2 (Consider)** | Record in `docs/plans/tech-debt-tracker.md` if worth tracking; otherwise skip. |
 
-   **Tech Debt Tracker format** — create `docs/tech-debt-tracker.md` if it does not exist:
+   **Tech Debt Tracker format** — create `docs/plans/tech-debt-tracker.md` if it does not exist:
 
    ```markdown
    # Tech Debt Tracker
@@ -174,7 +174,7 @@ Run 2 rounds of automated code review to catch issues before completion. Each ro
    - YYYY-MM-DD: Code review round 2 — P0: N, P1: N, P2: N — Verdict: [verdict]
    ```
 
-   If Round 2 finds new P0 issues, fix them immediately and commit. Record any new deferrable P1/P2 in `docs/tech-debt-tracker.md`.
+   If Round 2 finds new P0 issues, fix them immediately and commit. Record any new deferrable P1/P2 in `docs/plans/tech-debt-tracker.md`.
 
 4. **Decision Gate**
 
@@ -213,7 +213,7 @@ Run 2 rounds of automated code review to catch issues before completion. Each ro
 
 2. **Summarize to User**
    - List what was completed (steps, features, key commits)
-   - Note any items recorded in `docs/tech-debt-tracker.md` as follow-up work
+   - Note any items recorded in `docs/plans/tech-debt-tracker.md` as follow-up work
    - Note any other follow-up work identified during implementation
    - Do **not** push or create a PR automatically — wait for the user to request it
 
