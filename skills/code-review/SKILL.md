@@ -1,19 +1,32 @@
 ---
 name: code-review
-description: Review code changes between current branch and main using 5 specialized review agents in parallel
+description: Review committed code changes for a resolved git diff target using 5 specialized review agents in parallel
 ---
 
 # Code Review
 
-Review all code changes between the current branch and main using 5 specialized review agents in parallel, then synthesize findings into a unified P0/P1/P2 report.
+Review committed code changes for a resolved git diff target using 5 specialized review agents in parallel, then synthesize findings into a unified P0/P1/P2 report.
 
-## Branch Validation
+## Review Scope
 
-Check if the current branch is `main` or `master`. If so, respond:
+Review only committed changes. Always exclude uncommitted working tree changes, staged-but-uncommitted changes, and untracked files.
 
-"You are on the main branch. This command reviews changes between a feature branch and main. Please checkout a feature branch first."
+Accept these review targets:
 
-Then stop.
+- `A..B` — review the exact diff `A..B`
+- `A...B` — review `merge-base(A, B)..B`
+- `A` — review `A...HEAD`
+- no target provided:
+  - if current branch is not the default branch, review `default-branch...HEAD`
+  - if current branch is the default branch, review `HEAD~1..HEAD`
+
+Determine the default branch in this order:
+
+1. `origin/HEAD`
+2. `main`
+3. `master`
+
+If any ref cannot be resolved, stop and report the invalid ref.
 
 ## Workflow
 
@@ -22,13 +35,23 @@ Then stop.
 Run these commands to understand the review scope:
 
 1. `git branch --show-current` — current branch name
-2. `git log main..HEAD --oneline` — commits on this branch
-3. `git diff main...HEAD --stat` — files changed summary
-4. `git diff HEAD --stat` — uncommitted changes
+2. Resolve the requested target into a concrete review range `LEFT..RIGHT`
+3. `git log --oneline LEFT..RIGHT` — commits in scope
+4. `git diff --stat LEFT..RIGHT` — files changed summary
+
+Do not use working tree diffs such as `git diff HEAD` for review scope.
 
 ### Step 2: Spawn 5 Review Agents in Parallel
 
-Spawn one agent per review point below. Pass each agent the branch context (branch name, commit list, files changed). Wait for all agents to complete before proceeding to Step 3.
+Spawn one agent per review point below. Pass each agent:
+
+- current branch
+- requested target
+- resolved review range
+- commit list
+- files changed summary
+
+Wait for all agents to complete before proceeding to Step 3.
 
 | # | Agent | Focus |
 |---|-------|-------|
@@ -59,11 +82,15 @@ After all 5 agents complete:
 ## Output Format
 
 ```
-Code Review: [branch-name]
+Code Review: [target]
 
 **Overview**
+- Current branch: [branch-name]
+- Requested target: [input or default]
+- Resolved review range: [LEFT..RIGHT]
 - Commits reviewed: [count]
 - Files changed: [count]
+- Uncommitted changes: excluded
 - Reviewers: 5 (simplicity, architecture, readability, security, maintainability)
 
 **P0 — Must Fix**
@@ -92,4 +119,5 @@ Verdict: [PASS / NEEDS WORK / SIGNIFICANT ISSUES]
 
 - This is a read-only review — no files will be modified
 - Do not run tests
+- Review only committed changes in the resolved range
 - The review covers 5 perspectives: simplicity, architecture, readability, security, maintainability
