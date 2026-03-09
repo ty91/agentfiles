@@ -4,7 +4,7 @@ description: Transform feature descriptions into well-structured project plans f
 argument-hint: "[feature description, bug report, or improvement idea]"
 ---
 
-# Create a plan for a new feature or bug fix
+# Create a Plan for a New Feature or Bug Fix
 
 ## Introduction
 
@@ -26,7 +26,7 @@ Do not proceed until you have a clear feature description from the user.
 
 These principles govern your behavior throughout the entire planning process. They are not steps to follow in order — they are rules to apply at every decision point.
 
-### Explore first, then ask
+### Explore First, Then Ask
 
 Ground yourself in the actual environment before asking the user anything. Exploration prepares better questions — it does not replace asking.
 
@@ -36,7 +36,7 @@ As a default, perform at least one targeted exploration pass before asking any c
 
 This default also applies to preference/tradeoff questions: do a lightweight exploration pass first so you can ask with concrete options grounded in the actual codebase.
 
-### Two kinds of unknowns
+### Two Kinds of Unknowns
 
 Treat unknowns differently based on their nature:
 
@@ -53,7 +53,7 @@ Treat unknowns differently based on their nature:
    - Provide 2-4 mutually exclusive options with a recommended default.
    - If asked and unanswered, proceed with the recommended option and record it as an assumption.
 
-### Question quality bar
+### Question Quality Bar
 
 Bias toward asking over assuming. Every question must:
 - Materially change the plan, OR
@@ -62,7 +62,7 @@ Bias toward asking over assuming. Every question must:
 
 Questions must NOT be answerable by non-mutating exploration.
 
-### One question at a time
+### One Question at a Time
 
 Ask one question per message to avoid overwhelming the user. If a topic needs deeper exploration, break it into multiple sequential questions. Prefer multiple-choice with a recommended option when natural choices exist.
 
@@ -148,7 +148,7 @@ Verify the plan before writing to disk. Every item must pass.
 - [ ] Files to Change table is complete with Action, File, and Step
 - [ ] Every implementation step has a Verification section
 
-**Decision completeness:**
+**Decision Completeness:**
 - [ ] An implementer can execute this plan without making design decisions
 - [ ] Ambiguous areas are resolved or explicitly called out with chosen defaults
 - [ ] Approach rationale is documented (why this approach, not alternatives)
