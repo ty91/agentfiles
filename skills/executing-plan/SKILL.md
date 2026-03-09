@@ -224,6 +224,11 @@ Run 2 rounds of automated code review to catch issues before completion. Each ro
    status: active  →  status: completed
    ```
 
+   If the plan file is under `docs/plans/active/`, move it to `docs/plans/completed/` while keeping the same filename:
+   ```
+   docs/plans/active/<filename>.md  →  docs/plans/completed/<filename>.md
+   ```
+
    Add a final entry to the Progress Log:
    ```
    - YYYY-MM-DD: Implementation completed
