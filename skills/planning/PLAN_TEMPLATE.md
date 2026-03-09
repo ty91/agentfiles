@@ -1,9 +1,6 @@
-# Planning Template
-
-```markdown
 ---
 title: [Issue Title]
-type: [feat|fix|refactor|docs|chore|perf|test]
+type: [feat|fix|refactor]
 status: active
 date: YYYY-MM-DD
 ---
@@ -12,7 +9,7 @@ date: YYYY-MM-DD
 
 ## Overview
 
-[What and why]
+[What and why — describe the goal concisely]
 
 ## Proposed Solution
 
@@ -22,26 +19,26 @@ date: YYYY-MM-DD
 
 ### Step 1. [Step Title]
 
-[Desired end state and constraints]
+[Desired end state and constraints — reference APIs/patterns by name, not implementation code]
 
 **Verification:**
 
-- [ ] [Completion condition]
+- [ ] [Condition that confirms this step is complete]
 
 ---
 
 ### Step N. Final Verification
 
-[Full integration check]
+[Describe the full integration check]
 
 **Deliverables:**
 
-- [ ] [Concrete output]
+- [ ] [Concrete output — endpoint, component, script, etc.]
 
 **Acceptance Criteria:**
 
-- [ ] [User-facing behavior]
-- [ ] [Non-functional requirements]
+- [ ] [User-facing behavior — "when X, then Y"]
+- [ ] [Non-functional requirements — performance, security, etc.]
 - [ ] All tests pass, typecheck, lint
 
 ## Context
@@ -55,13 +52,12 @@ date: YYYY-MM-DD
 
 ### Key References
 
-- `path/to/file:line` - description
+- `path/to/file:line` — description
 
 ### Notes
 
-- [Implementation caveats]
+- [Caveats or things to watch out for during implementation]
 
 ## Progress Log
 
 - YYYY-MM-DD: Plan created
-```
