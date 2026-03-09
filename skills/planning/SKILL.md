@@ -30,9 +30,11 @@ These principles govern your behavior throughout the entire planning process. Th
 
 Ground yourself in the actual environment before asking the user anything. Exploration prepares better questions — it does not replace asking.
 
-Perform at least one targeted exploration pass before asking.
+As a default, perform at least one targeted exploration pass before asking any clarifying question.
 
 **Exception:** Ask clarifying questions before exploring ONLY if the feature description contains obvious ambiguities or contradictions that cannot be resolved by exploration.
+
+This default also applies to preference/tradeoff questions: do a lightweight exploration pass first so you can ask with concrete options grounded in the actual codebase.
 
 ### Two kinds of unknowns
 
@@ -44,8 +46,10 @@ Treat unknowns differently based on their nature:
    - When asking, present concrete candidates (paths, patterns) and recommend one.
    - If the codebase shows a single unambiguous answer, use it. Otherwise, present what you found and ask.
 
-2. **Preferences and tradeoffs** (not discoverable) — ask early.
+2. **Preferences and tradeoffs** (not discoverable) — ask early, but usually after one lightweight exploration pass.
    - These are intent or implementation choices that cannot be derived from exploration.
+   - Use the initial exploration pass to gather concrete options, constraints, and examples from the codebase.
+   - Then ask the user as soon as the meaningful tradeoff is clear.
    - Provide 2-4 mutually exclusive options with a recommended default.
    - If asked and unanswered, proceed with the recommended option and record it as an assumption.
 
@@ -113,6 +117,8 @@ If any item fails, return to Explore or Clarify.
 
 Use `./PLAN_TEMPLATE.md` in this skill directory as the source of truth for the plan template. Keep the generated plan structure identical to that file.
 
+Interpret "structure" as the section hierarchy and required headings. You may repeat the `Implementation Steps` step block as many times as needed, but do not rename, remove, or reorder the top-level template sections.
+
 **Title & Categorization:**
 
 - Draft clear, searchable issue title (e.g., `Add user authentication`, `Fix cart total calculation`)
@@ -161,7 +167,9 @@ If any item fails, fix it before proceeding.
 
 ## Write and Commit Plan File
 
-**REQUIRED: Write the plan file to disk before presenting any options.**
+**REQUIRED: Write the plan file to disk before presenting the final completed plan as the deliverable.**
+
+Clarifying questions and tradeoff options may be presented earlier during the planning loop. This requirement applies only once the spec is decision complete and you are ready to deliver the finished plan.
 
 ```bash
 mkdir -p docs/plans/active/
@@ -179,20 +187,8 @@ Confirm: "Plan written to docs/plans/active/[filename]"
 
 ## Output Format
 
-**Filename:** Use today's date and kebab-case descriptive name from Title & Categorization.
+In the final response, provide the exact plan path using the filename derived in **Title & Categorization**:
 
-```
-docs/plans/active/YYYY-MM-DD-<descriptive-name>.md
-```
+`docs/plans/active/YYYY-MM-DD-<descriptive-name>.md`
 
-Examples:
-- ✅ `docs/plans/active/2026-02-21-add-user-authentication.md`
-- ✅ `docs/plans/active/2026-02-21-fix-checkout-race-condition.md`
-- ✅ `docs/plans/active/2026-02-21-refactor-api-client-extraction.md`
-
-**Bad examples:**
-- ❌ `docs/plans/active/2026-02-21-thing.md` (not descriptive - what "thing"?)
-- ❌ `docs/plans/active/2026-02-21-new-feature.md` (too vague - what feature?)
-- ❌ `docs/plans/active/add-user-auth.md` (missing date prefix)
-
-Your task is complete when the plan file is written and committed. Stop. Do not offer to implement, do not ask to proceed, do not write code.
+Do not offer implementation, do not ask to proceed, and do not write code. Your task is complete when the plan file is written and committed.
