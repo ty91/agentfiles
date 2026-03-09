@@ -227,35 +227,35 @@ If any item fails, fix it before proceeding.
 **REQUIRED: Write the plan file to disk before presenting any options.**
 
 ```bash
-mkdir -p docs/plans/
+mkdir -p docs/plans/active/
 ```
 
 Write the complete plan to:
 
-`docs/plans/YYYY-MM-DD-<descriptive-name>.md`
+`docs/plans/active/YYYY-MM-DD-<descriptive-name>.md`
 
 After writing the file:
-- Stage only the plan file under `docs/plans/` (do not use `git add .`)
+- Stage only the plan file under `docs/plans/active/` (do not use `git add .`)
 - Create one Conventional Commit (recommended: `docs(plan): add <descriptive-name> plan`)
 
-Confirm: "Plan written to docs/plans/[filename]"
+Confirm: "Plan written to docs/plans/active/[filename]"
 
 ## Output Format
 
 **Filename:** Use today's date and kebab-case descriptive name from Title & Categorization.
 
 ```
-docs/plans/YYYY-MM-DD-<descriptive-name>.md
+docs/plans/active/YYYY-MM-DD-<descriptive-name>.md
 ```
 
 Examples:
-- ✅ `docs/plans/2026-02-21-add-user-authentication.md`
-- ✅ `docs/plans/2026-02-21-fix-checkout-race-condition.md`
-- ✅ `docs/plans/2026-02-21-refactor-api-client-extraction.md`
+- ✅ `docs/plans/active/2026-02-21-add-user-authentication.md`
+- ✅ `docs/plans/active/2026-02-21-fix-checkout-race-condition.md`
+- ✅ `docs/plans/active/2026-02-21-refactor-api-client-extraction.md`
 
 **Bad examples:**
-- ❌ `docs/plans/2026-02-21-thing.md` (not descriptive - what "thing"?)
-- ❌ `docs/plans/2026-02-21-new-feature.md` (too vague - what feature?)
-- ❌ `docs/plans/add-user-auth.md` (missing date prefix)
+- ❌ `docs/plans/active/2026-02-21-thing.md` (not descriptive - what "thing"?)
+- ❌ `docs/plans/active/2026-02-21-new-feature.md` (too vague - what feature?)
+- ❌ `docs/plans/active/add-user-auth.md` (missing date prefix)
 
 Your task is complete when the plan file is written and committed. Stop. Do not offer to implement, do not ask to proceed, do not write code.
