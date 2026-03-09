@@ -121,20 +121,7 @@ Do not proceed until a valid plan file is identified and explicitly confirmed by
    # Run linting / type checking (per CLAUDE.md)
    ```
 
-2. **Code Review** (Optional - for complex/risky changes)
-
-   Use the `code-reviewer` agent for changes that warrant review:
-   - Large refactor affecting many files (10+)
-   - Security-sensitive changes (authentication, permissions, data access)
-   - Performance-critical code paths
-   - Complex algorithms or business logic
-   - User explicitly requests thorough review
-
-   Spawn the code-reviewer agent via the Task tool with the branch diff context. If critical issues are found, fix them. Pass simplification opportunities to the `code-simplifier` agent.
-
-   **For most features: tests + linting + following patterns is sufficient.**
-
-3. **Final Validation**
+2. **Final Validation**
    - All plan checkboxes checked off
    - All tests pass
    - Linting passes
