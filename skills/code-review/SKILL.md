@@ -5,20 +5,18 @@ description: Review committed code changes for a resolved git diff target using 
 
 # Code Review
 
-Review committed code changes for a resolved git diff target using 5 specialized review agents in parallel, then synthesize findings into a unified P0/P1/P2 report.
+Review committed code changes for an explicit git diff range using 5 specialized review agents in parallel, then synthesize findings into a unified P0/P1/P2 report.
 
 ## Review Scope
 
 Review only committed changes. Always exclude uncommitted working tree changes, staged-but-uncommitted changes, and untracked files.
 
-Accept these review targets:
+Accept only this review target format:
 
 - `A..B` — review the exact diff `A..B`
-- `A...B` — review `merge-base(A, B)..B`
-- `A` — review `A...HEAD`
 
 If no target is provided, stop and ask the user to provide one.
-Examples: `main...feature/login`, `release..hotfix`, `HEAD~3..HEAD`, `HEAD~3...HEAD`
+Examples: `main..feature/login`, `release..hotfix`, `HEAD~3..HEAD`
 
 The default branch is always `main`.
 
@@ -31,7 +29,7 @@ If any ref cannot be resolved, stop and report the invalid ref.
 Run these commands to understand the review scope:
 
 1. `git branch --show-current` — current branch name
-2. Resolve the requested target into a concrete review range `LEFT..RIGHT`
+2. Validate the requested target as `LEFT..RIGHT`
 3. `git log --oneline LEFT..RIGHT` — commits in scope
 4. `git diff --stat LEFT..RIGHT` — files changed summary
 
