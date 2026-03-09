@@ -18,17 +18,17 @@ This command takes a work document (plan, specification, or todo file) and execu
 **Argument:** `#$ARGUMENTS`
 
 1. **If argument is provided:**
-   - Date (e.g. `2026-02-21`): match `docs/plans/<date>-*.md`.
-   - Keyword (e.g. `authentication`, `checkout`): match `docs/plans/*-*<keyword>*.md`.
+   - Date (e.g. `2026-02-21`): match `docs/plans/active/<date>-*.md`.
+   - Keyword (e.g. `authentication`, `checkout`): match `docs/plans/active/*-*<keyword>*.md`.
    - File path: use directly.
    - If multiple files match, list them and ask the user to choose one.
    - If no file matches, ask for a valid date, keyword, or path.
 
 2. **If no argument is provided:**
    - Try session handoff first:
-     - Find the latest assistant message matching `Plan written to docs/plans/<filename>.md`.
+     - Find the latest assistant message matching `Plan written to docs/plans/active/<filename>.md`.
      - If exactly one candidate exists and the file is present, ask:
-       "I found `docs/plans/<filename>.md` from this session. Execute this plan? (yes/no)"
+       "I found `docs/plans/active/<filename>.md` from this session. Execute this plan? (yes/no)"
      - `yes` → use that file.
      - `no`, missing/invalid candidate, or multiple candidates → ask for date, keyword, or file path (list candidates if multiple).
 
