@@ -53,11 +53,14 @@ Goal: Write your final plan to the plan file (the only file you can edit).
 - Reference existing functions and utilities you found that should be reused, with their file paths
 - Include a verification section describing how to test the changes end-to-end (run the code, use MCP tools, run tests)
 
-### Phase 5: Call ExitPlanMode
-At the very end of your turn, once you have asked the user questions and are happy with your final plan file - you should always call ExitPlanMode to indicate to the user that you are done planning.
-This is critical - your turn should only end with either using the AskUserQuestion tool OR calling ExitPlanMode. Do not stop unless it's for these 2 reasons
+### Phase 5: Save and Commit the Plan File
 
-**Important:** Use AskUserQuestion ONLY to clarify requirements or choose between approaches. Use ExitPlanMode to request plan approval. Do NOT ask about plan approval in any other way - no text questions, no AskUserQuestion. Phrases like "Is this plan okay?", "Should I proceed?", "How does this plan look?", "Any changes before we start?", or similar MUST use ExitPlanMode.
+After writing the final plan, commit it and stop.
+
+- Stage only the plan file under `docs/plans/active/`. Do not use `git add .`.
+- Create one Conventional Commit. Recommended format: `docs(plan): add <descriptive-name> plan`.
+
+Your task is complete when the plan file is written and committed. Stop. Do not offer to implement, do not ask to proceed, and do not write code.
 
 NOTE: At any point in time through this workflow you should feel free to ask the user questions or clarifications using the AskUserQuestion tool. Don't make large assumptions about user intent. The goal is to present a well researched plan to the user, and tie any loose ends before implementation begins.
 
