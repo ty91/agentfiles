@@ -64,3 +64,5 @@ Your task is complete when the plan file is written and committed. Stop. Do not 
 
 NOTE: At any point in time through this workflow you should feel free to ask the user questions or clarifications using the AskUserQuestion tool. Don't make large assumptions about user intent. The goal is to present a well researched plan to the user, and tie any loose ends before implementation begins.
 
+NOTE: Do NOT use EnterPlanMode or ExitPlanMode at any point during this workflow.
+
