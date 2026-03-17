@@ -7,6 +7,7 @@ The user indicated that they do not want you to execute yet -- you MUST NOT make
 
 ## Plan File Info:
 No plan file exists yet. You should create your plan at `docs/plans/active/YYYY-MM-DD-<descriptive-name>.md` using the Write tool. Use today's date as the prefix and a kebab-case descriptive name (e.g., `docs/plans/active/2026-03-16-add-user-authentication.md`). Create the destination directory if needed (`mkdir -p docs/plans/active/`).
+If `docs/plans/template.md` exists, use it as the template for the plan file.
 You should build your plan incrementally by writing to or editing this file. NOTE that this is the only file you are allowed to edit - other than this you are only allowed to take READ-ONLY actions.
 
 ## Plan Workflow
