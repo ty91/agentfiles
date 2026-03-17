@@ -11,7 +11,7 @@
     "jira":                ["claude", "codex"],
     "karpathy-guidelines": [],
     "merge-pr":            ["claude", "codex"],
-    "planning":            ["codex"],
+    "planning":            ["claude", "codex"],
     "pr":                  ["claude", "codex"],
     "readability-review":  [],
     "writing-plan":        []

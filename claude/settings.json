@@ -4,7 +4,9 @@
   },
   "includeCoAuthoredBy": false,
   "permissions": {
-    "allow": [],
+    "allow": [
+      "mcp__pencil"
+    ],
     "deny": [],
     "ask": [],
     "defaultMode": "default"
@@ -18,5 +20,6 @@
     "frontend-design@claude-plugins-official": false
   },
   "alwaysThinkingEnabled": true,
-  "skipDangerousModePermissionPrompt": true
+  "skipDangerousModePermissionPrompt": true,
+  "effortLevel": "high"
 }

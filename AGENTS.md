@@ -83,10 +83,6 @@
 
 - JavaScript/TypeScript deps: use `pnpm` only.
 
-### browser
-
-- Web automation: see `~/.agents/docs/tools/browser.md` for agent reference.
-
 ## msg
 
 - After long tasks (e.g., planning/plan execution), send a brief `msg noti <message>` and continue unless user input is needed.
