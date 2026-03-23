@@ -9,6 +9,10 @@
 - Workspace: `~/Developer/workspace`. Missing ty91 repo: clone `https://github.com/ty91/<repo>.git`.
 - 3rd-party/OSS (non-ty91): clone under `~/Developer/oss`.
 
+## Important Locations
+
+- Obsidian vault: `$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Second Brain`
+
 ## Code Quality
 
 - Use existing code style conventions and patterns in the codebase.
