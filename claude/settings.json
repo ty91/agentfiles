@@ -4,7 +4,9 @@
   },
   "includeCoAuthoredBy": false,
   "permissions": {
-    "allow": ["mcp__pencil"],
+    "allow": [
+      "mcp__pencil"
+    ],
     "deny": [],
     "ask": [],
     "defaultMode": "default"

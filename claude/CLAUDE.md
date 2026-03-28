@@ -8,6 +8,7 @@
 - Verify every task outcome before reporting completion.
 - Workspace: `~/Developer/workspace`
 - 3rd-party/OSS (non-ty91): clone under `~/Developer/oss`.
+- Prefer using `rg` or `rg --files` respectively when searching for text or files.
 
 ## Important Locations
 
