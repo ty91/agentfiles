@@ -1,8 +1,6 @@
 ---
 name: plan
 description: Create a researched implementation plan as a plan file; use only when the user explicitly mentions this skill
-argument-hint: "[feature description, bug report, improvement idea, or design doc path]"
-disable-model-invocation: true
 ---
 
 # Create Implementation Plan
