@@ -47,6 +47,7 @@ Review the planned approach before writing the final plan.
 Write the final plan to the plan file.
 
 - If `docs/plans/template.md` exists, use it as the template.
+- If `docs/plans/template.md` does not exist, use `./template.md` from this skill as the template.
 - Begin with a **Context** section explaining the problem, what prompted the change, and the intended outcome.
 - Include only the recommended approach.
 - Keep the plan concise enough to scan quickly, but detailed enough to execute.
