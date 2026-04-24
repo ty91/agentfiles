@@ -21,6 +21,12 @@
     "frontend-design@claude-plugins-official": false
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high",
-  "skipDangerousModePermissionPrompt": true
+  "effortLevel": "xhigh",
+  "showThinkingSummaries": true,
+  "skipDangerousModePermissionPrompt": true,
+  "editorMode": "vim",
+  "preferredNotifChannel": "ghostty",
+  "autoCompactEnabled": false,
+  "fileCheckpointingEnabled": false,
+  "teammateMode": "auto"
 }
