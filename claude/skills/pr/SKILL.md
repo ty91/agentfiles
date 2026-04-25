@@ -29,6 +29,7 @@ Create a GitHub pull request for the current branch.
 ### 3. Create PR
 
 - Create a pull request using `gh pr create` with `--assignee @me`.
+- Unless the user explicitly requests another language, write the pull request body in Korean.
 - Use the following PR template. Fill in the relevant sections based on the commits and diff:
 
 ```markdown
