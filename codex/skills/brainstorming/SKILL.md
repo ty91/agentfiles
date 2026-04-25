@@ -27,8 +27,8 @@ You MUST create a task for each of these items and complete them in order:
 2. **Ask clarifying questions** - one at a time, understand purpose/constraints/success criteria
 3. **Propose 2-3 approaches** - with trade-offs and your recommendation
 4. **Present design** - in sections scaled to their complexity, get user approval after each section
-5. **Write design doc** - save to `docs/design-docs/<design-topic>.md` and commit
-6. **Transition to implementation planning** - hand off to the appropriate planning workflow
+5. **Write design doc** - save to `/tmp/<design-topic>.md`
+6. **Ask next step** - ask the user whether to refine the design, move to planning, or stop here
 
 ## Process Flow
 
@@ -40,7 +40,9 @@ digraph brainstorming {
     "Present design sections" [shape=box];
     "User approves design?" [shape=diamond];
     "Write design doc" [shape=box];
-    "Transition to implementation planning" [shape=doublecircle];
+    "Ask next step" [shape=diamond];
+    "Create plan" [shape=doublecircle];
+    "Done" [shape=doublecircle];
 
     "Explore project context" -> "Ask clarifying questions";
     "Ask clarifying questions" -> "Propose 2-3 approaches";
@@ -48,7 +50,10 @@ digraph brainstorming {
     "Present design sections" -> "User approves design?";
     "User approves design?" -> "Present design sections" [label="no, revise"];
     "User approves design?" -> "Write design doc" [label="yes"];
-    "Write design doc" -> "Transition to implementation planning";
+    "Write design doc" -> "Ask next step";
+    "Ask next step" -> "Present design sections" [label="update design"];
+    "Ask next step" -> "Create plan" [label="move to planning"];
+    "Ask next step" -> "Done" [label="stop here"];
 }
 ```
 
@@ -76,29 +81,17 @@ digraph brainstorming {
 ## After the Design
 
 **Documentation:**
-- Write the validated design to `docs/design-docs/<design-topic>.md`
-- Start every design doc with YAML frontmatter in this format:
-
-  ```yaml
-  ---
-  title: "<Design Title>"
-  type: design
-  status: approved
-  date: YYYY-MM-DD
-  approved_at: YYYY-MM-DDTHH:mm:ssZ
-  source: brainstorming
-  ---
-  ```
-
-- Frontmatter rules:
-  - Use `type: design` and `source: brainstorming` exactly.
-  - Set `status: draft` until the user approves the design, then update to `status: approved`.
-  - Set `approved_at` when approval is given (leave blank or omit while still draft).
+- Write the validated design to `/tmp/<design-topic>.md`
 - Use elements-of-style:writing-clearly-and-concisely skill if available
-- Commit the design document to git
 
-**Implementation:**
-- Transition to your project's implementation planning workflow
+**Next step:**
+- After writing the design doc, use AskUserQuestion to ask the user what to do next:
+  1. **Update the design** - revisit and refine the design document further
+  2. **Move to planning** - transition to implementation planning
+  3. **Stop here** - end the brainstorming session as-is
+- If the user chooses to update, loop back to the relevant design section and repeat
+- If the user chooses planning, invoke the `create-plan` skill with the design doc path
+- If the user chooses to stop, end the session
 - Do NOT invoke implementation skills directly from brainstorming
 
 ## Key Principles
