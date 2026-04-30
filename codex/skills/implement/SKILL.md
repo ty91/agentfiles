@@ -2,7 +2,6 @@
 name: implement
 description: Execute work plans efficiently while maintaining quality and finishing features; use only when the user explicitly mentions this skill
 argument-hint: "[plan number (e.g. 1, 00001) or file path]"
-disable-model-invocation: true
 ---
 
 # Work Plan Execution
