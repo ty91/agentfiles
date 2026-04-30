@@ -1,5 +1,5 @@
 ---
-name: executing-plan
+name: implement
 description: Execute work plans efficiently while maintaining quality and finishing features; use only when the user explicitly mentions this skill
 argument-hint: "[plan number (e.g. 1, 00001) or file path]"
 disable-model-invocation: true
@@ -32,7 +32,7 @@ You MUST create a task for each of these items and complete them in order:
 ## Process Flow
 
 ```dot
-digraph executing_plan {
+digraph implement {
     "Resolve plan file" [shape=box];
     "Read plan & confirm environment" [shape=box];
     "Execute step" [shape=box];
