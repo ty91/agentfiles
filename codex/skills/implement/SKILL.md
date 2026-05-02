@@ -54,13 +54,10 @@ digraph implement {
 
 **Resolving the plan file:**
 
-Argument: `#$ARGUMENTS`
-
-- Date (e.g. `2026-02-21`): match `docs/plans/active/<date>-*.md`
-- Keyword (e.g. `authentication`): match `docs/plans/active/*-*<keyword>*.md`
-- File path: use directly
-- No argument: find the latest `Plan written to docs/plans/active/<filename>.md` in session, confirm with user
+- If the user provides a target after `implement`, resolve it as a plan file by matching against `docs/plans/active/` or using it directly if it is a valid path
+- If the user provides no target, use the latest plan file created in the current conversation under `docs/plans/active/`
 - Multiple matches: list and ask user to choose
+- If no plan file can be resolved, ask the user to provide a plan file
 - Do not proceed until a valid plan file is confirmed
 
 **Reading plan & confirming environment:**
