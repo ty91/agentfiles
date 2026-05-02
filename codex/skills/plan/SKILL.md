@@ -13,6 +13,8 @@ Create the plan at `docs/plans/active/YYYY-MM-DD-<descriptive-name>.md`. Use tod
 
 Create `docs/plans/active/` if needed. Build the plan incrementally by writing to or editing only this file.
 
+When creating or editing the plan file, MUST use `apply_patch`. Do not use shell redirection, here-docs, `cat >`, `tee`, or ad-hoc scripts to write the plan file.
+
 ## Workflow
 
 ### Phase 1: Initial Understanding
