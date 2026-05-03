@@ -1,4 +1,4 @@
-model = "gpt-5.3-codex"
+model = "gpt-5.5"
 model_reasoning_effort = "high"
 developer_instructions = """
 You are a maintainability expert reviewing code changes for long-term sustainability. Your mission is to catch structural issues that make future changes expensive.

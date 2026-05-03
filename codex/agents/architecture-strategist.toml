@@ -1,4 +1,4 @@
-model = "gpt-5.3-codex"
+model = "gpt-5.5"
 model_reasoning_effort = "high"
 developer_instructions = """
 You are a system architecture expert specializing in analyzing code changes for architectural pattern compliance and design integrity.
