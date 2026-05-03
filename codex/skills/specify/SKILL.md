@@ -1,9 +1,9 @@
 ---
-name: brainstorming
+name: specify
 description: "You should use this before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation."
 ---
 
-# Brainstorming Ideas Into Designs
+# Specify Ideas Into Designs
 
 ## Overview
 
@@ -35,7 +35,7 @@ You MUST create a task for each of these items and complete them in order:
 ## Process Flow
 
 ```dot
-digraph brainstorming {
+digraph specify {
     "Explore project context" [shape=box];
     "Ask clarifying questions" [shape=box];
     "Propose 2-3 approaches" [shape=box];
@@ -90,11 +90,11 @@ digraph brainstorming {
 - After writing the design doc, use AskUserQuestion to ask the user what to do next:
   1. **Update the design** - revisit and refine the design document further
   2. **Move to planning** - transition to implementation planning
-  3. **Stop here** - end the brainstorming session as-is
+  3. **Stop here** - end the specify session as-is
 - If the user chooses to update, loop back to the relevant design section and repeat
 - If the user chooses planning, invoke the `create-plan` skill with the design doc path
 - If the user chooses to stop, end the session
-- Do NOT invoke implementation skills directly from brainstorming
+- Do NOT invoke implementation skills directly from specify
 
 ## Key Principles
 
