@@ -1,20 +1,24 @@
 ---
 name: run-code-review
-description: Run the code-review skill, decide which findings should be applied, and immediately fix only the necessary review items
+description: Run code review for the active work session, triage findings, and immediately fix only the necessary items
 ---
 
 # Run Code Review
 
-Use when the user wants review findings collected and actionable items fixed.
+Review and fix the committed changes made in the active work session.
 
 ## Workflow
 
-1. Identify the repo/worktree changed by this task; run review/fix commands there. If unclear, ask.
-2. Determine this task's committed range: task-start commit..HEAD, or `HEAD~1..HEAD` only when this task made exactly one commit. If unsafe, ask.
-3. Run `$code-review` with that range.
-4. For each finding, decide `apply` or `skip`.
+1. Identify the work repo/worktree for the active session. Use the repo where the session's changes were made; if unclear, ask.
+2. Establish the session review range.
+   - On the first run, set `BASE` to the commit before this session's first commit in that repo.
+   - On repeated runs, reuse the same `BASE` and review `BASE..HEAD` again.
+   - Use `HEAD~1..HEAD` only when this is the first run and the session made exactly one commit.
+   - If `BASE` cannot be determined safely, ask.
+3. Run `$code-review` from that repo/worktree with `BASE..HEAD`.
+4. Triage every finding as `apply` or `skip`.
    - Apply: correctness, security, clear maintainability/readability/simplicity wins.
-   - Skip: speculative, stylistic-only, out of scope, or higher-risk than the issue.
-5. Implement only `apply` findings. Keep changes minimal and within reviewed files unless the root cause requires otherwise.
-6. Verify with the narrowest relevant checks, then the repo gate if practical.
-7. Report applied/skipped findings with brief reasons and verification results.
+   - Skip: speculative, stylistic-only, out of scope, duplicate, already fixed, or riskier than the issue.
+5. Implement only `apply` findings with minimal changes.
+6. Verify with relevant checks.
+7. Report the range, applied/skipped findings with reasons, and verification results.
