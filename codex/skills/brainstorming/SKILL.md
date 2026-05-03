@@ -13,6 +13,8 @@ Start by understanding the current project context, then ask questions one at a 
 
 <HARD-GATE>
 Do NOT invoke any implementation skill, write any code, scaffold any project, or take any implementation action until you have presented a design and the user has approved it. This applies to EVERY project regardless of perceived simplicity.
+If the user asks to fix, solve, implement, change, or modify while this skill is active, treat it as a request to discuss possible solutions unless they explicitly approve editing files.
+Before any file modification or implementation command, present the proposed design/approach and ask for approval.
 </HARD-GATE>
 
 ## Anti-Pattern: "This Is Too Simple To Need A Design"
