@@ -13,7 +13,8 @@ Before creating or editing the plan file, MUST use the `$git-worktree` skill to 
 
 - Create the plan file only inside that worktree, not in the original checkout.
 - Follow all `$git-worktree` path rules for the worktree location.
-- If the target branch name is not clear, derive a concise planning branch name from the descriptive plan name.
+- If the target branch name is not clear, derive a concise implementation-focused branch name from the intended change, not from the plan file path.
+- Avoid documentation-focused branch names like `docs/...`; the same worktree may be used for implementation.
 - After creating the worktree, continue the workflow from inside that worktree.
 
 ## Plan File
