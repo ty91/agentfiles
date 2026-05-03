@@ -7,6 +7,15 @@ description: Create a researched implementation plan as a plan file; use only wh
 
 The user indicated that they do not want execution yet. You MUST NOT make any edits except the plan file described below, run non-readonly tools except what is needed to create and commit that plan file, change configuration, or otherwise modify the system.
 
+## Worktree First
+
+Before creating or editing the plan file, MUST use the `$git-worktree` skill to create a dedicated Git worktree for the planning work.
+
+- Create the plan file only inside that worktree, not in the original checkout.
+- Follow all `$git-worktree` path rules for the worktree location.
+- If the target branch name is not clear, derive a concise planning branch name from the descriptive plan name.
+- After creating the worktree, continue the workflow from inside that worktree.
+
 ## Plan File
 
 Create the plan at `docs/plans/active/YYYY-MM-DD-<descriptive-name>.md`. Use today's date as the prefix and a kebab-case descriptive name, for example `docs/plans/active/2026-03-16-add-user-authentication.md`.
