@@ -29,21 +29,21 @@ Merge the target PR and fully clean up branch/worktree state.
 - If lookup fails, report it clearly and stop.
 - If PR is already merged/closed, report current state and ask user whether to continue with cleanup-only.
 
-### 3) If current directory is a worktree, return to the original repo directory before merging
+### 3) Prepare local checkout before merging
 
-- Detect worktree by comparing `git rev-parse --absolute-git-dir` and `git rev-parse --git-common-dir`.
-- If they differ:
-  - Save current worktree path as `sourceWorktreePath`.
-  - Resolve original repo root from `<git-common-dir>/..`.
-  - `cd` to that original repo root before merging and cleanup.
-- Keep `sourceWorktreePath` for later worktree removal.
+- Save `headRefName` from PR metadata.
+- If current directory is a worktree, save it as `sourceWorktreePath`, resolve the original repo root from `<git-common-dir>/..`, and `cd` there.
+- Before merge, ensure `headRefName` is not checked out locally:
+  - If a separate worktree has `headRefName` checked out, verify it is clean and has no unpushed commits, then remove that worktree.
+  - If the original repo is on `headRefName`, verify it is clean and synced, then checkout the base branch.
+  - If dirty or unpushed, stop and report what must be resolved.
 
 ### 4) Merge via `gh`
 
 - Choose a non-interactive merge method:
   - Prefer `--squash` if enabled for the repo.
   - Otherwise use `--merge`, then `--rebase`.
-- Run `gh pr merge <PR> --<method> --delete-branch` from the original repo root, not from the feature worktree.
+- Run `gh pr merge <PR> --<method> --delete-branch` from the original repo root after `headRefName` has been released from local checkout/worktrees.
 - Verify merge with `gh pr view <PR> --json state,mergedAt,mergeCommit,url`.
 
 ### 5) Sync `main`
@@ -59,13 +59,14 @@ Merge the target PR and fully clean up branch/worktree state.
 - Fetch with prune again and verify `origin/<headRefName>` is gone.
 - If it is a cross-repo PR, explain that the source branch may not be deletable from this remote.
 
-### 7) Remove local branch and worktree
+### 7) Clean up any remaining local state
 
-- Delete local source branch if it still exists (and is not `main`).
-- If this run started in a worktree, remove `sourceWorktreePath` from the original repo.
+- If local `headRefName` still exists, delete it.
+- If `git branch -d <headRefName>` fails after a verified squash merge, use `git branch -D <headRefName>`.
 - Verify cleanup:
   - `git branch --list <headRefName>` is empty.
-  - `git worktree list` does not include the removed path.
+  - `git branch -r --list origin/<headRefName>` is empty.
+  - `git worktree list` does not include `sourceWorktreePath` if one was saved.
 
 ### 8) Report result
 
