@@ -29,21 +29,22 @@ Merge the target PR and fully clean up branch/worktree state.
 - If lookup fails, report it clearly and stop.
 - If PR is already merged/closed, report current state and ask user whether to continue with cleanup-only.
 
-### 3) Merge via `gh`
+### 3) If current directory is a worktree, return to the original repo directory before merging
+
+- Detect worktree by comparing `git rev-parse --absolute-git-dir` and `git rev-parse --git-common-dir`.
+- If they differ:
+  - Save current worktree path as `sourceWorktreePath`.
+  - Resolve original repo root from `<git-common-dir>/..`.
+  - `cd` to that original repo root before merging and cleanup.
+- Keep `sourceWorktreePath` for later worktree removal.
+
+### 4) Merge via `gh`
 
 - Choose a non-interactive merge method:
   - Prefer `--squash` if enabled for the repo.
   - Otherwise use `--merge`, then `--rebase`.
-- Run `gh pr merge <PR> --<method> --delete-branch`.
+- Run `gh pr merge <PR> --<method> --delete-branch` from the original repo root, not from the feature worktree.
 - Verify merge with `gh pr view <PR> --json state,mergedAt,mergeCommit,url`.
-
-### 4) If current directory is a worktree, return to the original repo directory
-
-- Detect worktree by comparing `git rev-parse --absolute-git-dir` and `git rev-parse --git-common-dir`.
-- If they differ:
-  - Save current worktree path.
-  - Resolve original repo root from `<git-common-dir>/..`.
-  - `cd` to that original repo root before cleanup.
 
 ### 5) Sync `main`
 
@@ -61,7 +62,7 @@ Merge the target PR and fully clean up branch/worktree state.
 ### 7) Remove local branch and worktree
 
 - Delete local source branch if it still exists (and is not `main`).
-- If this run started in a worktree, remove that worktree from the original repo.
+- If this run started in a worktree, remove `sourceWorktreePath` from the original repo.
 - Verify cleanup:
   - `git branch --list <headRefName>` is empty.
   - `git worktree list` does not include the removed path.
