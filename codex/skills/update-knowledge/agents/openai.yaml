@@ -1,0 +1,6 @@
+interface:
+  display_name: "Update Knowledge"
+  short_description: "Keep durable routing memory concise"
+  default_prompt: "Use $update-knowledge to save a concise durable routing hint for future agents."
+policy:
+  allow_implicit_invocation: true
