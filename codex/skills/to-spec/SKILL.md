@@ -1,9 +1,9 @@
 ---
-name: to-prd
-description: Turn the current conversation context into a PRD file. Use when user wants to create a PRD from the current context.
+name: to-spec
+description: Turn the current conversation context into a GitHub parent issue spec. Use when user wants to create a spec issue from the current context after requirements or design discussion.
 ---
 
-This skill takes the current conversation context and codebase understanding and produces a PRD. Do NOT interview the user — just synthesize what you already know.
+This skill takes the current conversation context and codebase understanding and produces a spec issue. Do NOT interview the user — just synthesize what you already know.
 
 ## Process
 
@@ -15,9 +15,11 @@ A deep module (as opposed to a shallow module) is one which encapsulates a lot o
 
 Check with the user that these modules match their expectations. Check with the user which modules they want tests written for.
 
-3. Write the PRD using the template below and save it to PRD.md.
+3. Write the spec using the template below, then publish it as a GitHub issue.
 
-<prd-template>
+The GitHub issue is the parent issue for this spec. Do NOT create implementation sub-issues from this skill; that belongs to the planning step.
+
+<spec-template>
 
 ## Problem Statement
 
@@ -26,18 +28,6 @@ The problem that the user is facing, from the user's perspective.
 ## Solution
 
 The solution to the problem, from the user's perspective.
-
-## User Stories
-
-A LONG, numbered list of user stories. Each user story should be in the format of:
-
-1. As an <actor>, I want a <feature>, so that <benefit>
-
-<user-story-example>
-1. As a mobile bank customer, I want to see balance on my accounts, so that I can make better informed decisions about my spending
-</user-story-example>
-
-This list of user stories should be extremely extensive and cover all aspects of the feature.
 
 ## Implementation Decisions
 
@@ -63,10 +53,21 @@ A list of testing decisions that were made. Include:
 
 ## Out of Scope
 
-A description of the things that are out of scope for this PRD.
+A description of the things that are out of scope for this spec.
+
+## Definition of Done
+
+A list of conditions that must be true before the parent issue can be considered complete. Include:
+
+- The planned implementation sub-issues are complete
+- The requested behavior is verified end to end
+- Relevant tests, linting, type checking, and build checks pass
+- Code review is complete
+- The implementation PRs are merged
+- Relevant documentation is updated
 
 ## Further Notes
 
 Any further notes about the feature.
 
-</prd-template>
+</spec-template>
