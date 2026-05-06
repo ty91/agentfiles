@@ -13,47 +13,68 @@ The source spec should usually be a GitHub parent issue created by `to-spec`. If
 
 ### 1. Gather context
 
-Work from whatever is already in the conversation context. If the user passes an issue reference (issue number, URL, or path) as an argument, fetch it and read its full body and comments.
+Operate in read-only mode:
+
+- Read the spec and relevant codebase sections
+- Identify existing patterns and conventions
+- Map dependencies between components
+- Note risks and unknowns
 
 For GitHub issues, use `gh issue view <number-or-url> --comments` and capture the parent issue number and URL. The parent issue must remain the source of truth for the overall spec.
 
-### 2. Explore the codebase (optional)
+### 2. Identify the dependency graph
 
-If you have not already explored the codebase, do so to understand the current state of the code. Issue titles and descriptions should use the project's domain vocabulary, and respect ADRs or existing design docs in the area you're touching.
+Map what depends on what such as:
 
-### 3. Draft vertical slices
+```
+Database schema
+    │
+    ├── API models/types
+    │       │
+    │       ├── API endpoints
+    │       │       │
+    │       │       └── Frontend API client
+    │       │               │
+    │       │               └── UI components
+    │       │
+    │       └── Validation logic
+    │
+    └── Seed data / migrations
+```
 
-Break the plan into **tracer bullet** issues. Each issue is a thin vertical slice that cuts through ALL integration layers end-to-end, NOT a horizontal slice of one layer.
+Implementation order follows the dependency graph bottom-up: build foundations first.
+
+### 3. Slice vertically
+
+Break the plan into **tracer bullet** issues. Each issue is a thin vertical slice that cuts through ALL integration layers end-to-end, NOT a horizontal slice of one layer. Instead of building all the database, then all the API, then all the UI — build one complete feature path at a time:
+
+**Bad (horizontal slicing):**
+```
+Task 1: Build entire database schema
+Task 2: Build all API endpoints
+Task 3: Build all UI components
+Task 4: Connect everything
+```
+
+**Good (vertical slicing):**
+```
+Task 1: User can create an account (schema + API + UI for registration)
+Task 2: User can log in (auth schema + API + UI for login)
+Task 3: User can create a task (task schema + API + UI for creation)
+Task 4: User can view task list (query + API + UI for list view)
+```
+
+Vertical slice rules:
+
+- Each vertical slice delivers working, testable functionality.
+- A completed slice is demoable or verifiable on its own
+- Prefer many thin slices over few thick ones
 
 Slices may be 'HITL' or 'AFK'. HITL slices require human interaction, such as an architectural decision or a design review. AFK slices can be implemented and merged without human interaction. Prefer AFK over HITL where possible.
 
-<vertical-slice-rules>
-- Each slice delivers a narrow but COMPLETE path through every layer (schema, API, UI, tests)
-- A completed slice is demoable or verifiable on its own
-- Prefer many thin slices over few thick ones
-</vertical-slice-rules>
+### 4. Publish as sub-issues under the parent issue
 
-### 4. Quiz the user
-
-Present the proposed breakdown as a numbered list. For each slice, show:
-
-- **Title**: short descriptive name
-- **Type**: HITL / AFK
-- **Blocked by**: which other slices (if any) must complete first
-- **User stories covered**: which user stories this addresses (if the source material has them)
-
-Ask the user:
-
-- Does the granularity feel right? (too coarse / too fine)
-- Are the dependency relationships correct?
-- Should any slices be merged or split further?
-- Are the correct slices marked as HITL and AFK?
-
-Iterate until the user approves the breakdown.
-
-### 5. Publish as sub-issues under the parent issue
-
-For each approved slice, publish a new GitHub issue using the issue body template below, then attach it as a sub-issue of the parent issue. These issues are considered ready for AFK agents unless marked HITL or instructed otherwise.
+For each slice, publish a new GitHub issue using the issue body template below, then attach it as a sub-issue of the parent issue. These issues are considered ready for AFK agents unless marked HITL or instructed otherwise.
 
 Publish issues in dependency order (blockers first) so you can reference real issue identifiers in the "Blocked by" field.
 
@@ -95,4 +116,31 @@ Or "None - can start immediately" if no blockers.
 
 </issue-template>
 
-Do NOT close or modify the parent issue except to attach approved sub-issues.
+## Task Sizing Guidelines
+
+| Size | Files | Scope | Example |
+|------|-------|-------|---------|
+| **XS** | 1 | Single function or config change | Add a validation rule |
+| **S** | 1-2 | One component or endpoint | Add a new API endpoint |
+| **M** | 3-5 | One feature slice | User registration flow |
+| **L** | 5-8 | Multi-component feature | Search with filtering and pagination |
+| **XL** | 8+ | **Too large — break it down further** | — |
+
+If a task is L or larger, it should be broken into smaller tasks. An agent performs best on S and M tasks.
+
+**When to break a task down further:**
+- It would take more than one focused session (roughly 2+ hours of agent work)
+- You cannot describe the acceptance criteria in 3 or fewer bullet points
+- It touches two or more independent subsystems (e.g., auth and billing)
+- You find yourself writing "and" in the task title (a sign it is two tasks)
+
+## Red Flags
+
+- Starting implementation without a written task list
+- Tasks that say "implement the feature" without acceptance criteria
+- No verification steps in the plan
+- All tasks are XL-sized
+- Dependency order isn't considered
+
+Do NOT close or modify the parent issue except to attach sub-issues.
+
