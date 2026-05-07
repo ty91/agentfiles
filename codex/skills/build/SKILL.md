@@ -21,8 +21,9 @@ Implement the requested target end-to-end, then create a pull request.
 4. Run the repository's full handoff gate after code changes, including lint, typecheck, tests, and any project-specific checks.
 5. Commit the finished changes with a Conventional Commit, staging only the files changed for this target.
 6. Use `$pr` to push the branch, create the GitHub pull request, and verify it.
+7. After the PR is verified, clean up local worktree state: remove the implementation worktree, delete the local feature branch only after confirming it is pushed, prune stale worktree metadata, and verify the remaining local checkout is clean.
 
 ## Reporting
 
 - Keep progress updates concise and focused on completed phases, blockers, or decisions needed from the user.
-- In the final response, include the PR URL, verification results, and any notable follow-up.
+- In the final response, include the PR URL, verification results, cleanup result, and any notable follow-up.
