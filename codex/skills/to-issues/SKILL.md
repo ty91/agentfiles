@@ -9,6 +9,10 @@ Break a plan into independently-grabbable GitHub sub-issues using vertical slice
 
 The source spec should usually be a GitHub parent issue created by `to-spec`. If the parent issue is not clear, ask the user which issue should own the sub-issues before publishing anything.
 
+## Output Language
+
+Write GitHub issue titles and bodies in Korean by default. Preserve code identifiers, commands, file paths, labels, URLs, and product names in their original language. If the user explicitly requests another language, follow the user's request.
+
 ## Process
 
 ### 1. Gather context
