@@ -1,9 +1,9 @@
 ---
-name: run-code-review
+name: review
 description: Run code review for the active work session, triage findings, and immediately fix only the necessary items
 ---
 
-# Run Code Review
+# Review
 
 Review and fix the committed changes made in the active work session.
 
