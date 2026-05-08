@@ -20,20 +20,20 @@ During discovery:
 
 - Start with a high-level vision of the outcome.
 - Ask clarifying questions until the requirements are concrete enough to write a useful spec.
-- Surface assumptions immediately, before writing any spec content.
-- Do not silently fill in ambiguous requirements. The purpose of the spec process is to expose misunderstandings before code gets written.
 
-When surfacing assumptions, use this format:
+**Surface assumptions immediately.** Before writing any spec content, list what you're assuming:
 
-```text
+```
 Assumptions I'm making:
 
 1. This is a web application (not native mobile)
 2. Authentication uses session-based cookies (not JWT)
 3. The database is PostgreSQL (based on existing Prisma schema)
 4. We're targeting modern browsers only (no IE11)
--> Correct me now or I'll proceed with these.
+→ Correct me now or I'll proceed with these.
 ```
+
+Don't silently fill in ambiguous requirements. The spec's entire purpose is to surface misunderstandings *before* code gets written — assumptions are the most dangerous form of misunderstanding.
 
 ## Concrete Enough
 
