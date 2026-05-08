@@ -23,10 +23,11 @@ During discovery:
 - Surface assumptions immediately, before writing any spec content.
 - Do not silently fill in ambiguous requirements. The purpose of the spec process is to expose misunderstandings before code gets written.
 
-Use this assumption format:
+When surfacing assumptions, use this format:
 
 ```text
-ASSUMPTIONS I'M MAKING:
+Assumptions I'm making:
+
 1. This is a web application (not native mobile)
 2. Authentication uses session-based cookies (not JWT)
 3. The database is PostgreSQL (based on existing Prisma schema)
