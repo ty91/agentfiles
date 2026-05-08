@@ -1,11 +1,11 @@
 ---
 name: to-issues
-description: Break a plan, spec, or PRD into independently-grabbable GitHub sub-issues using tracer-bullet vertical slices. Use when user wants to convert a parent issue, plan, or spec into implementation sub-issues, create implementation tickets, or break down work into issues.
+description: Break a spec into independently-grabbable GitHub sub-issues using tracer-bullet vertical slices. Use when user wants to convert a parent issue or spec into implementation sub-issues, create implementation tickets, or break down work into issues.
 ---
 
 # To Issues
 
-Break a plan into independently-grabbable GitHub sub-issues using vertical slices (tracer bullets).
+Break a spec into independently-grabbable GitHub sub-issues using vertical slices.
 
 The source spec should usually be a GitHub parent issue created by `to-spec`. If the parent issue is not clear, ask the user which issue should own the sub-issues before publishing anything.
 
@@ -76,13 +76,11 @@ Vertical slice rules:
 
 Slices may be 'HITL' or 'AFK'. HITL slices require human interaction, such as an architectural decision or a design review. AFK slices can be implemented and merged without human interaction. Prefer AFK over HITL where possible.
 
-### 4. Publish as sub-issues under the parent issue
+### 4. Publish the issues to the issue tracker
 
-For each slice, publish a new GitHub issue using the issue body template below, then attach it as a sub-issue of the parent issue. These issues are considered ready for AFK agents unless marked HITL or instructed otherwise.
+For each slice, publish a new GitHub issue using the issue body template below, then attach it as a sub-issue of the parent issue. These issues are considered ready for AFK agents, so publish them with the correct triage label unless instructed otherwise.
 
 Publish issues in dependency order (blockers first) so you can reference real issue identifiers in the "Blocked by" field.
-
-Use the repo's existing labels only when they are already known. Do NOT invent labels. If the repo has an agreed "ready for agent" label, apply it to AFK sub-issues; otherwise leave labels alone.
 
 After creating each child issue, attach it to the parent issue using GitHub sub-issues. The REST API needs the child issue's REST `id`, not the issue number:
 
