@@ -9,10 +9,9 @@ Use this skill to make requirements concrete before writing a spec. Do not write
 
 ## Process
 
-1. If the user is specifying a product idea, feature, behavior change, or bug fix, use the `interview` skill.
-2. If the user is specifying a refactoring, architecture cleanup, consolidation, or codebase-improvement effort, use the `improve-codebase` skill.
-3. If the category is unclear, ask one short clarifying question before choosing.
-4. Once requirements are concrete, use the `to-spec` skill to write the spec document.
+- If the user is specifying a product idea, feature, behavior change, or bug fix, use the `interview` skill.
+- If the user is specifying a refactoring, architecture cleanup, consolidation, or codebase-improvement effort, use the `improve-codebase` skill.
+- If the category is unclear, ask one short clarifying question before choosing.
 
 ## Discovery Rules
 
@@ -35,14 +34,3 @@ Assumptions I'm making:
 
 Don't silently fill in ambiguous requirements. The spec's entire purpose is to surface misunderstandings *before* code gets written — assumptions are the most dangerous form of misunderstanding.
 
-## Concrete Enough
-
-Requirements are concrete when the agent understands:
-
-- the intended user or system outcome
-- the current problem or opportunity
-- the important constraints and non-goals
-- the expected behavior or acceptance criteria
-- the relevant codebase or product context, if any
-
-At that point, stop discovery and invoke `to-spec`.

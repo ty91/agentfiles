@@ -64,3 +64,5 @@ Once the user picks a candidate, run a focused design conversation. Walk the des
 Use [DEEPENING.md](DEEPENING.md) to classify dependencies and choose a testing strategy. If the user wants to explore alternative interfaces for the deepened module, use [INTERFACE-DESIGN.md](INTERFACE-DESIGN.md).
 
 Do not modify production code from this skill unless the user explicitly asks for implementation. The output is architectural understanding, candidate refactors, and interface direction.
+
+When the design conversation has reached sufficient shared understanding, you MUST stop and ask the user whether to write a spec document. Do not end the session without asking this. If the user says yes, you MUST use the `to-spec` skill to create the spec.
