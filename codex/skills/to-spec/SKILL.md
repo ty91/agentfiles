@@ -33,6 +33,10 @@ The problem that the user is facing, from the user's perspective.
 
 The solution to the problem, from the user's perspective.
 
+## Technical Context
+
+Relevant technical context, including existing system behavior, architectural constraints, key dependencies, and codebase conventions that affect implementation planning.
+
 ## Implementation Decisions
 
 A list of implementation decisions that were made. This can include:
@@ -59,16 +63,9 @@ A list of testing decisions that were made. Include:
 
 A description of the things that are out of scope for this spec.
 
-## Definition of Done
+## Success Criteria
 
-A list of conditions that must be true before the parent issue can be considered complete. Include:
-
-- The planned implementation sub-issues are complete
-- The requested behavior is verified end to end
-- Relevant tests, linting, type checking, and build checks pass
-- Code review is complete
-- The implementation PRs are merged
-- Relevant documentation is updated
+A list of specific, testable conditions that must be true before the requested behavior can be considered complete.
 
 ## Further Notes
 
