@@ -1,22 +1,22 @@
 ---
 name: spec
-description: Route early specification work to the right requirements-discovery skill before writing a spec. Use this when the user wants to specify, scope, clarify, or turn an idea, bug fix, behavior change, or refactoring direction into concrete requirements; route ideas and bug fixes to interview, route refactoring to improve-codebase, then use to-spec once requirements are concrete.
+description: Use this when the user wants to specify, scope, clarify, or turn an idea, bug fix, behavior change, or refactoring direction into concrete requirements before writing a spec. Use interview for ideas and bug fixes, improve-codebase for refactoring and codebase-improvement work, then use to-spec once requirements are concrete.
 ---
 
-# Spec Router
+# Spec
 
-Use this skill as a router for specification work. Do not write the spec yourself unless the routed workflow has made the requirements concrete.
+Use this skill to make requirements concrete before writing a spec. Do not write spec content until the user's intent, constraints, assumptions, and acceptance criteria are clear.
 
-## Route
+## Process
 
 1. If the user is specifying a product idea, feature, behavior change, or bug fix, use the `interview` skill.
 2. If the user is specifying a refactoring, architecture cleanup, consolidation, or codebase-improvement effort, use the `improve-codebase` skill.
-3. If the category is unclear, ask one short routing question before choosing.
+3. If the category is unclear, ask one short clarifying question before choosing.
 4. Once requirements are concrete, use the `to-spec` skill to write the spec document.
 
 ## Discovery Rules
 
-When running the routed discovery step:
+During discovery:
 
 - Start with a high-level vision of the outcome.
 - Ask clarifying questions until the requirements are concrete enough to write a useful spec.
