@@ -1,6 +1,6 @@
 ---
 name: spec
-description: Use this when the user wants to specify, scope, clarify, or turn an idea, bug fix, behavior change, or refactoring direction into concrete requirements before writing a spec. Use interview for ideas and bug fixes, improve-codebase for refactoring and codebase-improvement work, then use to-spec once requirements are concrete.
+description: Use this when the user wants to specify, scope, or clarify an idea, bug fix, behavior change, or refactoring direction before writing a spec. Focus on making requirements concrete before any spec content is drafted.
 ---
 
 # Spec
