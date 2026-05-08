@@ -1,6 +1,6 @@
 ---
 name: spec
-description: Use this when the user wants to specify, scope, or clarify an idea, bug fix, behavior change, or refactoring direction before writing a spec. Focus on making requirements concrete before any spec content is drafted.
+description: Use this when the user wants to specify, scope, or clarify an idea, bug fix, behavior change, or refactoring direction before writing a spec.
 ---
 
 # Spec
