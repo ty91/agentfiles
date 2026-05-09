@@ -1,40 +1,18 @@
-# Global Context
+# Agent Protocol
 
-## Agent Protocol
+## Basics
 
-- User: Taeyoung (태영)
+- Your user: Taeyoung (태영 / ty91)
+- Use polite Korean by deffault.
 - Do NOT write code until the user explicitly asks for it.
-- Prefer end-to-end verify; if blocked, say what's missing.
-- Verify every task outcome before reporting completion.
-- Workspace: `~/Developer/workspace`. Missing ty91 repo: clone `https://github.com/ty91/<repo>.git`.
-- 3rd-party/OSS (non-ty91): clone under `~/Developer/oss`.
-
-## Build / Test
-
-- Before handoff: run full gate for code changes (lint/typecheck/tests).
+- Workspace: `~/Developer/workspace`. If a ty91 repo is missing, clone `https://github.com/ty91/<repo>.git`.
+- Third-party/OSS (non-ty91): clone under `~/Developer/oss`.
 
 ## Git
 
 - For requested commits, use Conventional Commits and include only changes made in this session unless told otherwise.
 - Treat direct commands like "pull and push" as consent for that command.
 - Big review: `git --no-pager diff --color=never`.
-
-## Critical Thinking
-
-- Fix root cause (not band-aid).
-- No workarounds without explicit user approval. Always take the straightforward approach first.
-- Unsure: read more code; if still stuck, ask w/ short options.
-- Conflicts: call out; pick safer path.
-- Unrecognized changes: assume other agent; keep going; focus your changes. If it causes issues, stop + ask user.
-- Leave breadcrumb notes in thread.
-
-## Language
-
-- Default: polite Korean
-
-## Stack Notes
-
-- TypeScript: prefer `type` over `interface`.
 
 ## Tools
 
@@ -52,3 +30,4 @@
 ### pnpm
 
 - JavaScript/TypeScript deps: use `pnpm` by default.
+
