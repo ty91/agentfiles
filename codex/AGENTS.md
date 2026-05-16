@@ -16,7 +16,7 @@
 
 ## Tools
 
-- Use the package manager for dependency changes. Do NOT manipulate package management files directly.
+- Use package managers for dependency changes by default.
 - Web search: search early for current/unstable info. Prefer 2025-2026 sources.
 
 ### gh
