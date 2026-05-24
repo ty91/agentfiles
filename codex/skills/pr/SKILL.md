@@ -1,7 +1,6 @@
 ---
 name: pr
 description: Create a GitHub pull request for the current branch.
-allowed-tools: Bash(git:*), Bash(gh:*), AskUserQuestion
 ---
 
 ## Context

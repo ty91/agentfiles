@@ -1,29 +1,37 @@
 ---
 name: build
-description: Build an implementation target using worktree, TDD, and PR workflow; use only when the user explicitly mentions this skill
+description: Delegate sequential task implementation to worker with worktree, TDD, per-task commits, task-breakdown updates, and PR workflow.
 ---
 
 # Build
 
-Implement the requested target end-to-end, then create a pull request.
+Implement the requested spec issue's task breakdown end-to-end, then create a pull request.
 
 ## Target Resolution
 
-- If the user mentions a GitHub issue, plan file, spec, branch, file path, or concrete implementation target with `$build`, use that as the target.
-- If no explicit target is provided, infer the target from the current conversation context.
-- If multiple plausible targets exist and choosing one would be risky, ask the user to choose before changing files.
+Resolve the spec issue from the user's request. If it is unclear, ask the user which spec issue to build.
+
+Find the `[pi:task-breakdown]` comment on the spec issue. Treat the `## Task N:` sections in that comment as the implementation queue, and work through incomplete tasks strictly in order. Do not skip ahead unless an earlier task is already complete.
+
+A task is complete only when its implementation is done, its task-specific verification is satisfied, its changes are committed, and the task's checklist items in the `[pi:task-breakdown]` comment have been checked. If the comment cannot be found, the ordered task sections cannot be determined, or there are no incomplete tasks remaining, stop and report the blocker.
 
 ## Workflow
 
-1. Use `$git-worktree` to create or enter a dedicated worktree for the target.
-2. Read the target and relevant code until the required behavior is clear.
-3. Use `$tdd` to implement with vertical red-green-refactor cycles.
-4. Run the repository's full handoff gate after code changes, including lint, typecheck, tests, and any project-specific checks.
-5. Commit the finished changes with a Conventional Commit, staging only the files changed for this target.
-6. Use `$pr` to push the branch, create the GitHub pull request, and verify it.
-7. After the PR is verified, clean up local worktree state: remove the implementation worktree, delete the local feature branch only after confirming it is pushed, prune stale worktree metadata, and verify the remaining local checkout is clean.
+1. Use the `git-worktree` skill to create or enter a dedicated worktree for the spec issue.
+2. If you created a new worktree, install its dependencies before continuing.
+3. Read the spec issue, the `[pi:task-breakdown]` comment, and relevant code until the required behavior and task order are clear.
+4. Dump the `[pi:task-breakdown]` comment to `TODO.md`.
+5. For each incomplete `## Task N:` section, in order:
+   - Use the `tdd` skill to implement that task with vertical red-green-refactor cycles.
+   - Run the task's listed verification commands and any directly relevant checks.
+   - Commit the finished task with a Conventional Commit, staging only the files changed for that task.
+   - Update the `TODO.md` comment to check the completed task's checklist items, and any checkpoint checklist items that are now satisfied. Do not check future task items or unsatisfied checkpoint items.
+6. After all task sections are complete, run the repository's full handoff gate, including lint, typecheck, tests, build, and any project-specific checks.
+7. If the final handoff gate requires fixes, make a final Conventional Commit for those fixes and update the `TODO.md` file for any newly satisfied final checkpoint items.
+8. Update the `[pi:task-breakdown]` comment with `TODO.md`, then remove the local `TODO.md` file.
+9. Use the `pr` skill to push the branch, create the GitHub pull request, and verify it.
 
 ## Reporting
 
-- Keep progress updates concise and focused on completed phases, blockers, or decisions needed from the user.
-- In the final response, include the PR URL, verification results, cleanup result, and any notable follow-up.
+- Keep progress updates concise and focused on the current task number, worker status, blockers, or decisions needed from the user.
+- In the final response to the user, summarize completed tasks, commits, task-breakdown update status, PR URL, validation results, cleanup result, and any notable risks or follow-up.
