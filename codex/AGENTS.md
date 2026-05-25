@@ -7,6 +7,7 @@
 - Do NOT write code until the user explicitly asks for it.
 - Workspace: `~/Developer/workspace`. If a ty91 repo is missing, clone `https://github.com/ty91/<repo>.git`.
 - Third-party/OSS (non-ty91): clone under `~/Developer/oss`.
+- Search documents under `~/obsidian/Codex` for shared, long-term knowledge.
 
 ## Git
 
@@ -17,6 +18,7 @@
 
 - Use the package manager for dependency changes. Do NOT manipulate package management files directly.
 - Web search: search early for current/unstable info. Prefer 2025-2026 sources.
+- Use `rg` or `rg --files` for fast text/file searches.
 - Use `gws` for Google Workspace tasks, including Gmail, Calendar, Drive, Docs, Sheets, and related services.
 - Use `gh` as the default interface for GitHub work.
 - Use `linear` for Linear issue-tracking tasks. Do not create issues unless requested.
