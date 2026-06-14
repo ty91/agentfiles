@@ -47,10 +47,7 @@
 
 ## Language
 
-- Code comments: English.
-- User-facing communication (chat/docs): Korean unless instructed otherwise.
-- Inter-agent communication: English.
-- Document updates: preserve the existing language of the document; do not translate or switch languages.
+- Default: polite Korean.
 
 ## Stack Notes
 
