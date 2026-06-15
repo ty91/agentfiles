@@ -2,15 +2,11 @@
 
 ## Purpose
 
-Use ADRs to preserve decisions that future engineers or agents would otherwise re-litigate. The value is in recording that a decision was made and why, not in filling out a heavy template.
-
-Prefer short ADRs. A single paragraph is acceptable when it captures the context, the decision, and the reason.
+Use ADRs to record that a decision was made and why. An ADR can be a single paragraph. The value is in recording *that* a decision was made and *why* — not in filling out sections.
 
 ## Location And Naming
 
-Store ADRs in `docs/adr/`.
-
-Use sequential numbering:
+ADRs live in `docs/adr/` and use sequential numbering: `0001-slug.md`, `0002-slug.md`, etc.
 
 ```text
 docs/adr/
@@ -30,11 +26,11 @@ For context-scoped decisions in a multi-context repo, follow the repo's existing
 
 ## When To Create An ADR
 
-Offer or create an ADR only when all three are true:
+Offer or create an ADR only when all three of these are true:
 
-1. **Hard to reverse**: changing the decision later would be meaningfully expensive.
-2. **Surprising without context**: a future reader might wonder why this path was chosen.
-3. **Real trade-off**: there were plausible alternatives and one was intentionally rejected.
+1. **Hard to reverse**: the cost of changing your mind later is meaningful.
+2. **Surprising without context**: a future reader will look at the code and wonder why it was done this way.
+3. **The result of a real trade-off**: there were genuine alternatives and you picked one for specific reasons.
 
 Good ADR subjects:
 
@@ -46,7 +42,7 @@ Good ADR subjects:
 - Durable constraints: compliance, latency, hosting, operational, or business constraints.
 - Rejected alternatives likely to be suggested again.
 
-Skip ADRs for easy-to-reverse choices, obvious implementation details, temporary scheduling reasons, or decisions with no meaningful alternative.
+If a decision is easy to reverse, skip it. If it is not surprising, skip it. If there was no real alternative, there is nothing to record beyond doing the obvious thing.
 
 ## Template
 
@@ -69,7 +65,7 @@ SQLite도 검토했지만, 동시 창고 작업을 안전하게 처리하기에�
 
 ## Optional Sections
 
-Add sections only when they clarify a real future question. Most ADRs should not need all of these.
+Only include these when they add genuine value. Most ADRs will not need them.
 
 ```md
 ---
@@ -102,15 +98,9 @@ Supported status values when status is useful:
 
 ## Updating ADRs
 
-Do not delete old ADRs just because the decision changed. Historical context remains useful.
+When a decision is revisited, prefer preserving the historical record. If the decision changes, write a new ADR and mark or mention the old ADR as superseded when the repo uses status metadata.
 
-When a decision changes:
-
-1. Write a new ADR with the new decision.
-2. Mark or mention the old ADR as superseded if the repo uses status metadata.
-3. Link the old and new ADRs by number.
-
-When an ADR only needs clarification, edit it in place if the decision itself is unchanged.
+When an ADR only needs clarification and the decision itself is unchanged, edit it in place.
 
 ## Style
 
