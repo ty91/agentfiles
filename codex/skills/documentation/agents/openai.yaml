@@ -1,0 +1,4 @@
+interface:
+  display_name: "Documentation"
+  short_description: "Document decisions and durable context"
+  default_prompt: "Use $documentation to document an architectural decision as an ADR."
