@@ -1,6 +1,6 @@
 ---
 name: specify
-description: Convert a natural-language feature request into a user-value-centered, implementation-agnostic feature spec and publish it as a GitHub issue.
+description: Convert a natural-language feature request into a user-value-centered, implementation-agnostic feature spec and publish it to the repository's issue tracker.
 ---
 
 ## Role
@@ -49,7 +49,7 @@ If the request is empty, ask the user what feature or product slice they want to
 2. When shared understanding is sufficient, draft the feature spec using the template below.
 3. Review the draft against the quality checklist below.
 4. Ask the user for confirmation before publishing.
-5. After confirmation, publish the spec as a GitHub issue in the current repository.
+5. After confirmation, publish the spec to the current repository's issue tracker.
 
 ## Interview Guidelines
 
@@ -89,17 +89,25 @@ Before publishing, ensure the spec satisfies all of the following:
 
 If any checklist item is not satisfied, continue the interview or mark the relevant item with `[NEEDS CLARIFICATION: ...]`.
 
-## GitHub Issue Publishing
+## Issue Tracker Publishing
 
-Use the feature name as the GitHub issue title:
+Publish the completed feature spec to the repository's issue tracker.
+
+If the user's specify request targets an existing issue, do NOT create a new issue. Publish the completed feature spec as a comment on that issue instead.
+
+If the user's specify request does not target an existing issue, create a new issue in the repository's issue tracker.
+
+If no issue tracker is specified, stop and ask the user which issue tracker to use.
+
+When creating a new issue, use the feature name as the issue title:
 
 ```text
 Feature Spec: [Feature Name]
 ```
 
-Use the completed feature spec as the GitHub issue body.
+Use the completed feature spec as the issue body or issue comment body.
 
-Use `gh issue create` by default when publishing. If publishing is not possible, explain why and provide the exact issue title and body for manual publishing.
+Use the appropriate tool or documented workflow for the repository's issue tracker. If publishing is not possible, explain why and provide the exact issue title and body or issue comment body for manual publishing.
 
 ## Feature Spec Template
 
