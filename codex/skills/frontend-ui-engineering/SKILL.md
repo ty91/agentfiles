@@ -28,7 +28,6 @@ src/components/
   TaskList/
     TaskList.tsx          # Component implementation
     TaskList.test.tsx     # Tests
-    TaskList.stories.tsx  # Storybook stories (if using)
     use-task-list.ts      # Custom hook (if complex state)
     types.ts              # Component-specific types (if needed)
 ```
@@ -79,11 +78,11 @@ export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
 ```tsx
 // Container: handles data
 export function TaskListContainer() {
-  const { tasks, isLoading, error } = useTasks();
+  const { tasks, isLoading, error, refetch } = useTasks();
 
   if (isLoading) return <TaskListSkeleton />;
-  if (error) return <ErrorState message="Failed to load tasks" retry={refetch} />;
-  if (tasks.length === 0) return <EmptyState message="No tasks yet" />;
+  if (error) return <ErrorState message="할 일을 불러오지 못했습니다." retry={refetch} />;
+  if (tasks.length === 0) return <EmptyState message="아직 등록된 할 일이 없습니다." />;
 
   return <TaskList tasks={tasks} />;
 }
@@ -91,8 +90,10 @@ export function TaskListContainer() {
 // Presentation: handles rendering
 export function TaskList({ tasks }: { tasks: Task[] }) {
   return (
-    <ul role="list" className="divide-y">
-      {tasks.map(task => <TaskItem key={task.id} task={task} />)}
+    <ul className="divide-y">
+      {tasks.map((task) => (
+        <TaskItem key={task.id} task={task} />
+      ))}
     </ul>
   );
 }
@@ -114,6 +115,15 @@ Global store (Zustand, Redux)    → Complex client state shared app-wide
 **Avoid prop drilling deeper than 3 levels.** If you're passing props through components that don't use them, introduce context or restructure the component tree.
 
 ## Design System Adherence
+
+### Tokens and Components First
+
+Before creating new UI, look for existing design tokens and components.
+
+- If an existing component solves the problem, do not create a new one.
+- If an existing component is close, extend it with a variant, prop, or composition instead of duplicating it.
+- Do not introduce new color, spacing, radius, or typography values when existing tokens can express the design.
+- If a new design value is truly needed, define it as a design token before using it instead of writing a raw value directly.
 
 ### Avoid the AI Aesthetic
 
