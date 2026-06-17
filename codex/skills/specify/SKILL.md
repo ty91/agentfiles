@@ -56,6 +56,7 @@ If the request is empty, ask the user what feature or product slice they want to
 - Ask one question at a time.
 - Prefer questions that clarify user value, target users, scope, observable behavior, success criteria, acceptance scenarios, and edge cases.
 - Each requirement MUST become clear, unambiguous, and independently testable.
+- If a question can be answered by reading the codebase or docs, read them instead. Translate findings into product-level behavior without exposing implementation details.
 - Do not ask implementation-detail questions unless they are necessary to clarify externally visible behavior. If asked, phrase them in non-technical product terms.
 - If there are multiple possible feature slices, ask the user to choose one. Do not produce multiple specs in one session.
 
