@@ -3,6 +3,7 @@ name: merge-pr
 description: Merge a GitHub pull request and clean up branch/worktree state.
 argument-hint: "[PR number|PR URL|branch name]"
 allowed-tools: Bash(git:*), Bash(gh:*), AskUserQuestion
+disable-model-invocation: true
 ---
 
 ## Context
