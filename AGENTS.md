@@ -21,6 +21,6 @@
 - Use `rg` or `rg --files` for fast text/file searches.
 - Use `gws` for Google Workspace tasks, including Gmail, Calendar, Drive, Docs, Sheets, and related services.
 - Use `gh` as the default interface for GitHub work.
-- Use `linear` for Linear issue-tracking tasks. Do not create issues unless requested.
+- Use `linear` for Linear issue-tracking tasks.
 - Python deps: use `uv` by default.
 - JavaScript/TypeScript deps: use `pnpm` by default.
