@@ -60,10 +60,8 @@ if [[ ! -d "$CLAUDE_DST" ]]; then
 fi
 
 link_item "$REPO_DIR/AGENTS.md" "$CLAUDE_DST/CLAUDE.md"
-
-for item in statusline-command.sh agents; do
-  link_item "$REPO_DIR/claude/$item" "$CLAUDE_DST/$item"
-done
+link_item "$REPO_DIR/claude/statusline-command.sh" "$CLAUDE_DST/statusline-command.sh"
+link_item "$REPO_DIR/claude/agents" "$CLAUDE_DST/agents"
 echo
 
 # --- 2. ./codex/agents -> ~/.codex/agents ---
