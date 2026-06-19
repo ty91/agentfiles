@@ -80,4 +80,13 @@ link_item "$REPO_DIR/codex/agents" "$CODEX_DST/agents"
 link_item "$REPO_DIR/AGENTS.md" "$CODEX_DST/AGENTS.md"
 echo
 
+# --- 4. Install skills globally ---
+echo "--- Skills ---"
+if [[ "$DRY_RUN" == true ]]; then
+  echo "  Would run: npx skills add . --global --agent codex claude-code -y"
+else
+  npx skills add . --global --agent codex claude-code -y
+fi
+echo
+
 echo "=== Done ==="
