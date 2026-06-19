@@ -59,7 +59,9 @@ if [[ ! -d "$CLAUDE_DST" ]]; then
   fi
 fi
 
-for item in CLAUDE.md settings.json statusline-command.sh agents commands hooks; do
+link_item "$REPO_DIR/AGENTS.md" "$CLAUDE_DST/CLAUDE.md"
+
+for item in statusline-command.sh agents; do
   link_item "$REPO_DIR/claude/$item" "$CLAUDE_DST/$item"
 done
 echo
@@ -79,13 +81,5 @@ link_item "$REPO_DIR/codex/agents" "$CODEX_DST/agents"
 # --- 3. ./AGENTS.md -> ~/.codex/AGENTS.md ---
 link_item "$REPO_DIR/AGENTS.md" "$CODEX_DST/AGENTS.md"
 echo
-
-# --- 4. Run setup-skills.sh ---
-echo "--- Skills ---"
-if [[ "$DRY_RUN" == true ]]; then
-  "$REPO_DIR/setup-skills.sh" --dry-run
-else
-  "$REPO_DIR/setup-skills.sh"
-fi
 
 echo "=== Done ==="
