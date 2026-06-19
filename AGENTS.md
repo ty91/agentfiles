@@ -7,7 +7,7 @@
 - Do NOT write code until the user explicitly asks for it.
 - Workspace: `~/Developer/workspace`. If a ty91 repo is missing, clone `https://github.com/ty91/<repo>.git`.
 - Third-party/OSS (non-ty91): clone under `~/Developer/oss`.
-- Search documents under `~/obsidian/Codex` for shared, long-term knowledge.
+- Search documents under `~/obsidian/Agents` for shared, long-term knowledge.
 
 ## Git
 

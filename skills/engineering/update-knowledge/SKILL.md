@@ -14,7 +14,7 @@ Treat fresh-agent context window as scarce. Knowledge should be a routing aid, n
    - Do not save one-off task details, private Slack transcripts, secrets/tokens, temporary debugging notes, or unverified guesses.
 
 2. Read narrowly.
-   - Start at `~/.reco/knowledge/Start Here.md`.
+   - Start at `~/obsidian/Agents/Start Here.md`.
    - Follow only the relevant link.
    - Do not load the whole vault.
 
