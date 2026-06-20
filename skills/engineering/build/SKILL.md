@@ -1,38 +1,77 @@
 ---
 name: build
-description: Delegate sequential task implementation to worker with worktree, TDD, per-task commits, task-breakdown updates, and PR workflow.
+description: Implement one assigned task issue end-to-end in the current codebase. Use when the user provides a to-tasks sub-issue or other implementation issue and expects a focused codebase diff for that single task, not a plan, not all sibling tasks, and not a pull request.
 ---
 
 # Build
 
-Implement the requested spec issue's task breakdown end-to-end, then create a pull request.
+## Mission
 
-You own orchestration, not inline implementation. Resolve the target, prepare the worktree, then delegate each task to the `task-implementer` subagent in order, verify each result, track progress, run the final gate, and open the PR. The per-task TDD, verification, and commit work is delegated to the subagent.
+Implement exactly one task issue. The input is an implementation sub-issue, usually created by `to-tasks` and marked with `[pi:task]`. The output is a focused codebase diff that satisfies that one issue.
+
+Do not process the parent issue's full plan. Do not implement sibling sub-issues. Do not create or update a `[pi:task-breakdown]` comment. Do not delegate implementation to a subagent. You are the implementer.
 
 ## Target Resolution
 
-Resolve the spec issue from the user's request. If it is unclear, ask the user which spec issue to build.
+Resolve the task issue from the user's request. If the target is missing or ambiguous, ask which task issue to build.
 
-Find the `[pi:task-breakdown]` comment on the spec issue. Treat the `## Task N:` sections in that comment as the implementation queue, and work through incomplete tasks strictly in order. Do not skip ahead unless an earlier task is already complete.
+Read the task issue directly. If it is a `[pi:task]` sub-issue, also read:
 
-A task is complete only when its implementation is done, its task-specific verification is satisfied, its changes are committed, and the task's checklist items in the `[pi:task-breakdown]` comment have been checked. If the comment cannot be found, the ordered task sections cannot be determined, or there are no incomplete tasks remaining, stop and report the blocker.
+- Its parent issue, if linked.
+- The `[pi:plan]` comment on the parent issue, if present.
+- Any dependency sub-issues listed in the task body.
+- Relevant project guidance such as `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, and `docs/agents/issue-tracker.md`.
+
+Treat the task issue as the scope boundary. Parent plans and dependency issues provide context only; they do not authorize extra work.
+
+Stop and ask before implementing if:
+
+- The task issue has no clear acceptance criteria.
+- A listed dependency is incomplete and blocks this task.
+- The task contradicts the parent plan or current codebase.
+- The required change is larger than the task issue describes.
 
 ## Workflow
 
-1. Use the `git-worktree` skill to create or enter a dedicated worktree for the spec issue.
-2. If you created a new worktree, install its dependencies before continuing.
-3. Read the spec issue, the `[pi:task-breakdown]` comment, and relevant code until the required behavior and task order are clear.
-4. Dump the `[pi:task-breakdown]` comment to `TODO.md`.
-5. For each incomplete `## Task N:` section, strictly in order — sequentially, never in parallel, since the tasks share one worktree and build on each other:
-   - Delegate the task to the `task-implementer` subagent. Pass a thin packet: the worktree path, the exact `## Task N:` section (description, acceptance criteria, checklist items, and verification commands), and references to the spec issue, relevant code, and project convention files. Do not restate the TDD or commit discipline in the prompt; the subagent owns it.
-   - When the subagent returns, verify its result against `git log` and `git diff`: confirm the commit exists, stages only that task's files, and that its verification passed. If the subagent reports a blocker or its result does not hold up, stop and report rather than proceeding to the next task.
-   - Update the `TODO.md` file to check the completed task's checklist items, and any checkpoint checklist items that are now satisfied. Do not check future task items or unsatisfied checkpoint items.
-6. After all task sections are complete, run the repository's full handoff gate, including lint, typecheck, tests, build, and any project-specific checks.
-7. If the final handoff gate requires fixes, make a final Conventional Commit for those fixes and update the `TODO.md` file for any newly satisfied final checkpoint items.
-8. Update the `[pi:task-breakdown]` comment with `TODO.md`, then remove the local `TODO.md` file.
-9. Use the `pr` skill to push the branch, create the GitHub pull request, and verify it.
+1. Inspect the repo state with `git status --short`. Do not overwrite unrelated user changes.
+2. Read the task issue and relevant code until the required behavior is clear.
+3. Use the `tdd` skill when the task changes behavior or fixes a bug:
+   - Write one failing test for one required behavior.
+   - Make it pass with the smallest appropriate change.
+   - Refactor only within the task scope.
+4. Implement only the assigned task. Keep the diff narrow and consistent with existing patterns.
+5. Run the task's listed verification commands. If the issue does not list commands, run the smallest relevant repo checks for the touched area.
+6. Inspect the final diff with `git diff` and confirm it maps back to the task's acceptance criteria.
+7. Do not create a PR or commit unless the user explicitly asks or the repo's task workflow requires it.
+8. If issue tracker updates are expected, update only this task issue's checklist/status after verification. Do not modify the parent issue or sibling issues unless explicitly asked.
 
-## Reporting
+## Diff Discipline
 
-- Keep progress updates concise and focused on the current task number, worker status, blockers, or decisions needed from the user.
-- In the final response to the user, summarize completed tasks, commits, task-breakdown update status, PR URL, validation results, cleanup result, and any notable risks or follow-up.
+- Leave unrelated changes untouched.
+- Do not start cleanup outside the task scope.
+- Do not hide failing verification. If verification cannot pass, keep the useful diff and report the blocker.
+- Do not mark unchecked acceptance criteria as complete unless the code and verification satisfy them.
+
+## Completion Report
+
+Report the result concisely:
+
+```markdown
+## Task Issue
+<issue URL or identifier>
+
+## Summary
+- [What changed]
+
+## Diff
+- [Files changed and why]
+
+## Verification
+- `<command>` -- pass/fail
+
+## Issue Update
+- [Checklist/status update performed, or "not updated"]
+
+## Blockers / Risks
+- [Anything still requiring user action, or "none"]
+```

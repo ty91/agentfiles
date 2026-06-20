@@ -1,165 +1,76 @@
 ---
 name: to-plan
-description: Breaks work into ordered tasks. Use when you have a spec or clear requirements and need to break work into implementable tasks. Use when a task feels too large to start, when you need to estimate scope, or when parallel work is possible.
+description: Create an implementation plan comment for a spec issue without decomposing it into detailed tasks or sub-issues. Use when a feature/spec issue needs architecture direction, execution phases, risks, and human approval before detailed task creation; use to-tasks separately after the plan is approved to create sub-issues.
 ---
 
 # To Plan
 
 ## Overview
 
-Decompose work into small, verifiable tasks with explicit acceptance criteria. Good task breakdown is the difference between an agent that completes work reliably and one that produces a tangled mess. Every task should be small enough to implement, test, and verify in a single focused session.
+Turn a spec issue into a concise implementation plan. The plan explains the approach, major phases, dependencies, risks, and open questions. It does not create detailed task breakdowns, task checklist comments, local planning files, or sub-issues.
 
-## Source Spec and Ownership
+## Source Spec
 
 Start from the spec issue the user provides. The source spec must be an issue in the repo's configured issue tracker.
 
-If the spec target is missing or ambiguous, ask which spec issue to plan from. Do not choose a spec yourself.
+If the target is missing or ambiguous, ask which spec issue to plan from. Do not choose one yourself.
 
 If the user provides a local spec document instead of an issue, stop and ask which issue tracker issue should contain the plan, or ask whether to create/import the spec into an issue first. Do not create local planning files.
 
 If the repo has `docs/agents/issue-tracker.md`, follow it for fetching and updating issue details and comments. Otherwise, use the repo's configured issue-tracker workflow. If the workflow is unclear, ask the user how to read and comment on the issue before continuing.
 
-The spec issue is the source of truth for product intent and scope. It is also the container for the plan comment and task breakdown comment. If the spec is stale, incomplete, or contradicted by the codebase, stop and ask whether to revise the spec before writing the plan.
+The spec issue is the source of truth for product intent and scope. If the spec is stale, incomplete, or contradicted by the codebase, stop and ask whether to revise the spec before writing the plan.
 
-## Output Comments
+## Output
 
-Publish planning artifacts as comments on the spec issue. Do not write local planning files.
+Create or update exactly one planning comment on the spec issue:
 
-Create or update two comments on the spec issue:
+```markdown
+[pi:plan]
+```
 
-1. Plan comment, starting with `[pi:plan]`
-2. Task breakdown comment, starting with `[pi:task-breakdown]`
+Use a visible marker line, not a hidden HTML comment, because issue tracker editors may sanitize or transform hidden comments.
 
-Use visible marker lines, not hidden HTML comments, because issue tracker editors may sanitize or transform hidden comments.
+If an existing `[pi:plan]` comment is found, update it instead of creating a duplicate. If the issue tracker workflow does not support comment updates, create a new comment with the same marker and state that it supersedes the previous one.
 
-If an existing marked comment is found, update it instead of creating a duplicate. If the issue tracker workflow does not support comment updates, create a new comment with the same marker and state that it supersedes the previous one.
+Do not create a `[pi:task-breakdown]` comment. Do not create sub-issues. Detailed implementation tasks belong to the `to-tasks` skill after the plan is approved.
 
-Treat these comments as working artifacts while the work is in progress:
+Do not close or otherwise modify the spec issue unless the user explicitly asks.
 
-- Keep them updated when scope or decisions change.
-- Use them as the shared source of truth between the human and the agent during implementation.
-- Do not close or otherwise modify the spec issue unless the user explicitly asks.
+## Planning Process
 
-## When to Use
-
-- You have a spec and need to break it into implementable units
-- A task feels too large or vague to start
-- Work needs to be parallelized across multiple agents or sessions
-- You need to communicate scope to a human
-- The implementation order isn't obvious
-
-**When NOT to use:** Single-file changes with obvious scope, or when the spec already contains well-defined tasks.
-
-## The Planning Process
-
-### Step 1: Enter Plan Mode
+### 1. Read First
 
 Before writing any code, operate in read-only mode:
 
-- Read the spec and relevant codebase sections
-- Identify existing patterns and conventions
-- Map dependencies between components
-- Note risks and unknowns
+- Read the spec and relevant codebase sections.
+- Identify existing patterns and conventions.
+- Map major dependencies between components.
+- Note risks, unknowns, and decisions that need human review.
 
-**Do NOT write code during planning.** The output is a plan document, not implementation.
+**Do not write code during planning.** The output is a plan comment, not implementation.
 
-### Step 2: Identify the Dependency Graph
+### 2. Decide The Shape
 
-Map what depends on what:
+Describe the implementation strategy at a planning level:
 
-```text
-Database schema
-    |
-    +-- API models/types
-    |       |
-    |       +-- API endpoints
-    |       |       |
-    |       |       +-- Frontend API client
-    |       |               |
-    |       |               +-- UI components
-    |       |
-    |       +-- Validation logic
-    |
-    +-- Seed data / migrations
-```
+- Major architecture decisions and rationale.
+- Dependency order between phases.
+- Data, API, UI, migration, test, release, or documentation concerns.
+- Explicit risks and mitigations.
+- Open questions that block or may change the work.
 
-Implementation order follows the dependency graph bottom-up: build foundations first.
+Keep the plan implementation-aware enough to guide the next step, but do not write per-task acceptance criteria, file lists, or verification commands. Those belong in sub-issues created by `to-tasks`.
 
-### Step 3: Slice Vertically
+### 3. Publish And Ask
 
-Instead of building all the database, then all the API, then all the UI — build one complete feature path at a time:
+Publish the `[pi:plan]` comment, then ask the user to review it before detailed task creation:
 
-**Bad (horizontal slicing):**
+> Plan written to `<issue-url>`. Please review it and let me know if you want changes before I split it into sub-issues with `to-tasks`.
 
-```text
-Task 1: Build entire database schema
-Task 2: Build all API endpoints
-Task 3: Build all UI components
-Task 4: Connect everything
-```
-
-**Good (vertical slicing):**
-
-```text
-Task 1: User can create an account (schema + API + UI for registration)
-Task 2: User can log in (auth schema + API + UI for login)
-Task 3: User can create a task (task schema + API + UI for creation)
-Task 4: User can view task list (query + API + UI for list view)
-```
-
-Each vertical slice delivers working, testable functionality.
-
-### Step 4: Write Tasks
-
-Each task follows this structure:
-
-```markdown
-## Task [N]: [Short descriptive title]
-
-**Description:** One paragraph explaining what this task accomplishes.
-
-**Acceptance criteria:**
-- [ ] [Specific, testable condition]
-- [ ] [Specific, testable condition]
-
-**Verification:**
-- [ ] Tests pass: `npm test -- --grep "feature-name"`
-- [ ] Build succeeds: `npm run build`
-- [ ] Manual check: [description of what to verify]
-
-**Dependencies:** [Task numbers this depends on, or "None"]
-
-**Files likely touched:**
-- `src/path/to/file.ts`
-- `tests/path/to/test.ts`
-
-**Estimated scope:** [Small: 1-2 files | Medium: 3-5 files | Large: 5+ files]
-```
-
-### Step 5: Order and Checkpoint
-
-Arrange tasks so that:
-
-1. Dependencies are satisfied (build foundation first)
-2. Each task leaves the system in a working state
-3. Verification checkpoints occur after every 2-3 tasks
-4. High-risk tasks are early (fail fast)
-
-Add explicit checkpoints:
-
-```markdown
-## Checkpoint: After Tasks 1-3
-- [ ] All tests pass
-- [ ] Application builds without errors
-- [ ] Core user flow works end-to-end
-- [ ] Review with human before proceeding
-```
-
-## Plan Document Template
+## Plan Comment Template
 
 Write the plan comment primarily in Korean. Established technical terms may remain in English when they are clearer or conventional.
-
-Create or update the plan comment using this structure:
 
 ```markdown
 [pi:plan]
@@ -167,35 +78,22 @@ Create or update the plan comment using this structure:
 # Implementation Plan: [Feature/Project Name]
 
 ## Overview
-[One paragraph summary of what we're building]
+[One paragraph summary of what will be built and why.]
 
 ## Architecture Decisions
-- [Key decision 1 and rationale]
-- [Key decision 2 and rationale]
+- [Decision 1 and rationale]
+- [Decision 2 and rationale]
 
-## Task List
+## Execution Phases
 
-### Phase 1: Foundation
-- [ ] Task 1: ...
-- [ ] Task 2: ...
+### Phase 1: [Name]
+[Planning-level description of the outcome and dependencies.]
 
-### Checkpoint: Foundation
-- [ ] Tests pass, builds clean
+### Phase 2: [Name]
+[Planning-level description of the outcome and dependencies.]
 
-### Phase 2: Core Features
-- [ ] Task 3: ...
-- [ ] Task 4: ...
-
-### Checkpoint: Core Features
-- [ ] End-to-end flow works
-
-### Phase 3: Polish
-- [ ] Task 5: ...
-- [ ] Task 6: ...
-
-### Checkpoint: Complete
-- [ ] All acceptance criteria met
-- [ ] Ready for review
+### Phase 3: [Name]
+[Planning-level description of the outcome and dependencies.]
 
 ## Risks and Mitigations
 | Risk | Impact | Mitigation |
@@ -206,96 +104,13 @@ Create or update the plan comment using this structure:
 - [Question needing human input]
 ```
 
-## Todo Document Template
-
-Write the task breakdown comment primarily in Korean. Established technical terms may remain in English when they are clearer or conventional.
-
-Create or update the task breakdown comment as the execution checklist. It should contain the detailed task entries from Step 4, grouped by phase and ordered by dependency.
-
-```markdown
-[pi:task-breakdown]
-
-# Implementation Todo: [Feature/Project Name]
-
-## Phase 1: Foundation
-
-## Task 1: [Short descriptive title]
-
-**Description:** One paragraph explaining what this task accomplishes.
-
-**Acceptance criteria:**
-- [ ] [Specific, testable condition]
-- [ ] [Specific, testable condition]
-
-**Verification:**
-- [ ] Tests pass: `npm test -- --grep "feature-name"`
-- [ ] Build succeeds: `npm run build`
-- [ ] Manual check: [description of what to verify]
-
-**Dependencies:** None
-
-**Files likely touched:**
-- `src/path/to/file.ts`
-- `tests/path/to/test.ts`
-
-**Estimated scope:** Small: 1-2 files
-```
-
-## Task Sizing Guidelines
-
-| Size | Files | Scope | Example |
-|------|-------|-------|---------|
-| **XS** | 1 | Single function or config change | Add a validation rule |
-| **S** | 1-2 | One component or endpoint | Add a new API endpoint |
-| **M** | 3-5 | One feature slice | User registration flow |
-| **L** | 5-8 | Multi-component feature | Search with filtering and pagination |
-| **XL** | 8+ | **Too large — break it down further** | — |
-
-If a task is L or larger, it should be broken into smaller tasks. An agent performs best on S and M tasks.
-
-**When to break a task down further:**
-
-- It would take more than one focused session (roughly 2+ hours of agent work)
-- You cannot describe the acceptance criteria in 3 or fewer bullet points
-- It touches two or more independent subsystems (e.g., auth and billing)
-- You find yourself writing "and" in the task title (a sign it is two tasks)
-
-## Parallelization Opportunities
-
-When multiple agents or sessions are available:
-
-- **Safe to parallelize:** Independent feature slices, tests for already-implemented features, documentation
-- **Must be sequential:** Database migrations, shared state changes, dependency chains
-- **Needs coordination:** Features that share an API contract (define the contract first, then parallelize)
-
-## Common Rationalizations
-
-| Rationalization | Reality |
-|---|---|
-| "I'll figure it out as I go" | That's how you end up with a tangled mess and rework. 10 minutes of planning saves hours. |
-| "The tasks are obvious" | Write them down anyway. Explicit tasks surface hidden dependencies and forgotten edge cases. |
-| "Planning is overhead" | Planning is the task. Implementation without a plan is just typing. |
-| "I can hold it all in my head" | Context windows are finite. Written plans survive session boundaries and compaction. |
-
-## Red Flags
-
-- Starting implementation without a written task list
-- Tasks that say "implement the feature" without acceptance criteria
-- No verification steps in the plan
-- All tasks are XL-sized
-- No checkpoints between tasks
-- Dependency order isn't considered
-
 ## Verification
 
-Before starting implementation, confirm:
+Before finishing, confirm:
 
-- [ ] The source spec was read from the user-provided issue tracker issue
-- [ ] The plan comment was created or updated on the spec issue
-- [ ] The task breakdown comment was created or updated on the spec issue
-- [ ] Every task has acceptance criteria
-- [ ] Every task has a verification step
-- [ ] Task dependencies are identified and ordered correctly
-- [ ] No task touches more than ~5 files
-- [ ] Checkpoints exist between major phases
-- [ ] The human has reviewed and approved the plan
+- [ ] The source spec was read from the user-provided issue tracker issue.
+- [ ] Existing repo patterns and relevant code were considered.
+- [ ] A single `[pi:plan]` comment was created or updated on the spec issue.
+- [ ] No `[pi:task-breakdown]` comment, local planning file, or sub-issue was created.
+- [ ] The plan is suitable for a later `to-tasks` pass.
+- [ ] The human was asked to review the plan before task creation.
