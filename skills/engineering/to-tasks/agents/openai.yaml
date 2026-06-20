@@ -1,6 +1,2 @@
-interface:
-  display_name: "To Tasks"
-  short_description: "Break a plan into vertical-slice tasks"
-  default_prompt: "Use $to-tasks to split this plan into independently-grabbable tasks."
 policy:
   allow_implicit_invocation: false
