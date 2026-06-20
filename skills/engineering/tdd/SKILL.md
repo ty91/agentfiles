@@ -44,18 +44,19 @@ RIGHT (vertical):
 
 ### 1. Planning
 
-When exploring the codebase, use the project's domain glossary so that test names and interface vocabulary match the project's language, and respect ADRs in the area you're touching.
+When exploring the codebase, read `CONTEXT.md` (if it exists) so that test names and interface vocabulary match the project's domain language, and respect ADRs in the area you're touching.
 
 Before writing any code:
 
-- [ ] Extract required interface changes from the issue, agent brief, or spec
-- [ ] Extract the behaviors to test, prioritizing acceptance criteria and critical paths
-- [ ] Identify opportunities for [deep modules](deep-modules.md) (small interface, deep implementation)
-- [ ] Design interfaces for [testability](interface-design.md)
+- [ ] Confirm with user what interface changes are needed
+- [ ] Confirm with user which behaviors to test (prioritize)
+- [ ] Identify opportunities for deep modules (small interface, deep implementation) — run the `codebase-design` skill for the vocabulary and the testability checks
 - [ ] List the behaviors to test (not implementation steps)
-- [ ] If the source does not define observable behavior clearly enough, stop and ask for clarification
+- [ ] Get user approval on the plan
 
-**You can't test everything.** Focus testing effort on the acceptance criteria, critical paths, and complex logic, not every possible edge case.
+Ask: "What should the public interface look like? Which behaviors are most important to test?"
+
+**You can't test everything.** Confirm with the user exactly which behaviors matter most. Focus testing effort on critical paths and complex logic, not every possible edge case.
 
 ### 2. Tracer Bullet
 
