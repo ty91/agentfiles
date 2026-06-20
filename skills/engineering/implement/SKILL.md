@@ -4,7 +4,7 @@ description: Implement one assigned task issue end-to-end in the current codebas
 disable-model-invocation: true
 ---
 
-Implement the work described by the user in the PRD or an issue.
+Implement the work described by the user in the PRD or an issue. Read the passed issue's full body and comments to understand the goal. Also read the parent issue's full body and comments for further understanding, if exists.
 
 You MUST first create a new git worktree and install dependencies before implementing.
 
