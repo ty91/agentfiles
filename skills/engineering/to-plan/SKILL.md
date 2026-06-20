@@ -1,13 +1,15 @@
 ---
 name: to-plan
-description: Create an implementation plan comment for a spec issue without decomposing it into detailed tasks or sub-issues. Use when a feature/spec issue needs architecture direction, execution phases, risks, and human approval before detailed task creation; use to-tasks separately after the plan is approved to create sub-issues.
+description: Create a researched plan for a spec issue before implementation. Use to clarify context, scope, codebase findings, and implementation/testing decisions.
 ---
 
 # To Plan
 
 ## Overview
 
-Turn a spec issue into a concise implementation plan. The plan explains the approach, major phases, dependencies, risks, and open questions. It does not create detailed task breakdowns, task checklist comments, local planning files, or sub-issues.
+Turn a spec issue into a researched, decision-oriented plan. The plan records why the work matters, what was learned from the codebase and relevant documentation, what the work should and should not accomplish, and which implementation and testing decisions have been agreed.
+
+Do not implement code during this skill. Do not decompose the work into detailed checklists, local planning files, or sub-issues.
 
 ## Source Spec
 
@@ -15,17 +17,13 @@ Start from the spec issue the user provides. The source spec must be an issue in
 
 If the target is missing or ambiguous, ask which spec issue to plan from, or whether to create a new issue for the plan. Do not choose one yourself.
 
-If the user asks to create a new issue, write the plan in the new issue body instead of creating a comment. The new issue itself becomes the source of truth for the plan.
-
 If the user provides a local spec document instead of an issue, stop and ask which issue tracker issue should contain the plan, or ask whether to create/import the spec into an issue first. Do not create local planning files.
 
 If the repo has `docs/agents/issue-tracker.md`, follow it for fetching and updating issue details and comments. Otherwise, use the repo's configured issue-tracker workflow. If the workflow is unclear, ask the user how to read and comment on the issue before continuing.
 
-The spec issue is the source of truth for product intent and scope. If the spec is stale, incomplete, or contradicted by the codebase, stop and ask whether to revise the spec before writing the plan.
+## Output Location
 
-## Output
-
-For an existing spec issue, create or update exactly one planning comment on the spec issue:
+For an existing spec issue, create or update exactly one planning comment on the spec issue. The comment must start with a visible marker line:
 
 ```markdown
 [pi:plan]
@@ -37,75 +35,75 @@ If an existing `[pi:plan]` comment is found, update it instead of creating a dup
 
 For a newly created issue, put the `[pi:plan]` content in the issue body instead of a comment.
 
-Do not create a `[pi:task-breakdown]` comment. Do not create sub-issues. Detailed implementation tasks belong to the `to-tasks` skill after the plan is approved.
+## Workflow
 
-Do not close or otherwise modify the spec issue unless the user explicitly asks.
+### 1. Research
 
-## Planning Process
+Before writing the plan, operate in read-only mode:
 
-### 1. Read First
+- Read the source spec issue.
+- Read relevant codebase sections, existing implementation patterns, and nearby tests.
+- Read project documentation that defines architecture, testing, release, or contribution conventions.
+- Use web research only when the work depends on current or external information, and prefer official or primary sources.
 
-Before writing any code, operate in read-only mode:
+Using subagents to delegate the research is strongly recommended. Use `general-purpose` or `default` subagent whenever possible.
 
-- Read the spec and relevant codebase sections.
-- Identify existing patterns and conventions.
-- Map major dependencies between components.
-- Note risks, unknowns, and decisions that need human review.
+### 2. Summarize Research
 
-**Do not write code during planning.** The output is a plan comment, not implementation.
+Capture only findings that matter to planning. Separate facts from recommendations.
 
-### 2. Decide The Shape
+Include enough references for a future implementer to inspect the evidence:
 
-Describe the implementation strategy at a planning level:
+- Use file paths with line numbers for important local code or documentation findings when practical.
+- Use hyperlinks for web documents and external references.
+- Do not pad the plan with broad codebase summaries that do not affect the work.
 
-- Major architecture decisions and rationale.
-- Dependency order between phases.
-- Data, API, UI, migration, test, release, or documentation concerns.
-- Explicit risks and mitigations.
-- Open questions that block or may change the work.
+### 3. Elicit Decisions
 
-Keep the plan implementation-aware enough to guide the next step, but do not write per-task acceptance criteria, file lists, or verification commands. Those belong in sub-issues created by `to-tasks`.
+Identify decisions that materially affect scope, architecture, data flow, migration, API shape, UI behavior, rollout, or testing strategy.
 
-### 3. Publish And Ask
+Prefer to use `grilling` skill when there are meaningful plan-affecting decisions to resolve. Skip grilling only when the spec and codebase already make the decisions clear, the plan is trivial, or the user explicitly asks to skip it.
 
-Publish the `[pi:plan]` comment, then ask the user to review it before detailed task creation:
+### 4. Publish And Ask
 
-> Plan written to `<issue-url>`. Please review it and let me know if you want changes before I split it into sub-issues with `to-tasks`.
+Publish the plan, then ask the user to review it.
 
-## Plan Comment Template
+## Plan Template
 
-Write the plan comment primarily in Korean. Established technical terms may remain in English when they are clearer or conventional.
+Write the plan primarily in Korean including the title of the plan. Established technical terms or section titles may remain in English when they are clearer or conventional.
 
 ```markdown
 [pi:plan]
 
-# Implementation Plan: [Feature/Project Name]
+# Plan: <plan title>
 
-## Overview
-[One paragraph summary of what will be built and why.]
+## Background
 
-## Architecture Decisions
-- [Decision 1 and rationale]
-- [Decision 2 and rationale]
+[Explain why the work should happen. Base this on the spec issue and user-provided context, not speculation.]
 
-## Execution Phases
+## Research Findings
 
-### Phase 1: [Name]
-[Planning-level description of the outcome and dependencies.]
+[Summarize codebase, documentation, and web research findings that affect planning. Keep recommendations out of this section.]
 
-### Phase 2: [Name]
-[Planning-level description of the outcome and dependencies.]
+## Goal
 
-### Phase 3: [Name]
-[Planning-level description of the outcome and dependencies.]
+[State the desired outcome at a planning level. Avoid detailed checklists or acceptance criteria.]
 
-## Risks and Mitigations
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| [Risk] | [High/Med/Low] | [Strategy] |
+## Out of Scope
 
-## Open Questions
-- [Question needing human input]
+[Record boundaries that prevent scope creep.]
+
+## Implementation Decisions
+
+[List agreed implementation decisions and short rationale. Include only decisions resolved by the spec, codebase research, or user discussion.]
+
+## Testing Decisions
+
+[List agreed testing strategy decisions and short rationale, including meaningful exclusions.]
+
+## Further Notes
+
+[Record unresolved questions, deferred decisions, rollout notes, dependencies, or context that does not fit the other sections.]
 ```
 
 ## Verification
@@ -113,8 +111,8 @@ Write the plan comment primarily in Korean. Established technical terms may rema
 Before finishing, confirm:
 
 - [ ] The source spec was read from the user-provided issue tracker issue.
-- [ ] Existing repo patterns and relevant code were considered.
-- [ ] A single `[pi:plan]` comment was created or updated on the existing spec issue, or the `[pi:plan]` content was written to the body of a newly created issue.
-- [ ] No `[pi:task-breakdown]` comment, local planning file, or sub-issue was created.
-- [ ] The plan is suitable for a later `to-tasks` pass.
-- [ ] The human was asked to review the plan before task creation.
+- [ ] Relevant code, existing patterns, and nearby tests were considered.
+- [ ] Required project documentation was considered.
+- [ ] Web research was performed when current or external information was needed.
+- [ ] Research findings include useful file line references or document links where practical.
+- [ ] Grilling was performed when meaningful plan-affecting decisions were not already clear, unless the user asked to skip it.
