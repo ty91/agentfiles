@@ -5,8 +5,6 @@ description: Create a researched plan for a spec issue before implementation. Us
 
 # To Plan
 
-## Overview
-
 Turn a spec issue into a researched, decision-oriented plan. The plan records why the work matters, what was learned from the codebase and relevant documentation, what the work should and should not accomplish, and which implementation and testing decisions have been agreed.
 
 Do not implement code during this skill. Do not decompose the work into detailed checklists, local planning files, or sub-issues.
