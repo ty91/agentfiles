@@ -13,7 +13,9 @@ Turn a spec issue into a concise implementation plan. The plan explains the appr
 
 Start from the spec issue the user provides. The source spec must be an issue in the repo's configured issue tracker.
 
-If the target is missing or ambiguous, ask which spec issue to plan from. Do not choose one yourself.
+If the target is missing or ambiguous, ask which spec issue to plan from, or whether to create a new issue for the plan. Do not choose one yourself.
+
+If the user asks to create a new issue, write the plan in the new issue body instead of creating a comment. The new issue itself becomes the source of truth for the plan.
 
 If the user provides a local spec document instead of an issue, stop and ask which issue tracker issue should contain the plan, or ask whether to create/import the spec into an issue first. Do not create local planning files.
 
@@ -23,7 +25,7 @@ The spec issue is the source of truth for product intent and scope. If the spec 
 
 ## Output
 
-Create or update exactly one planning comment on the spec issue:
+For an existing spec issue, create or update exactly one planning comment on the spec issue:
 
 ```markdown
 [pi:plan]
@@ -32,6 +34,8 @@ Create or update exactly one planning comment on the spec issue:
 Use a visible marker line, not a hidden HTML comment, because issue tracker editors may sanitize or transform hidden comments.
 
 If an existing `[pi:plan]` comment is found, update it instead of creating a duplicate. If the issue tracker workflow does not support comment updates, create a new comment with the same marker and state that it supersedes the previous one.
+
+For a newly created issue, put the `[pi:plan]` content in the issue body instead of a comment.
 
 Do not create a `[pi:task-breakdown]` comment. Do not create sub-issues. Detailed implementation tasks belong to the `to-tasks` skill after the plan is approved.
 
@@ -110,7 +114,7 @@ Before finishing, confirm:
 
 - [ ] The source spec was read from the user-provided issue tracker issue.
 - [ ] Existing repo patterns and relevant code were considered.
-- [ ] A single `[pi:plan]` comment was created or updated on the spec issue.
+- [ ] A single `[pi:plan]` comment was created or updated on the existing spec issue, or the `[pi:plan]` content was written to the body of a newly created issue.
 - [ ] No `[pi:task-breakdown]` comment, local planning file, or sub-issue was created.
 - [ ] The plan is suitable for a later `to-tasks` pass.
 - [ ] The human was asked to review the plan before task creation.
