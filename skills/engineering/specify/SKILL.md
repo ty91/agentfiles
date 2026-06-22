@@ -113,69 +113,69 @@ Use the appropriate tool or documented workflow for the repository's issue track
 ## Feature Spec Template
 
 ```md
-# Feature Spec: [Feature Name]
+# 기능 명세: [기능 이름]
 
-## User Scenarios
+## 유저 시나리오
 
-### User Story 1 - [Brief Title] (Priority: P1)
+### User Story 1 - [짧은 제목] (우선순위: P1)
 
-[Describe this user journey in plain language]
+[이 유저 여정을 쉬운 말로 설명]
 
-**Value**: [Explain the user value and why this priority is appropriate]
+**가치**: [유저 가치와 이 우선순위가 적절한 이유를 설명]
 
-**Tests**: [Explain how this story can be tested independently]
+**테스트**: [이 스토리를 독립적으로 테스트하는 방법을 설명]
 
-**Acceptance Scenarios**:
+**인수 시나리오**:
 
 1. **Given** [initial state], **When** [action], **Then** [expected outcome]
 2. **Given** [initial state], **When** [action], **Then** [expected outcome]
 
 ---
 
-### User Story 2 - [Brief Title] (Priority: P2)
+### User Story 2 - [짧은 제목] (우선순위: P2)
 
-[Describe this user journey in plain language]
+[이 유저 여정을 쉬운 말로 설명]
 
-**Value**: [Explain the user value and why this priority is appropriate]
+**가치**: [유저 가치와 이 우선순위가 적절한 이유를 설명]
 
-**Tests**: [Explain how this story can be tested independently]
+**테스트**: [이 스토리를 독립적으로 테스트하는 방법을 설명]
 
-**Acceptance Scenarios**:
+**인수 시나리오**:
 
 1. **Given** [initial state], **When** [action], **Then** [expected outcome]
 
 ---
 
-### Edge Cases
+### 엣지 케이스
 
-- What happens when [boundary condition]?
-- How does the system handle [error scenario]?
+- [경계 조건]일 때 어떤 일이 발생하는가?
+- 시스템은 [오류 상황]을 어떻게 처리하는가?
 
-## Requirements
+## 요구사항
 
-### Functional Requirements
+### 기능 요구사항
 
-- **FR-001**: System MUST [specific externally observable capability]
-- **FR-002**: System MUST [specific externally observable capability]
-- **FR-003**: Users MUST be able to [key interaction]
-- **FR-004**: System MUST [observable data or state requirement]
-- **FR-005**: System MUST [specific externally observable behavior]
-- **FR-006**: System MUST [NEEDS CLARIFICATION: unresolved product behavior]
+- **FR-001**: 시스템은 [구체적으로 외부에서 관찰 가능한 기능]을 제공해야 한다
+- **FR-002**: 시스템은 [구체적으로 외부에서 관찰 가능한 기능]을 제공해야 한다
+- **FR-003**: 사용자는 [핵심 상호작용]을 할 수 있어야 한다
+- **FR-004**: 시스템은 [관찰 가능한 데이터 또는 상태 요구사항]을 충족해야 한다
+- **FR-005**: 시스템은 [구체적으로 외부에서 관찰 가능한 동작]을 수행해야 한다
+- **FR-006**: 시스템은 [NEEDS CLARIFICATION: 미해결 제품 동작]을 처리해야 한다
 
-### Success Criteria
+### 성공 기준
 
-- **SC-001**: [Measurable outcome or completion criterion]
-- **SC-002**: [Measurable outcome or completion criterion]
+- **SC-001**: [측정 가능한 결과 또는 완료 기준]
+- **SC-002**: [측정 가능한 결과 또는 완료 기준]
 
-## Assumptions
+## 가정
 
-- [Assumptions about target users]
-- [Assumptions about scope boundaries]
-- [Assumptions about data or environment]
-- [Dependency on existing system or service, described without implementation design]
+- [대상 유저에 대한 가정]
+- [범위 경계에 대한 가정]
+- [데이터 또는 환경에 대한 가정]
+- [기존 시스템 또는 서비스에 대한 의존성, 구현 설계 없이 설명]
 
-## Out of Scope
+## 범위에서 제외
 
-- [Explicitly excluded behavior, workflow, or user group]
-- [Implementation details intentionally deferred to plan]
+- [명시적으로 제외되는 동작, 워크플로, 또는 유저 그룹]
+- [계획 단계로 의도적으로 미룬 구현 세부사항]
 ```
