@@ -28,6 +28,7 @@ src/components/
   TaskList/
     TaskList.tsx          # Component implementation
     TaskList.test.tsx     # Tests
+    TaskList.stories.tsx  # Storybook stories (if using)
     use-task-list.ts      # Custom hook (if complex state)
     types.ts              # Component-specific types (if needed)
 ```
