@@ -50,7 +50,7 @@ Iterate until the user approves the breakdown.
 
 ### 5. Publish the tasks to the issue tracker
 
-For each approved slice, publish a new task to the issue tracker. Use the issue body template below. These tasks are considered ready for AFK agents, so publish them with the correct triage label unless instructed otherwise.
+For each approved slice, publish a new task to the issue tracker. Use the issue body template below. These tasks are considered ready for agents, so publish them with the correct triage label unless instructed otherwise.
 
 Write issue content primarily in Korean. Section names and established technical terms may remain in English when they are clearer or conventional.
 
