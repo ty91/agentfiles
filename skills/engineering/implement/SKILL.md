@@ -10,7 +10,7 @@ You MUST first create a new git worktree and install dependencies before impleme
 
 Use `tdd` skill where possible, at pre-agreed seams.
 
-Run typechecking regularly, single test files regularly, and the full test suite once at the end.
+Run typechecking regularly, single test files regularly, commit regularly, and the full test suite once at the end.
 
 Once done, use `review` skill to review the work and fix every merge blockers before submitting.
 
