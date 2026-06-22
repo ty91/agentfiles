@@ -15,6 +15,8 @@ description: Test-driven development with red-green-refactor loop. Use when user
 
 See [tests.md](tests.md) for examples and [mocking.md](mocking.md) for mocking guidelines.
 
+Use tests as a design pressure, not as surveillance over implementation. A good TDD test fixes a requirement and makes the public interface easier to evaluate. It should fail for a real behavior regression, not because an internal helper was renamed, extracted, or reordered.
+
 ## Anti-Pattern: Horizontal Slices
 
 **DO NOT write all tests first, then all implementation.** This is "horizontal slicing" - treating RED as "write all tests" and GREEN as "write all code."
@@ -52,11 +54,13 @@ Before writing any code:
 - [ ] Confirm with user which behaviors to test (prioritize)
 - [ ] Identify opportunities for deep modules (small interface, deep implementation) — run the `codebase-design` skill for the vocabulary and the testability checks
 - [ ] List the behaviors to test (not implementation steps)
+- [ ] Choose the first test as the simplest meaningful failing case
+- [ ] Include boundary and failure cases where the business rule changes
 - [ ] Get user approval on the plan
 
 Ask: "What should the public interface look like? Which behaviors are most important to test?"
 
-**You can't test everything.** Confirm with the user exactly which behaviors matter most. Focus testing effort on critical paths and complex logic, not every possible edge case.
+**You can't test everything.** Confirm with the user exactly which behaviors matter most. Focus testing effort on acceptance criteria, critical paths, boundary conditions, failure paths, and complex logic, not every possible edge case.
 
 ### 2. Tracer Bullet
 
@@ -103,6 +107,10 @@ After all tests pass, look for [refactor candidates](refactoring.md):
 [ ] Test describes behavior, not implementation
 [ ] Test uses public interface only
 [ ] Test would survive internal refactor
+[ ] Test has one reason to fail
+[ ] Test name reads like a requirement
+[ ] Test data exposes only values relevant to the behavior
+[ ] Expected result is a concrete example, not a copy of the implementation logic
 [ ] Code is minimal for this test
 [ ] No speculative features added
 ```
