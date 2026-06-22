@@ -25,6 +25,8 @@ linear issue query --workspace <workspace> --team <TEAM> --search "검색어" --
 linear issue create --workspace <workspace> --no-interactive --team <TEAM> \
   --project <project> --title "제목" --description-file /tmp/linear-description.md
 linear issue update <TEAM-123> --workspace <workspace> --state started --priority 3 --label <label>
+linear issue update <TEAM-123> --workspace <workspace> --parent <PARENT-123>
+linear issue relation add <TEAM-123> blocked-by <BLOCKER-123> --workspace <workspace>
 
 # comments / replies
 linear issue comment add <TEAM-123> --workspace <workspace> --body-file /tmp/linear-comment.md
