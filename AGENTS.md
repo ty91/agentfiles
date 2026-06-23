@@ -9,6 +9,7 @@
 - Third-party/OSS (non-ty91): clone under `~/Developer/oss`.
 - Search documents under `~/obsidian/Agents` for shared, long-term knowledge.
 - Do NOT use en- or em-dashes.
+- Do not add succinct code comments if the code is already self-explanatory.
 
 ## Git
 
