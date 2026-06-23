@@ -15,7 +15,7 @@ The agent can reach the codebase, the issue tracker, and other project resources
 
 ## Running the command
 
-Run `claude -p` from the repository root and pass the prompt through stdin with a quoted heredoc. Frontend work can take more than 10 minutes, so allow a generous tool timeout (commonly 1800-3600 seconds).
+Run `claude -p` from the repository root and pass the prompt through stdin with a quoted heredoc. Frontend work can take more than 10 minutes, so allow a generous tool timeout (commonly 1800-3600 seconds). Wait for `claude -p` to finish on its own. The long runtime is expected, not a hang, so never kill or interrupt the process unless it has actually stopped with an error.
 
 ```bash
 claude -p <<'EOF'
