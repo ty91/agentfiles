@@ -50,11 +50,13 @@ Iterate until the user approves the breakdown.
 
 ### 5. Publish the tasks to the issue tracker
 
-For each approved slice, publish a new task to the issue tracker. Use the issue body template below. These tasks are considered ready for agents, so publish them with the correct triage label unless instructed otherwise.
+For each approved slice, publish a new task to the issue tracker. Use the issue body template below.
 
 Write issue content primarily in Korean. Section names and established technical terms may remain in English when they are clearer or conventional.
 
-Publish tasks in dependency order (blockers first) so you can reference real issue identifiers in the "Blocked by" field.
+Publish tasks in dependency order (blockers first) so you can reference real issue identifiers when wiring up relationships. Record each relationship in the template's "Parent" and "Blocked by" sections, and whenever the issue tracker supports native relationship features (e.g. parent/sub-issue or blocking/blocked-by links), always use those as well.
+
+Once a task is triaged, the agentic engineering system picks it up automatically. So a task's relationships MUST be fully set up before you apply its triage label. These tasks are considered ready for agents, so apply the correct triage label as the final step unless instructed otherwise.
 
 <issue-template>
 ## Parent
