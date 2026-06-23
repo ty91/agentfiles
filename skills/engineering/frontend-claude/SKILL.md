@@ -1,6 +1,6 @@
 ---
 name: frontend-claude
-description: Delegate frontend UI changes to Claude via the CLI. Use when building or modifying any user-facing interface (components, layouts, styling, interaction). Do not use for refactoring internal logic.
+description: Delegate frontend UI changes to Claude via the CLI. MUST use when building or modifying any user-facing interface (components, layouts, styling, interaction). Do not use for refactoring internal logic.
 ---
 
 When doing any frontend UI work, you **MUST** delegate it to Claude by running `claude -p <prompt>`. Do not edit the UI yourself.
