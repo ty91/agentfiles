@@ -1,6 +1,7 @@
 ---
 name: to-plan
 description: Create a researched plan for a spec issue before implementation. Use to clarify context, scope, codebase findings, and implementation/testing decisions.
+disable-model-invocation: true
 ---
 
 # To Plan

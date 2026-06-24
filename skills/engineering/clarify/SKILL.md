@@ -1,6 +1,7 @@
 ---
 name: clarify
 description: Explore an idea through clarification, turn it into an approved design, and publish it to the repository's issue tracker.
+disable-model-invocation: true
 ---
 
 # Clarify Ideas Into Designs

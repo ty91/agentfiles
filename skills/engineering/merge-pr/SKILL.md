@@ -1,6 +1,7 @@
 ---
 name: merge-pr
 description: Merge a GitHub pull request and clean up branch/worktree state.
+disable-model-invocation: true
 ---
 
 # Merge-PR

@@ -1,6 +1,7 @@
 ---
 name: specify
 description: Convert a natural-language feature request into a user-value-centered, implementation-agnostic feature spec and publish it to the repository's issue tracker.
+disable-model-invocation: true
 ---
 
 ## Role

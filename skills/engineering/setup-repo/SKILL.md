@@ -1,6 +1,7 @@
 ---
 name: setup-repo
 description: Configure the current repository's issue tracker instructions in AGENTS.md/CLAUDE.md and docs/agents/issue-tracker.md. Run once per repo before using skills that publish, fetch, or triage issues.
+disable-model-invocation: true
 ---
 
 # Setup Repo
