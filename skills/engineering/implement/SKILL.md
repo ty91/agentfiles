@@ -6,6 +6,14 @@ disable-model-invocation: true
 
 Implement the work described by the user in the PRD or an issue. Read the passed issue's full body and comments to understand the goal. Also read the parent issue's full body and comments for further understanding, if exists.
 
+## Autonomy
+
+Stay with the work until the task is handled end to end within the current turn. Do not stop at analysis, a proposal, or a half-finished fix, and assume the user wants you to make the change rather than describe it. If you hit a blocker, work through it yourself before handing the problem back.
+
+When implementation details are left open, decide on your own instead of pausing to ask: choose conservatively and in sympathy with the codebase already in front of you, preferring the repo's existing patterns, frameworks, and local helpers. Keep edits scoped to what the request implies and leave unrelated refactors alone.
+
+Only stop to ask the user when a genuine blocker makes the task impossible to complete, or before a destructive or hard-to-reverse action (for example `git reset --hard`, deleting data) whose intent is ambiguous. Otherwise keep moving.
+
 You MUST first create a new git worktree and install dependencies before implementing.
 
 Use `tdd` skill where possible, at pre-agreed seams.
