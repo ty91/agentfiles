@@ -13,12 +13,18 @@ The agent can reach the codebase, the issue tracker, and other project resources
 - Spend the prompt on what the agent cannot infer: the precise goal of this task, and an explicit out-of-scope list so it does not drift.
 - Give enough context for the agent to succeed in one pass, but no more.
 
-## Running the command
+## Running via tmux
 
-Run `claude -p` from the repository root and pass the prompt through stdin with a quoted heredoc. Frontend work can take more than 10 minutes, so allow a generous tool timeout (commonly 1800-3600 seconds). Wait for `claude -p` to finish on its own. The long runtime is expected, not a hang, so never kill or interrupt the process unless it has actually stopped with an error.
+Run the delegated Claude inside a detached `tmux` session from the repository root. Frontend work can take more than 10 minutes; the long runtime is expected, not a hang.
+
+The agent reports completion by writing a file under `.tmux/`, so you do **not** need to keep reading the tmux pane to track progress. Watch for the report file instead.
 
 ```bash
-claude --permission-mode bypassPermissions -p <<'EOF'
+mkdir -p .tmux
+SESSION="frontend-claude-$(date +%s)"
+
+# 1. Write the prompt (including the reporting + cleanup protocol) to a file.
+cat > ".tmux/$SESSION.prompt" <<'EOF'
 You are implementing only the frontend UI slice of a larger task.
 
 ## Context
@@ -35,7 +41,32 @@ You are implementing only the frontend UI slice of a larger task.
 - Do not run destructive Git commands
 - Do not commit or push.
 
-## Report
-summarize the changes, files changed, validation run, and risks or follow-ups.
+## Reporting
+- Do the work to completion first.
+- Only when the work is fully finished, write a completion report to
+  `.tmux/$(tmux display-message -p '#S').report.md` summarizing the changes,
+  files changed, validation run, and any risks or follow-ups. Writing this file
+  is the signal that you are done, so write it only when the work is truly
+  complete.
 EOF
+
+# 2. Launch interactive Claude inside a detached tmux session.
+#    Keep the pane on exit so a crash stays inspectable.
+tmux new-session -d -s "$SESSION" "claude --permission-mode bypassPermissions \"\$(cat '.tmux/$SESSION.prompt')\""
+tmux set-option -t "$SESSION" remain-on-exit on
+
+# 3. Record which session and pid are in use, under .tmux/.
+printf 'session=%s\npid=%s\n' "$SESSION" "$(tmux list-panes -t "$SESSION" -F '#{pane_pid}')" > ".tmux/$SESSION.info"
+```
+
+## Waiting for completion
+
+Wait for the report file rather than inspecting the pane. Because the run can exceed a single command timeout, run the wait in the background (or re-check periodically) instead of blocking on one long call.
+
+## Cleanup
+
+Once you are done with the session (after reading the report, or after inspecting a failure), clean it up yourself:
+
+```bash
+tmux kill-session -t "$SESSION"
 ```
