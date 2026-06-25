@@ -3,9 +3,9 @@ name: frontend-delegation
 description: Delegate frontend UI changes to Claude via the CLI. MUST use when building or modifying how a user-facing interface looks (components, layouts, styling, visual states). Not for behavior or logic (business logic, domain modeling, tests, refactoring).
 ---
 
-Claude lays out and styles front-facing UI far better than you — that is the only reason to delegate. So delegate only **how the UI looks** (markup, layout, styling, visual states), never **how it works** (business logic, domain modeling, state and data flow, tests, refactoring).
+Delegate only **how the UI looks** (markup, layout, styling, visual states), never **how it works** (business logic, domain modeling, state and data flow, tests, refactoring).
 
-When UI work has a visual slice, you **MUST** delegate that slice to Claude. Do not build the UI yourself.
+When UI work has a visual slice, you **MUST** delegate that slice to Claude. The visual slice then belongs to the delegate; you own only the logic and the handoff. It is never yours to write.
 
 ## Writing the prompt
 
@@ -13,11 +13,10 @@ The agent can reach the codebase, the issue tracker, and other project resources
 
 - Keep out of the prompt anything the agent can discover by itself. Do not paste file contents or facts it can look up; instead give it a map: which files, directories, components, or issues to look at.
 - Spend the prompt on what the agent cannot infer: the precise visual goal, and which specific areas to leave untouched so it does not drift.
-- Give enough context for the agent to succeed in one pass, but no more.
 
 ## Running via tmux
 
-Run the delegated Claude inside a detached `tmux` session from the repository root. Frontend work can take more than 10 minutes; the long runtime is expected, not a hang.
+Run the delegated Claude inside a detached `tmux` session from the repository root.
 
 The agent reports completion by writing a file under `.tmux/`, so you do **not** need to keep reading the tmux pane to track progress. Watch for the report file instead.
 
@@ -75,7 +74,16 @@ printf 'session=%s\npid=%s\n' "$SESSION" "$(tmux list-panes -t "$SESSION" -F '#{
 
 ## Waiting for completion
 
-Run a background poll loop that checks for the report file every ~15s instead of inspecting the pane; don't give up before 10 minutes, and exit only when the file appears or the tmux session dies.
+The wait ends in exactly one of two states, and **never** in you doing the work yourself:
+
+- the report file appears -> go to handoff;
+- the tmux session dies without a report -> go to recovery.
+
+Run a background poll loop checking for the report file every ~30s instead of inspecting the pane. There is no timeout that ends the wait. Frontend work routinely runs 10+ minutes and sometimes much longer; a long-running session is the expected state, not a hang. Slowness, impatience, or a long runtime never authorize you to build the visual slice yourself.
+
+## Recovery (session died without a report)
+
+Inspect the dead pane to see what failed. Then either relaunch the delegation (fixing the prompt if needed) or surface the failure to the user. Do **not** implement the visual slice yourself: a failed delegation is re-delegated or escalated, never absorbed.
 
 ## Picking up the handoff
 
@@ -83,8 +91,4 @@ The subagent only wired the minimal scaffolding to make the UI render. Once it r
 
 ## Cleanup
 
-Once you are done with the session (after reading the report, or after inspecting a failure), clean it up yourself:
-
-```bash
-tmux kill-session -t "$SESSION"
-```
+When you are done with the session (after reading the report, or inspecting a failure), kill it yourself: `tmux kill-session -t "$SESSION"`.
