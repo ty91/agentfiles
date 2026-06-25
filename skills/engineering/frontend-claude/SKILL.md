@@ -61,7 +61,7 @@ printf 'session=%s\npid=%s\n' "$SESSION" "$(tmux list-panes -t "$SESSION" -F '#{
 
 ## Waiting for completion
 
-Wait for the report file rather than inspecting the pane. Because the run can exceed a single command timeout, run the wait in the background (or re-check periodically) instead of blocking on one long call.
+Run a background poll loop that checks for the report file every ~15s instead of inspecting the pane; don't give up before 10 minutes, and exit only when the file appears or the tmux session dies.
 
 ## Cleanup
 
