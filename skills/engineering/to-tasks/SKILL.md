@@ -32,6 +32,12 @@ Break the plan into **tracer bullet** tasks. Each task is a thin vertical slice 
 
 </vertical-slice-rules>
 
+<task-sizing>
+
+Try to keep each slice to a change you estimate at **~1000 LOC across ~8 files or fewer**, small enough to review in one sitting. You estimate this by analogy before any code exists; hold it as a ceiling, not a number to creep past. When a slice estimates over budget the tracer bullet is too wide: split it into thinner end-to-end slices, and lift any one-time scaffolding (a migration, a module's plumbing) into its own prefactoring slice.
+
+</task-sizing>
+
 ### 4. Quiz the user
 
 Present the proposed breakdown as a numbered list. For each slice, show:
