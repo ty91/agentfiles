@@ -12,11 +12,12 @@ Merge the target GitHub pull request, then leave local state tidy.
 
 1. Resolve the target PR from the user's request, recent conversation, or the current branch; ask only if still ambiguous.
 2. Inspect the PR and stop if it cannot be found or is not mergeable.
-3. Merge the PR, preferring the repository's normal non-interactive merge method and deleting the remote branch when possible.
-4. Verify the PR is merged.
-5. Sync the default branch locally with fast-forward pull and prune remotes.
-6. Check whether the local feature worktree and branch are already gone; if either remains and is safe to remove, remove it and prune stale worktree metadata.
-7. Verify the local checkout is clean, the merged branch is no longer checked out locally, and stale worktree entries are gone.
+3. If required PR checks are still running, wait for them to complete; stop if they fail or remain pending beyond a reasonable timeout.
+4. Merge the PR, preferring the repository's normal non-interactive merge method and deleting the remote branch when possible.
+5. Verify the PR is merged.
+6. Sync the default branch locally with fast-forward pull and prune remotes.
+7. Check whether the local feature worktree and branch are already gone; if either remains and is safe to remove, remove it and prune stale worktree metadata.
+8. Verify the local checkout is clean, the merged branch is no longer checked out locally, and stale worktree entries are gone.
 
 ## Reporting
 
