@@ -55,6 +55,7 @@ linear --workspace <workspace> label list --team <TEAM>
 
 - To delete a threaded comment conversation, delete replies first, then the parent comment.
 - State type values work (`started`, `completed`, etc.) and map to the workspace's concrete state names such as `In Progress`.
+- When writing issue descriptions or comments through the CLI/API, keep issue IDs plain in prose (`ENG-123`) and place clickable references in a bottom `관련 이슈` section, e.g. `- [ENG-123](https://linear.app/<workspace>/issue/ENG-123)`.
 
 ## GraphQL Fallback
 
