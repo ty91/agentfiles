@@ -17,6 +17,6 @@ For each individual sub-issue:
 Important:
 
 - Never implement the work directly. The main agent only orchestrates.
-- When sending input to Codex in a tmux pane, always send Enter afterward.
+- When sending input to Codex in a tmux pane, run `tmux send-keys` once to type the command, then run `tmux send-keys` again to send Enter.
 
 Once all open sub-issues are implemented, mark the original issue provided by the user as complete and report the result.
