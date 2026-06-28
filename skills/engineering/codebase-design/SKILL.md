@@ -110,4 +110,5 @@ Good interfaces make testing natural:
 
 ## Going deeper
 
+- **Choosing where implementation belongs** — use the `cohesion-axis` skill for placement and grouping decisions before choosing a module's interface and seam.
 - **Deepening a cluster given its dependencies** — see [DEEPENING.md](DEEPENING.md): dependency categories, seam discipline, and replace-don't-layer testing.
