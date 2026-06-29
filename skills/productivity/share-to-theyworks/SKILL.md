@@ -72,6 +72,8 @@ Use this when the page needs local CSS, JS, images, fonts, or other assets. The 
    - `.ico` -> `image/x-icon`
    - `.woff` -> `font/woff`
    - `.woff2` -> `font/woff2`
+   - `.pf_fragment`, `.pf_index`, `.pf_meta`, `.pf_filter` -> `application/octet-stream`
+   - `.pagefind` -> `application/wasm`
 
 3. Request presigned upload URLs by sending `files`:
 
@@ -90,7 +92,7 @@ curl -sS -X POST \
   'https://4yv7woafpb4gm6anvhpko46lla0cucns.lambda-url.ap-southeast-2.on.aws/'
 ```
 
-4. Save `uploads[]`, `baseUrl`, and `url` from the JSON response.
+4. Save `uploads[]`, `aliases[]`, `baseUrl`, and `url` from the JSON response.
 
 5. For each item in `uploads[]`, upload the corresponding local file to `item.upload.url` with the exact headers from `item.upload.headers`.
 
@@ -113,11 +115,27 @@ curl -sS -X PUT \
   '<item.upload.url>'
 ```
 
-6. Verify the returned public `url` responds with HTTP 200.
+6. For each item in `aliases[]`, upload the local file at `item.sourcePath` to `item.upload.url` with the exact headers from `item.upload.headers`.
 
-7. For directory uploads, also verify important asset URLs respond with HTTP 200 by appending each relative path to `baseUrl`.
+   Directory aliases make URLs like `<baseUrl>docs/` work on the S3 REST endpoint by uploading the same bytes as `docs/index.html` to the `docs/` object key. The root alias uses `sourcePath: "index.html"` and `path: ""`.
 
-8. Give only the public `url` to the user unless they ask for more detail.
+   Example for one alias:
+
+```bash
+curl -sS -X PUT \
+  -H 'content-type: text/html; charset=utf-8' \
+  -H 'cache-control: no-cache' \
+  -H 'x-amz-server-side-encryption: AES256' \
+  -H 'x-amz-tagging: theyworks-share-public=true' \
+  --data-binary '@/path/to/site/docs/index.html' \
+  '<alias.upload.url>'
+```
+
+7. Verify the returned public `url` responds with HTTP 200.
+
+8. For directory uploads, also verify important asset URLs and important directory URLs respond with HTTP 200 by appending each relative path to `baseUrl`.
+
+9. Give only the public `url` to the user unless they ask for more detail.
 
 ## Response Shape
 
@@ -135,6 +153,26 @@ The Lambda returns this shape:
       "key": "<uuid>/index.html",
       "s3Uri": "s3://theyworks-share/<uuid>/index.html",
       "url": "https://theyworks-share.s3.ap-southeast-2.amazonaws.com/<uuid>/index.html",
+      "upload": {
+        "method": "PUT",
+        "url": "<presigned-put-url>",
+        "expiresIn": 900,
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "cache-control": "no-cache",
+          "x-amz-server-side-encryption": "AES256",
+          "x-amz-tagging": "theyworks-share-public=true"
+        }
+      }
+    }
+  ],
+  "aliases": [
+    {
+      "path": "",
+      "sourcePath": "index.html",
+      "key": "<uuid>/",
+      "s3Uri": "s3://theyworks-share/<uuid>/",
+      "url": "https://theyworks-share.s3.ap-southeast-2.amazonaws.com/<uuid>/",
       "upload": {
         "method": "PUT",
         "url": "<presigned-put-url>",
