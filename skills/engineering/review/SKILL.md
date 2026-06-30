@@ -24,9 +24,8 @@ Pass references, not long summaries. The `code-reviewer` subagent should indepen
 Include:
 
 - Review scope, such as `git diff main...HEAD`, `git diff --staged`, a PR number or URL, or the relevant commit range
-- Relevant reference paths or URLs, such as spec, plan, task, issue, PR description, and test files
+- Relevant reference paths or URLs, such as spec, plan, task, issue, PR description
 - Project convention files when readily identifiable, such as `AGENTS.md`, `CONTRIBUTING.md`, `context.md`, or `plan.md`
-- Verification already run, such as test, lint, or build commands and pass/fail results
 - Any user-specified review focus or constraints
 
 Summarize only ephemeral conversation context that the subagent cannot access directly.

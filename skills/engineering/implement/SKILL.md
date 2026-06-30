@@ -14,12 +14,12 @@ When implementation details are left open, decide on your own instead of pausing
 
 Only stop to ask the user when a genuine blocker makes the task impossible to complete, or before a destructive or hard-to-reverse action (for example `git reset --hard`, deleting data) whose intent is ambiguous. Otherwise keep moving.
 
-You MUST first create a new git worktree and install dependencies before implementing.
-
-Use `tdd` skill where possible, at pre-agreed seams.
-
-Run typechecking regularly, single test files regularly, commit regularly, and the full test suite once at the end.
-
-Once done, use `review` skill to review the work and fix every merge blockers before submitting.
-
-Finally, create a pull request of your work using `pr` skill.
+## Process
+1. Create a new git worktree and install dependencies before implementing.
+2. Implement the work.
+  * Use `tdd` skill where possible, at pre-agreed seams.
+  * Run typechecking regularly, single test files regularly, commit regularly, and the full test suite once at the end.
+3. Review the work.
+  * Use `review` skill to review the work and fix every merge blockers before submitting.
+  * If the user passes `--no-review`, skip this step.
+4. Create a pull request of your work.
