@@ -55,7 +55,12 @@ linear --workspace <workspace> label list --team <TEAM>
 
 - To delete a threaded comment conversation, delete replies first, then the parent comment.
 - State type values work (`started`, `completed`, etc.) and map to the workspace's concrete state names such as `In Progress`.
-- When writing issue descriptions or comments through the CLI/API, keep issue IDs plain in prose (`ENG-123`) and place clickable references in a bottom `관련 이슈` section, e.g. `- [ENG-123](https://linear.app/<workspace>/issue/ENG-123)`.
+
+## Referencing Rules
+
+- Issue descriptions and comments are read outside the codebase, so any reference to code, files, or PRs MUST be a remote URL (e.g. a GitHub link), never a local filesystem path.
+- The Obsidian vault is personal; never mention, reference, or link it in Linear issues or comments.
+- Keep issue IDs plain in prose (`ENG-123`) and place clickable references in a bottom `관련 이슈` section, e.g. `- [ENG-123](https://linear.app/<workspace>/issue/ENG-123)`.
 
 ## GraphQL Fallback
 

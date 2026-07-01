@@ -16,3 +16,8 @@ For now, this skill only defines ADR guidance. When the task involves an archite
 - **ADRs**: Use [adr.md](adr.md) for when to create one, where to place it, how to number it, and what format to use.
 
 Do not invent additional documentation workflows under this skill until they are added here or in a directly linked reference file.
+
+## Referencing Rules
+
+- Any reference that points outside this codebase MUST be a remote URL, never a local filesystem path.
+- The Obsidian vault is personal; never mention, reference, or link it in shared or committed documentation.
