@@ -1,6 +1,7 @@
 ---
 name: cohesion-axis
 description: "Shared vocabulary for choosing the cohesion axis: where implementation belongs. Use when placing implementation, reducing fragmentation across role-axis groups, or when another skill needs the cohesion-axis vocabulary."
+disable-model-invocation: true
 ---
 
 # Cohesion Axis
