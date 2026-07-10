@@ -21,6 +21,7 @@
 - Use the package manager for dependency changes. Do NOT manipulate package management files directly.
 - Web search: search early for current/unstable info. Prefer 2025-2026 sources.
 - Use `rg` or `rg --files` for fast text/file searches.
+- When using heredocs for command input, issue bodies, PR descriptions, Markdown, code, or JSON, use quoted delimiters (`<<'EOF'`) unless shell expansion is intentional.
 - Use `gh` CLI as the default interface for GitHub work.
 - Use `linear` CLI for Linear issue-tracking tasks.
 - Python deps: use `uv` by default.
