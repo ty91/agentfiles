@@ -128,13 +128,15 @@ function Avatar({ src, alt }: { src: string; alt: string }) {
 <Avatar src={member.avatarUrl} alt={member.name} />;
 ```
 
-**6. The design system is the frontend's shared home, not a drawer.**
+**6. Every kind of shared code has one home; the design system is the home for components.**
 
 A component moves into the design system only when all three are true: it is domain-free by rule 5's test, more than one context actually uses it, and it is a component by rule 1's bar — a state, an invariant, or a variation axis of its own, not a frozen arrangement. When you are unsure whether something qualifies, it does not, yet. Leave it in its feature; a second copy is cheaper than a wrong promotion.
 
+Domain-free code that is not a component — a hook, a formatter, a shared client — promotes the same way, minus the component test. Its home is the repo's precedent for that kind; a missing home is surfaced, not improvised.
+
 When reuse pressure lands on a domain component, promotion splits it along the populations: the form is stripped into a design-system part, and each context keeps its own thin domain component. Promoting the domain component whole means every new context adds a prop or a conditional, until the component belongs to no one.
 
-How and when to promote is covered in [duplication-and-promotion](../shared/duplication-and-promotion.md). This rule only fixes where the frontend's shared home is and what is allowed in.
+How and when to promote is covered in [duplication-and-promotion](../shared/duplication-and-promotion.md). This rule only fixes what makes a place a home and what is allowed in.
 
 ```tsx
 // Bad: promoted whole. Each context that adopted the card left a prop behind

@@ -16,7 +16,7 @@ So before promoting, ask: if the rule behind this code changes, do both places c
 
 ## 3. Promoted code moves to a home, never a drawer
 
-Every stack declares exactly one shared home with an admission bar; for backend that is the shared kernel in 01-module-composition. Promotion means meeting that bar, and promoting the smallest piece that is actually shared, not the whole file it happens to live in.
+Every kind of shared code has exactly one home, and every home has an admission bar; backend's is the shared kernel in 01-module-composition, and the frontend's are declared in 01-component-composition. Promotion means meeting that bar, and promoting the smallest piece that is actually shared, not the whole file it happens to live in.
 
 Never create a `utils`, `helpers`, `common`, or `misc` folder. A drawer has no admission criteria, so it collects everything and explains nothing. If the code you want to share cannot meet the home's bar, it is not ready to be shared.
 
