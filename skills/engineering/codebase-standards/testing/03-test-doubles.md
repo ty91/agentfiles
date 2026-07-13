@@ -1,70 +1,72 @@
-# 03. Test Doubles
+# 03. Test Doubles and Fidelity
 
-A double is a claim that a boundary exists. Doubling something you own tests a system that does not exist: the double encodes a guess about the real thing's behavior, the guess drifts from the real thing one change at a time, and the suite keeps passing against the guess. Everything you own runs real; substitution happens only at boundaries you do not control, and each kind of boundary has one sanctioned substitute.
+Substitute only declared boundaries. Run owned code for real inside the selected surface. Claim only properties the test environment reproduces.
 
-## 1. Never double what you own
+## 1. Run owned code for real
 
-No mocked repositories, no fake services, no hand-rolled call recorders standing in for your own modules. A test that mocks the layer below can only assert delegation — that A called B with the right arguments — which proves wiring, not behavior. Stack that pattern and the same behavior is asserted as plumbing at every layer and exercised for real at none: the service is tested against a guessed repository, the repository against guessed rows, and the actual query that orders, filters, and scopes is run by no test at all. The suite is large, green, and blind to the most likely bug.
+- Decision tests run the real calculation.
+- Storage tests run the real query.
+- Module tests assemble real decisions and data code.
+- Do not mock repositories, fake services, or record calls to test hidden wiring.
+- Prove assembly through observable behavior and boot failure for missing dependencies.
+- Assert returned values, stored facts, rendered states, emitted contracts, or declared environmental calls.
+- Assert a call only when it is the declared output to the environment, such as `onSend` or an email port.
+- Treat a call as internal when changing it affects no caller, consumer, operator, or stored fact.
 
-```ts
-// Bad: the repository is ours; the mock asserts delegation against a guess
-const repository = { listDeliveries: vi.fn().mockResolvedValue(rows) };
-const service = createDeliveriesService({ repository });
-await service.listDeliveries(principal, query);
-expect(repository.listDeliveries).toHaveBeenCalledWith({ tenantId: "t-1" });
+## 2. Substitute declared boundaries
 
-// Good: real service, real repository, real query on a local database substitute
-const app = buildTestApp(); // real modules, database on the local substitute
-await seed(app.db, [delivery({ area: "east" }), delivery({ area: null })]);
-const response = await app.inject({ method: "GET", url: "/deliveries?date=2026-06-24" });
-expect(response.json().sections.map((s) => s.area)).toEqual(["east", "unassigned"]);
-```
+Use a substitute when the dependency is outside the selected surface and the test needs control, speed, or isolation:
 
-## 2. Substitute by kind of boundary
+- true third party;
+- separately deployed service;
+- time, randomness, or process environment;
+- slow or unavailable resource outside the obligation;
+- timeout, retryable failure, partial response, or rare condition;
+- browser or database behavior the substitute faithfully supports.
 
-The kind of dependency decides the substitute; the decision is made once here, not per test.
+- Expose the boundary as an explicit dependency or port.
+- Express the port in domain vocabulary.
+- Keep vendor shapes, generic fetch conditions, and hidden collaborator methods out of domain tests.
 
-| Dependency | In tests |
-| --- | --- |
-| Pure in-process logic | Nothing. Run it real. |
-| Infrastructure with a local stand-in (database, filesystem) | The stand-in runs inside the suite (an embedded Postgres, a temp directory). Storage semantics are tested for real. |
-| Our own service across a network | A port at the seam; tests use an in-memory adapter, production uses the transport adapter. |
-| A true third party (payments, push, email) | A mock at the adapter, in the domain's vocabulary. Vendor shapes appear only in the adapter's own tests (see backend/07-external-calls). |
-| Time and randomness | Injected, always: `now: () => …`, seeded generators. Never read the ambient clock in tested code. |
+## 3. Match the environment to the property
 
-One consequence worth naming: "the database is hard to test against" is not a reason to mock the repository — it is the reason the local stand-in exists. If no stand-in is available for a piece of infrastructure, treat it as a third party: put an adapter in front of it and mock the adapter.
+Use the lightest environment that reproduces the property. Respect its evidence limit.
 
-## 3. Assert outcomes, not conversations
+| Property | Environment | Does not prove |
+| --- | --- | --- |
+| Pure logic | Real code | Unselected inputs or properties |
+| SQL, schema, constraints, basic transactions | Local database substitute with real migrations and queries | Production driver, network, pool, multiple connections |
+| Locks, isolation, deadlocks, concurrent writers | Production database engine with independent connections | Unconfigured engines or isolation conditions |
+| Filesystem | Real calls in a temporary directory | Deployment permissions or remote storage |
+| Owned network service | Domain port plus provider-consumer contract | Port alone does not prove transport compatibility |
+| Third party | Domain adapter double plus contract or sandbox test | Current vendor behavior from the double alone |
+| Time and randomness | Injected clock and seeded generator | Unselected times or seeds |
+| React behavior | jsdom with the real component tree | Layout, browser focus, navigation, cookies |
+| Browser behavior | Real browser | Unselected browsers or deployment paths |
 
-`toHaveBeenCalledWith` on an internal collaborator pins the conversation between two pieces of code you own — a conversation every refactor is entitled to change. Assert what a caller can observe through the interface: the returned value, the stored fact, the rendered screen.
+- `Promise.all` over one embedded database connection does not prove multi-connection concurrency.
+- A hand-written fetch response does not prove deployed API compatibility.
 
-The exception is a declared port. When the module's contract with its environment *is* the call — a component's `onSend` prop, an adapter invoked at a true external boundary — then the call on the injected port is the module's observable output, and asserting it is asserting an outcome.
+## 4. Inject faults at a declared port
 
-```tsx
-// Bad: a conversation between two modules we own
-expect(repository.getDelivery).toHaveBeenCalledWith({ deliveryId: "d-1" });
+- Treat an environmental failure as an input to the caller.
+- Inject it at the narrowest declared boundary that can express it.
+- Use ports for timeouts, queue rejection, retryable responses, partial responses, and controlled storage failures.
+- Assert preserved data, bounded retry, typed failure, rollback, or visible recovery.
+- Use the real dependency when the obligation depends on its failure semantics. A port can prove conflict handling; the database must prove the conflict occurs under the intended constraint and isolation.
 
-// Good: the injected port is this component's declared output
-render(<Composer onSend={onSend} />);
-await user.click(screen.getByRole("button", { name: "Send" }));
-expect(onSend).toHaveBeenCalledWith("hello");
-```
+## 5. Keep doubles small
 
-The discriminator: is the callee part of the module's declared interface with its environment, or a collaborator hidden behind it? If deleting the assertion changes nothing a caller could notice, it was a conversation.
+- Expose one function per operation and one domain result shape.
+- Prefer a focused stub, small in-memory adapter, or provider-verified fixture.
+- Do not build a general fake with route, query, call-order, or mutable-state branches.
+- Reset shared substitutes between tests.
+- Never depend on another test's call history or mutations.
 
-## 4. Boundaries are built to be substituted
+## 6. Build substitutable boundaries
 
-A boundary that cannot be substituted breeds the doubles rule 1 forbids, so the design rules land on the production code. Dependencies arrive as arguments; a module that constructs its own client has welded the boundary shut (see backend/01-module-composition on assembly). And ports expose one function per operation rather than a generic fetcher, so a test double returns one shape instead of growing conditional logic that itself needs testing.
-
-```ts
-// Bad: the boundary is welded shut, and the only lever left is monkey-patching
-function processPayment(order: Order) {
-  const client = new StripeClient(process.env.STRIPE_KEY);
-  return client.charge(order.total);
-}
-
-// Good: the dependency arrives, one operation per function, one shape per double
-function processPayment(order: Order, payments: PaymentsPort) {
-  return payments.charge(order.total);
-}
-```
+- Inject dependencies through construction or function arguments.
+- Let the assembly root supply production adapters and tests supply controlled ports.
+- Do not construct vendor clients, clocks, random generators, or transports inside decisions.
+- Create a port only for an environmental boundary or real alternate behavior.
+- Keep a single internal implementation direct. Do not add an interface only for testing.

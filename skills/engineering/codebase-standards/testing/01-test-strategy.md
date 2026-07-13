@@ -1,52 +1,87 @@
 # 01. Test Strategy
 
-A test suite is a set of promises about behavior, and every promise costs review, maintenance, and trust. The default for any piece of code is no test; a test earns its place by pinning a rule that could be wrong. The test surface is the module's interface, not its files. Each rule is pinned exactly once, and whether a diff may add tests at all is decided by what kind of diff it is. RED is a symptom, not a goal.
+Test obligations, not files. Use the smallest sufficient surface. Give each obligation one primary owner.
 
-## 1. The unit of testing is the module's interface, not the file
+## 1. Define the obligation
 
-A test file per source file is a reflex, not a strategy. Each module has one primary test surface: the public interface its real callers use, assembled from real internals. For a backend module that is its routes, running the real decisions and data layers on a local database substitute (see 03-test-doubles); for a UI module it is the component tree, driven through roles, labels, and user-visible outcomes. Internal layers — repository, service, router — do not get their own suites: a suite behind a tested surface re-proves what the surface already proves, through an interface no caller uses.
+1. Write one requirement sentence for a caller, component, operator, or the business.
+2. Name behavior, not implementation.
+   - Obligation: "Every emitted cursor decodes to the same item position."
+   - Implementation: "The cursor codec calls `Buffer.from`."
+3. Add a test only when a concrete defect can escape every other check.
+4. Do not test something merely because a constant, type, configuration, hook, file, or function exists.
 
-The exception is pure logic with real complexity of its own: a codec, a calculation, a state derivation. That logic has a small public interface of its own; test it there directly.
+## 2. Use the cheapest sufficient verification
 
-The discriminator: does any real caller call the interface this test calls? If the only caller is the test, the test is pinning an internal, and the pin will break on the next refactor that changes no behavior.
+Stop at the first mechanism that fully proves the obligation:
 
-## 2. A test pins a rule that can be wrong
+1. Type system or compiler
+2. Linter or static rule
+3. Runtime schema at the trust boundary
+4. Database constraint for every writer
+5. Existing test
+6. New test
 
-What earns a test: a domain rule that branches, a state transition, a boundary where the answer changes, a contract's failure modes, storage semantics running on a real substitute, a serialization round-trip. Each of these can be silently wrong tomorrow, and the test is what says so.
+- Do not copy types, schemas, constraints, or implementations into assertions.
+- Keep distinct obligations separate. A constraint may own uniqueness while a module test owns the public conflict response.
 
-What never earns a test: restating code. A schema definition transcribed into assertions, a config file's contents matched against itself, a constant array repeated, a type's shape, an internal call's arguments, a cache key's tuple, a class name, "renders without crashing." These tests cannot catch a bug — they fail only when the code is edited, which means they detect change, not defects.
+## 3. Choose the smallest sufficient surface
 
-The discriminator: if the only way to make this test fail is to edit the source it describes, it is not a test; it is a second copy of the code, and shared/duplication-and-promotion forbids silent copies. Schema invariants need no transcription test: the database enforces them (see backend/02-data-modeling) and every surface test running on the real substitute exercises them.
+| Obligation | Use for | Surface |
+| --- | --- | --- |
+| Decision rule | Calculation, parsing, normalization, state transition, codec | Pure function or small domain interface |
+| Storage or adapter | SQL, constraints, transactions, serialization, filesystem, vendor translation | Repository or adapter with a matching dependency or substitute |
+| Module behavior | Assembly, authorization, orchestration, error translation, visible component behavior | Public route, handler, job entry point, or component tree with real internals |
+| Component contract | Independently built or deployed producers and consumers | Contract from one authoritative schema or verified artifact |
+| User journey | Critical workflow requiring the real runtime path | Real application path through the required components |
+| Operational quality | Concurrency, performance, resilience, security, recovery, deployment | Environment that reproduces the property |
 
-## 3. Each rule is pinned exactly once
+- Explore decision rules directly and cheaply.
+- Test representative success and each externally distinct failure at the module surface.
+- Use contract, journey, and operational tests only when narrower surfaces cannot prove the obligation. See `04-contract-and-system-tests.md`.
+- Incidental coverage does not own edge cases. Prefer the surface with the least unrelated setup and clearest failure.
 
-The same rule asserted at several layers is a silent copy: when the rule changes, every copy must be found and changed, and one day one will not be. One error code asserted in the repository test, the service test, the route test, the client test, and the page test is five tests and one rule. Pin the rule at the lowest surface that can prove it, and let the other layers inherit the guarantee.
+## 4. Give each obligation one primary owner
 
-At the surface, coverage is one representative success per operation plus each failure whose observable answer differs — not every input value, and not the same failure re-dressed per layer. Choose boundary values that prove the rule: inventory 10 with order 10 succeeds, order 11 fails.
+- Two tests are duplicates when the same defect makes both fail for the same reason.
+- Keep the smaller sufficient test or the one with stronger production fidelity.
+- When a new test becomes the better owner, delete the old owner in the same change.
+- Allow overlap only for a distinct failure mode or justified defense of security, money, tenant isolation, or data loss.
+- Treat provider production, consumer interpretation, and deployed delivery as separate obligations when they can fail independently.
+- For every overlap, name the defect it catches that the primary owner cannot.
 
-## 4. The diff decides whether a new test exists
+## 5. Classify the change
 
-Classify the change before writing any test:
+- **New or changed behavior**: test each obligation at its primary surface.
+- **Behavior-preserving change**: add no test unless it reveals an unowned obligation.
+- **Bug or discovered risk**: express the standing obligation. Use boundaries, a table, or a property when one example reveals an input class.
+- **Contract change**: verify provider production and consumer interpretation.
+- **Contract removal or narrowing**: describe the standing contract. Assert absence only for a durable security, privacy, or compatibility obligation.
+- **Operational change**: reproduce the property, such as multiple database connections for concurrency or a real browser for focus.
 
-- **A new obligation on the interface** — new behavior, a new rule, changed contract semantics. The only case where RED is legitimate: one failing test per new obligation, then the implementation that meets it.
-- **A behavior-preserving change** — internal restructuring, efficiency, cleanup. Zero new tests. The verification is the existing suite staying green; that is the suite doing its job. A RED test can only be manufactured here by reaching past the interface, so the attempt itself is a rule-2 violation in progress.
-- **A bug fix** — a bug is a missing pin. Add exactly one test that reproduces it and fails on the old code. This is the routine way a regression test is born; rule 6 decides whether it stays.
-- **A contract removal or narrowing** — the work is editing and deleting existing tests until the suite describes the new contract, never adding an absence assertion. A test that asserts a field is gone or a route no longer exists pins the transition, not the system; transitions are recorded in commits and ADRs. The suite describes what the system is, not what it stopped being.
+Work one obligation at a time: fail its test, implement the minimum behavior, pass it, remove test scaffolding, continue. RED indicates an unmet obligation; it is not a goal.
 
-RED is a symptom, not a goal. It appears when a new obligation exists and is not yet met; when there is no obligation to add, there is no RED to seek.
+## 6. Review the test list first
 
-## 5. Scaffolding comes down when the work ends
+Record each proposed test before implementation:
 
-While working, a test that verifies "my change was applied" — the removed field is absent from the response, the new module got wired — is a legitimate steering device, with the same status as a debug print. Finishing the work includes deleting it.
+1. Obligation
+2. Classification from rule 3
+3. Failure cost
+4. Surface
+5. Why existing verification is insufficient
+6. Unique defect it catches
 
-Two discriminators separate scaffolding from a real pin. First: is the subject of this test a rule of the system, or the change just made? Second: would someone building this module from its spec, with no knowledge of the diff's history, write this test? An absence assertion can be a real pin when the absence itself is a standing obligation — password hashes never leave the repository, admin-only fields never reach customer responses. "The legacy route returns 404" is neither; it is the memory of a deletion.
+- No test without an obligation.
+- No accepted obligation without verification.
+- Test count is not coverage.
 
-## 6. A regression test is the product of an incident, not of a change
+## 7. Finish the test change
 
-Blanket "regression protection" added alongside every change is scaffolding by rule 5. A regression test earns a permanent place only when all three hold: the defect actually happened and its recurrence would be costly; it revealed a hole in the existing test surface; and it can be rewritten as a standing obligation of the interface. When all three hold, rewrite it that way — the name states the obligation, and the test reads like any other behavior test, not like an incident report.
+Before handing off:
 
-## 7. The test list is the plan and the review surface
-
-Before implementing, write the behaviors to pin as one-line requirement sentences. That list is what a reviewer approves; the diff's tests map to it one to one — no test in the diff without a sentence, no sentence without a test.
-
-Then work one obligation at a time: one failing test, the minimal implementation that meets it, green, next. Never refactor while RED. And tests are replaced, not layered: when a stronger test at the surface comes to cover what an earlier, narrower test proved, the narrower one is deleted in the same change.
+- Remove scaffolding that only proves the change was applied.
+- Delete lower-value duplicates.
+- Keep edge-case tables at the decision surface.
+- Use a real environment for properties substitutes cannot reproduce.
+- For every test, name the unique defect that passes without it.

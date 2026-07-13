@@ -40,6 +40,7 @@ Find the triggers below that match the work at hand and read those documents; sk
 
 ## Testing
 
-- `testing/01-test-strategy.md`: deciding whether a change needs new tests at all; what deserves a test and at which surface; adding, keeping, or deleting tests; TDD; regression tests.
-- `testing/02-writing-tests.md`: writing or changing test code; test names, test data, assertions.
-- `testing/03-test-doubles.md`: reaching for a mock, stub, fake, or in-memory substitute; testing code that touches a database, another service, a third party, time, or randomness.
+- `testing/01-test-strategy.md`: deciding whether, where, or why to add, keep, replace, or delete a test.
+- `testing/02-writing-tests.md`: writing or changing test code.
+- `testing/03-test-doubles.md`: choosing real dependencies, substitutes, fault injection, or test-environment fidelity.
+- `testing/04-contract-and-system-tests.md`: testing cross-component contracts, user journeys, or operational properties.

@@ -1,71 +1,66 @@
 # 02. Writing Tests
 
-A test is read at two moments: in review, when a human decides whether the promise is right, and at failure, when someone must see which rule broke. Both readers need the same thing: the rule, visible. The name states the requirement, the body shows only the values the rule turns on, and the assertion states the rule's answer, not the world's.
+Make one obligation obvious in the name, data, actions, and assertions.
 
-## 1. The name is a requirement sentence
+## 1. Name the obligation
 
-A test name reads like a line from the spec, so the test list (see 01-test-strategy) can be reviewed without reading the bodies. Names that describe mechanism instead of requirement are violations — they survive only as long as the mechanism does.
+- Write a requirement sentence.
+- Name behavior, not mechanism.
+  - Requirement: `rejects checkout of an empty cart`
+  - Mechanism: `calls validateCart`
+- Give each test one primary reason to fail.
+- Keep multiple assertions only when they describe one outcome.
+- Split independent obligations. Treat unrelated promises joined by "and" as a warning.
 
-```ts
-// Bad: the name describes the mechanism
-it("calls validateCart");
-it("sets status to confirmed");
+## 2. Assert only the obligation
 
-// Good: the name states a requirement
-it("rejects checkout of an empty cart");
-it("confirms the order when payment succeeds");
-```
+- Assert only facts the obligation decides.
+- Do not deep-equal an entire response for one behavior.
+- Verify full shapes in schemas or contract tests.
+- Use negative assertions only for standing obligations, such as secrets never leaving a boundary.
 
-A test has one reason to fail. Several assertions are fine when they describe one observable behavior; split the test when the assertions cover separate rules, because a shared body hides which rule broke.
+## 3. Show only relevant data
 
-## 2. Assert the rule, not the world
+- Let builders and factories own ordinary valid defaults.
+- Override only values that can change the answer.
+- Extract a builder only when valid setup repeats.
+- Let helpers hide incidental setup, never values or actions that explain the obligation.
+- Do not use positional records when fields are unclear.
+- Do not build one conditional fixture for every feature.
+- Treat setup longer than the assertion as a signal that data may hide the obligation.
 
-A deep-equal of the whole response pins every field the module returns, so every test breaks whenever any field changes, and the rule under test drowns in fields it never touches. Assert exactly the facts the rule decides; the rest of the response is other rules' business.
+## 4. Keep expected values independent
 
-```ts
-// Bad: one rule (grouping and order), ninety lines of world
-expect(result.value).toEqual({
-  sections: [
-    { area: "east", deliveries: [/* every field of every delivery */] },
-    { area: "unassigned", deliveries: [/* … */] },
-  ],
-});
+- Do not calculate expectations with production formulas, parsers, or helpers.
+- Use a concrete, human-verifiable value for representative behavior.
+- Use a table for equivalence classes and named boundaries.
+- Use a property when many values share an invariant, such as `decode(encode(value)) === value`.
+- Add concrete cases when a property has business-significant boundaries.
+- Generalize a bug into a table or property when it reveals an input class.
 
-// Good: the assertion states the rule
-expect(result.value.sections.map((s) => s.area)).toEqual(["east", "unassigned"]);
-expect(result.value.sections[0].deliveries.map((d) => d.id)).toEqual(["d-1", "d-3", "d-2"]);
-```
+## 5. Assert outcomes, not conversations
 
-The full shape of a contract is pinned once, by the schema that validates it at the boundary (see backend/04-api-contracts) — not re-pinned by every behavior test.
+- Observe a returned value, stored fact, emitted contract, rendered state, or declared environmental call.
+- Do not assert calls between hidden collaborators.
+- Treat a call as an outcome only when it is the declared interface with the environment, such as `onSend` or a payment port.
+- Follow `03-test-doubles.md` for substitution and call assertions.
 
-## 3. The data shows only what the rule turns on
+## 6. Treat length as a review signal
 
-Test data is an argument for the rule, and irrelevant values are noise in that argument. Builders and factories own the defaults; the test body sets only the values the rule reads. Positional tuples are forbidden in test data — a reviewer cannot tell which of twenty-eight columns the rule is about.
+For a long test, ask:
 
-```ts
-// Bad: which of these values does the sorting rule read?
-seedRow(["d-1", "o-1", "pending", "2026-06-23", null, "c-1", "East Butcher", 2, 12500, null]);
+1. Does it contain multiple obligations?
+2. Can incidental setup move into a focused builder?
+3. Is the length inherent to one contract, journey, or operational scenario?
 
-// Good: the builder hides the defaults; the visible values are the rule's inputs
-const delivery = aDelivery().inArea("east").receivedAt("2026-06-23T01:30:00Z");
-```
+- Split independent obligations.
+- Keep one workflow intact when splitting would hide causality.
+- Do not split tests merely because the body or file is long.
 
-The smell test: when the fixture is longer than the assertion, the data is hiding the rule instead of stating it.
+## 7. Drive UI through user behavior
 
-## 4. Expected values are concrete examples
-
-An assertion that recomputes the expected value replays the implementation, and a test that replays the implementation agrees with every bug in it. Fix a concrete example that a human can verify by hand, chosen at the values where the rule changes.
-
-```ts
-// Bad: the assertion mirrors the implementation
-expect(total).toBe(price * quantity * (1 - discountRate));
-
-// Good: a concrete example pins the rule
-expect(calculateTotal({ price: 1000, quantity: 3, discountRate: 0.1 })).toBe(2700);
-```
-
-## 5. A test that outgrows the page is testing the wrong thing
-
-Size is a symptom, and the fix is never "a bigger test." A body past roughly twenty lines means the data has not been factored into builders (rule 3) or the assertion is describing the world (rule 2). A hand-rolled fake spanning hundreds of lines means the test surface is wrong (see 01-test-strategy) or a real substitute is missing (see 03-test-doubles). A test file rivaling its implementation in length means the suite is restating the code, one mirrored branch at a time.
-
-Test code is refactored like any code — after green, never while RED. Extract builders when setup repeats, rename tests until they read as requirements, and delete a test whenever a stronger neighbor fails for the same reason.
+- Query by role, accessible name, label, and visible result.
+- Use `userEvent` for typing, clicking, tabbing, and selecting.
+- Use `fireEvent` only for a low-level event that user interaction does not produce.
+- Use component tests for semantic DOM and application state.
+- Use the real browser for layout, browser focus, navigation, and platform behavior. See `04-contract-and-system-tests.md`.
