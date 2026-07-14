@@ -1,6 +1,6 @@
 # Component Composition
 
-UI grows by composition, not by piling up props. Components that need composition are built as compound components: the parent establishes context, and the parts are exported as individual components with flat names (`CardHeader`, `CardFooter`). Dot notation (`Card.Header`) is not used.
+UI grows by composition, not by piling up props. Compound component interface guidance lives in [codebase-design](../../codebase-design/frontend/compound-components.md).
 
 ## The two populations
 
@@ -16,7 +16,7 @@ There is no third population. Fetching is not an identity and "container" is not
 **1. New UI is decided in this order: compose → extend → create.**
 
 - **Compose**: when all you need is arrangement, with no new state or invariant, compose existing components at the call site. The default answer is to stop here.
-- **Extend**: extend an existing component only when one value is added to a variation axis it already has. Adding a variant value (`variant="destructive"` on `Button`) or a compound part (`CardAction` on `Card`) belongs here.
+- **Extend**: extend an existing component only when one value is added to a variation axis it already has. Adding a variant value (`variant="destructive"` on `Button`) belongs here.
 - **Create**: create a new component only when a new state or invariant appears. Implement its internals by composing existing components.
 
 If you are unsure whether composition is enough, rewrite the component as a composition of existing parts. If after the rewrite the call site has no new convention to remember and no state to carry, the component was only freezing an arrangement; do not create it.
@@ -61,22 +61,7 @@ function DateRangePicker({ value, onChange }: DateRangePickerProps) {
 }
 ```
 
-**2. The kind of variation decides the means of expression. Variation in appearance is a variant axis; variation in structure is composition. Never add a boolean prop for a variation.** Booleans that represent state (`disabled`, `isLoading`) are fine.
-
-```tsx
-// Bad: variations pile up as props
-<Card title="Billing history" showFooter footerAlign="right" />
-
-// Good: structure is visible as composition
-<Card>
-  <CardHeader>
-    <CardTitle>Billing history</CardTitle>
-  </CardHeader>
-  <CardFooter className="justify-end">…</CardFooter>
-</Card>
-```
-
-**3. The moment a prop is only received and passed straight down, that spot is restructured. Composition through children is the default remedy; when composition cannot reach the reader, choose the transport with the ladder in [09-state-provisioning.md](09-state-provisioning.md).** This rule is about props that merely pass through app components. Spreading `...props` into a DOM element or an underlying primitive is not covered.
+**2. The moment a prop is only received and passed straight down, that spot is restructured. Composition through children is the default remedy; when composition cannot reach the reader, choose the transport with the ladder in [09-state-provisioning.md](09-state-provisioning.md).** This rule is about props that merely pass through app components. Spreading `...props` into a DOM element or an underlying primitive is not covered.
 
 ```tsx
 // Bad: Layout and Sidebar never use user; they only pass it along
@@ -95,7 +80,7 @@ function Sidebar({ user }: { user: User }) {
 </Layout>
 ```
 
-**4. A component owns no outer margin. Spacing belongs to the parent that composes it.** The moment the root carries a `margin`, the component is welded to one particular arrangement and composition breaks.
+**3. A component owns no outer margin. Spacing belongs to the parent that composes it.** The moment the root carries a `margin`, the component is welded to one particular arrangement and composition breaks.
 
 ```tsx
 // Bad: the component decides its own placement
@@ -110,7 +95,7 @@ function CommentComposer() {
 </div>
 ```
 
-**5. Dependencies point one way: a design-system part never imports the domain.**
+**4. Dependencies point one way: a design-system part never imports the domain.**
 
 Domain components import design-system parts; the reverse is contamination. A design-system part that needs domain-specific content receives it through composition — children, slots, callbacks — never through an import. The moment a part imports a domain type, every screen that uses it carries that domain, and the part can no longer be judged by its form alone. The check is mechanical: one look at the import list.
 
@@ -128,9 +113,9 @@ function Avatar({ src, alt }: { src: string; alt: string }) {
 <Avatar src={member.avatarUrl} alt={member.name} />;
 ```
 
-**6. Every kind of shared code has one home; the design system is the home for components.**
+**5. Every kind of shared code has one home; the design system is the home for components.**
 
-A component moves into the design system only when all three are true: it is domain-free by rule 5's test, more than one context actually uses it, and it is a component by rule 1's bar — a state, an invariant, or a variation axis of its own, not a frozen arrangement. When you are unsure whether something qualifies, it does not, yet. Leave it in its feature; a second copy is cheaper than a wrong promotion.
+A component moves into the design system only when all three are true: it is domain-free by rule 4's test, more than one context actually uses it, and it is a component by rule 1's bar — a state, an invariant, or a variation axis of its own, not a frozen arrangement. When you are unsure whether something qualifies, it does not, yet. Leave it in its feature; a second copy is cheaper than a wrong promotion.
 
 Domain-free code that is not a component — a hook, a formatter, a shared client — promotes the same way, minus the component test. Its home is the repo's precedent for that kind; a missing home is surfaced, not improvised.
 
@@ -149,7 +134,7 @@ function MemberCard({ member }: { member: Member }) {
 }
 ```
 
-**7. A domain prop is introduced by real use, never by anticipation.**
+**6. A domain prop is introduced by real use, never by anticipation.**
 
 The default form of a domain component has no domain props: it reads its owners where it stands ([09-state-provisioning.md](09-state-provisioning.md)). A prop that a single caller fills with the value the component could read itself is not an interface; it is indirection. A domain value earns its place as a prop in exactly two situations: the parent generates structure from data it already holds (a list handing each row its item), or a second real consumer arrives that feeds different data through the same rendering (a draft preview, a story). Do not split a component into a fetching shell and a rendering body for a consumer that has not arrived.
 
@@ -174,9 +159,9 @@ function MemberPanel() {
 ))}
 ```
 
-**8. Files cohere by what they are about. A feature's code lives in the feature's folder; only domain-free code coheres by kind.**
+**7. Files cohere by what they are about. A feature's code lives in the feature's folder; only domain-free code coheres by kind.**
 
-The two populations have two homes. Design-system parts — domain-free by rule 5's test — cohere by kind, in the design system. Domain code — components, hooks, clients, contracts that speak the project's language — coheres by the feature or entity it serves, and everything one component owns (its hook, its test, its types) colocates next to it. Slicing a feature across top-level role buckets (`components/`, `hooks/`, `api/`) fragments it: following one feature's data flow becomes a tour of the directory tree, and each bucket is a drawer with no admission bar ([duplication-and-promotion](../shared/duplication-and-promotion.md)). New code lands where its feature already lives; a second parallel home for the same feature is a fork.
+The two populations have two homes. Design-system parts — domain-free by rule 4's test — cohere by kind, in the design system. Domain code — components, hooks, clients, contracts that speak the project's language — coheres by the feature or entity it serves, and everything one component owns (its hook, its test, its types) colocates next to it. Slicing a feature across top-level role buckets (`components/`, `hooks/`, `api/`) fragments it: following one feature's data flow becomes a tour of the directory tree, and each bucket is a drawer with no admission bar ([duplication-and-promotion](../shared/duplication-and-promotion.md)). New code lands where its feature already lives; a second parallel home for the same feature is a fork.
 
 ```
 // Bad: one feature sliced across role buckets; its data flow spans four directories

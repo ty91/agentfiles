@@ -47,7 +47,7 @@ const ReportEditor = lazy(() => import("./ReportEditor"));
 
 **3. An import path points at the module that defines the code. Heavy dependencies may not enter modules shared by several screens.**
 
-A barrel (re-export index) makes one path stand for a crowd of unrelated modules; import one thing and its neighbors ride into the graph. A module with many exports is not a barrel. Compound parts defined in one file are one concept used together, for the same reason. The problem is re-export, not definition.
+A barrel (re-export index) makes one path stand for a crowd of unrelated modules; import one thing and its neighbors ride into the graph. A module with many exports is not a barrel. The problem is re-export, not definition.
 
 A shared module is an entry cost for every screen that imports it. The deciding question is "does a screen that never uses this module pay its weight?" Heavy things live inside the island that uses them, not in the shared layer.
 

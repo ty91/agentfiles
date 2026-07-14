@@ -39,7 +39,7 @@ function MemberPanel() {
 
 **3. Context carries environment, not interaction. The admission test: when this value changes, may the entire subtree legitimately re-render?**
 
-An environmental value is identical for every reader beneath the provider and changes rarely: theme, locale, a compound component's internal coordination, a form's context. If only some readers care, or the value changes with user interaction, the answer to the test is no — it is interaction state and belongs one rung down. Server data never enters context; the cache is already ambient (rule 2).
+An environmental value is identical for every reader beneath the provider and changes rarely: theme, locale, a form's context. If only some readers care, or the value changes with user interaction, the answer to the test is no — it is interaction state and belongs one rung down. Server data never enters context; the cache is already ambient (rule 2). Compound component context follows the same admission test; see [compound components](../../codebase-design/frontend/compound-components.md).
 
 ```tsx
 // Bad: interaction state in context. Every selection change redraws everything beneath the provider
