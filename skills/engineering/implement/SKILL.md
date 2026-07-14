@@ -13,17 +13,6 @@ disable-model-invocation: true
   - completion is genuinely blocked, or
   - an ambiguous action is destructive or hard to reverse.
 
-Apply implementation guidance in this order:
-
-1. The user's request and task acceptance criteria
-2. Applicable repository instructions and ADRs
-3. `codebase-standards`
-4. Existing codebase patterns, frameworks, and helpers
-
-- Treat repository guidance or an ADR as an override only when it explicitly establishes an exception.
-- Use lower-ranked guidance only when compatible with higher-ranked guidance.
-- Existing code alone never establishes an exception to the standards.
-
 ## Process
 
 ### 1. Prepare the worktree
@@ -69,8 +58,7 @@ A small task may have one checkpoint.
 ### 4. Implement and commit each checkpoint
 
 - Work on exactly one checkpoint at a time.
-- A checkpoint may require no new tests.
-- Add or change tests only to pin durable interface obligations under the testing standards.
+- Use `/tdd` where possible, at pre-agreed seams.
 - Never manufacture a failing test merely to begin implementation.
 
 When the checkpoint is complete:
