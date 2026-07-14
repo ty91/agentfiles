@@ -1,6 +1,7 @@
 ---
 name: codebase-standards
 description: Team codebase standards encoding our engineering judgment. MUST be used whenever writing, changing, or reviewing code. Before designing, implementing, refactoring, or reviewing any change, open this map and read the documents matching the work at hand.
+disable-model-invocation: true
 ---
 
 # Codebase Standards
