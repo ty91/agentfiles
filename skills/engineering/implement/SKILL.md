@@ -33,7 +33,6 @@ disable-model-invocation: true
   - acceptance criteria,
   - affected module interfaces,
   - explicit non-goals.
-- Read the `codebase-standards` map and every document triggered by the work.
 - If tests may change, read the matching testing standards before deciding whether a test belongs.
 
 ### 3. Define commit checkpoints
@@ -78,16 +77,13 @@ Do not start the next checkpoint until verification passes and the commit succee
 
 Unless `--no-review` was passed:
 
-1. Run `review` after the implementation checkpoints are committed.
-2. Provide the relevant `codebase-standards` documents and verification evidence.
-3. Explicitly review:
-   - excessive tests,
-   - wrong test surfaces,
-   - duplicated coverage,
+1. Run `code-review` after the implementation checkpoints are committed.
+2. Explicitly review:
+   - whether each TDD-added test protects distinct observable behavior at a pre-agreed seam; remove or consolidate those that do not,
    - refactors required to make the current change coherent.
-4. Fix every required finding as a verified and committed checkpoint.
-5. Re-run review after material structural or behavioral changes.
-6. Continue until no required findings remain.
+3. Fix every required finding as a verified and committed checkpoint.
+4. Re-run review after material structural or behavioral changes.
+5. Continue until no required findings remain.
 
 ### 7. Finalize and create the pull request
 
