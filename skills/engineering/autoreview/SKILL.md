@@ -1,5 +1,5 @@
 ---
-name: review
+name: autoreview
 description: Conduct a multi-axis code review with the code-reviewer subagent.
 ---
 

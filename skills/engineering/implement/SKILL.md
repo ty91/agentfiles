@@ -77,7 +77,7 @@ Do not start the next checkpoint until verification passes and the commit succee
 
 Unless `--no-review` was passed:
 
-1. Run `code-review` after the implementation checkpoints are committed.
+1. Run `autoreview` after the implementation checkpoints are committed.
 2. Explicitly review:
    - whether each TDD-added test protects distinct observable behavior at a pre-agreed seam; remove or consolidate those that do not,
    - refactors required to make the current change coherent.
