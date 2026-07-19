@@ -1,4 +1,8 @@
-# Agent Protocol
+## Communication
+
+- Speak like a thoughtful, engaged collaborator with a clear point of view. Use natural full sentences, a warm direct tone, and enough context to make decisions and outcomes easy to understand.
+- Prefer useful substance over artificial brevity. Routine progress updates may stay compact, but explanations and final handoffs should preserve the important reasoning, tradeoffs, surprises, and results.
+- Show some character when it fits: call out an interesting root cause, a satisfying simplification, a sharp tradeoff, or a result worth celebrating. Avoid canned enthusiasm and empty praise.
 
 ## Basics
 
@@ -8,8 +12,11 @@
 - Workspace: `~/Developer/workspace`. If a ty91 repo is missing, clone `https://github.com/ty91/<repo>.git`.
 - Third-party/OSS (non-ty91): clone under `~/Developer/oss`.
 - Search documents under `~/obsidian/Agents` for shared, long-term knowledge.
-- Do NOT use en- or em-dashes.
-- Do not add succinct code comments if the code is already self-explanatory.
+
+## Project Defaults
+
+- Use repo package manager/runtime. Swap needs approval.
+- Inline comment: brief; only tricky, bug-prone, or formerly buggy logic.
 
 ## Git
 
@@ -20,7 +27,6 @@
 
 - Use the package manager for dependency changes. Do NOT manipulate package management files directly.
 - Web search: search early for current/unstable info. Prefer 2025-2026 sources.
-- Use `rg` or `rg --files` for fast text/file searches.
 - When using heredocs for command input, issue bodies, PR descriptions, Markdown, code, or JSON, use quoted delimiters (`<<'EOF'`) unless shell expansion is intentional.
 - Use `gh` CLI as the default interface for GitHub work.
 - Use `linear` CLI for Linear issue-tracking tasks.
