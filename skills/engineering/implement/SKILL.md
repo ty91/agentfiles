@@ -81,9 +81,6 @@ Unless `--no-review` was passed:
 2. Explicitly review:
    - whether each TDD-added test protects distinct observable behavior at a pre-agreed seam; remove or consolidate those that do not,
    - refactors required to make the current change coherent.
-3. Fix every required finding as a verified and committed checkpoint.
-4. Re-run review after material structural or behavioral changes.
-5. Continue until no required findings remain.
 
 ### 7. Finalize and create the pull request
 
