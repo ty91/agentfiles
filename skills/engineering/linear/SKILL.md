@@ -25,6 +25,7 @@ linear issue query --workspace <workspace> --team <TEAM> --search "검색어" --
 linear issue create --workspace <workspace> --no-interactive --team <TEAM> \
   --project <project> --title "제목" --description-file /tmp/linear-description.md
 linear issue update <TEAM-123> --workspace <workspace> --state started --priority 3 --label <label>
+linear issue update <TEAM-123> --workspace <workspace> --assignee self
 linear issue update <TEAM-123> --workspace <workspace> --parent <PARENT-123>
 linear issue relation add <TEAM-123> blocked-by <BLOCKER-123> --workspace <workspace>
 
@@ -55,6 +56,8 @@ linear --workspace <workspace> label list --team <TEAM>
 
 - To delete a threaded comment conversation, delete replies first, then the parent comment.
 - State type values work (`started`, `completed`, etc.) and map to the workspace's concrete state names such as `In Progress`.
+- The self-assign reserved word is `self` (`--assignee self`), not `@me` (that is the `gh` convention) and not `me` — those fail with "User not found".
+- `issue create` puts new issues in Backlog by default. If the repo's default status differs (e.g. Todo), set it explicitly with `--state`.
 
 ## Referencing Rules
 
