@@ -33,7 +33,7 @@ disable-model-invocation: true
   - acceptance criteria,
   - affected module interfaces,
   - explicit non-goals.
-- If tests may change, read the matching testing standards before deciding whether a test belongs.
+- If tests may change, load the `tests` skill and the repo's own testing standards before deciding whether a test belongs.
 
 ### 3. Define commit checkpoints
 
@@ -57,8 +57,8 @@ A small task may have one checkpoint.
 ### 4. Implement and commit each checkpoint
 
 - Work on exactly one checkpoint at a time.
-- Use `/tdd` where possible, at pre-agreed seams.
-- Never manufacture a failing test merely to begin implementation.
+- Use `/tdd` where possible. The test surface defaults to the outermost consumer seam per the `tests` skill; a red below it is legitimate only under that skill's justification list.
+- Never manufacture a failing test merely to begin implementation: if a checkpoint is internal plumbing, it is covered by driving the outer acceptance red green, not by a red of its own.
 
 When the checkpoint is complete:
 
@@ -79,7 +79,7 @@ Unless `--no-review` was passed:
 
 1. Run `autoreview` after the implementation checkpoints are committed.
 2. Explicitly review:
-   - whether each TDD-added test protects distinct observable behavior at a pre-agreed seam; remove or consolidate those that do not,
+   - each TDD-added test against the suite-review checklist in the `tests` skill (`principles.md`) — in particular: if the behavior it names broke, would an outer required test already turn red? Remove or consolidate tests that fail the checklist,
    - refactors required to make the current change coherent.
 
 ### 7. Finalize and create the pull request

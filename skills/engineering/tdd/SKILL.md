@@ -5,32 +5,28 @@ description: Test-driven development. Use when the user wants to build features 
 
 # Test-Driven Development
 
-TDD is the red → green loop. This skill is the reference that makes that loop produce tests worth keeping: what a good test is, where tests go, the anti-patterns, and the rules of the loop. Every section applies on every cycle — consult them before and during the loop, not after.
+TDD is the red → green loop. What a good test IS — the default test surface, layering, mocking rules, and what deserves a test at all — is defined by the `tests` skill: load it before writing the first red and follow it throughout. This skill defines only the loop.
 
 When exploring the codebase, read `CONTEXT.md` (if it exists) so test names and interface vocabulary match the project's domain language, and respect ADRs in the area you're touching.
 
-## What a good test is
+## The double loop (outside-in)
 
-Tests verify behavior through public interfaces, not implementation details. Code can change entirely; tests shouldn't. A good test reads like a specification — "user can checkout with valid cart" tells you exactly what capability exists — and survives refactors because it doesn't care about internal structure.
+Work two loops, not one:
 
-See [tests.md](tests.md) for examples and [mocking.md](mocking.md) for mocking guidelines.
+1. **Outer loop — one acceptance red at the outermost consumer seam** (real HTTP for a server app, the rendered tree for UI — per the tests skill). Write it first, from the task's acceptance criteria. It stays red while you build inward; turning it green is the definition of done for the slice.
+2. **Inner loop — unit reds only for extracted pure functions.** While driving the acceptance test green, when you hit combinatorial logic (validation rules, calculations, sorting, state transitions), extract it as a pure function and red-green its branches exhaustively there. No other inner reds exist.
 
-## Seams — where tests go
+Never write a red against an internal layer (a service, a route mapping, repository wiring) in order to "have something to implement against." The acceptance red already demands that code — implement until it passes. The only test files below the outer seam are those the tests skill's justification list allows (complex query, pure-function extraction, load-bearing invariant).
 
-A **seam** is the public boundary you test at: the interface where you observe behavior without reaching inside. Tests live at seams, never against internals.
+## What makes a legitimate red
 
-**Test only at pre-agreed seams.** Before writing any test, write down the seams under test and confirm them with the user. No test is written at an unconfirmed seam. You can't test everything — agreeing the seams up front is how testing effort lands on the critical paths and complex logic instead of every edge case.
+A red must encode an **observable behavior difference** at its seam: a response, rendered output, persisted state, or outbound request that differs depending on whether the behavior exists.
 
-Ask: "What's the public interface, and which seams should we test?"
-
-## Anti-patterns
-
-- **Implementation-coupled** — mocks internal collaborators, tests private methods, or verifies through a side channel (querying the database instead of using the interface). The tell: the test breaks when you refactor but behavior hasn't changed.
-- **Tautological** — the assertion recomputes the expected value the way the code does (`expect(add(a, b)).toBe(a + b)`, a snapshot derived by hand the same way, a constant asserted equal to itself), so it passes by construction and can never disagree with the code. Expected values must come from an independent source of truth — a known-good literal, a worked example, the spec.
-- **Horizontal slicing** — writing all tests first, then all implementation. Bulk tests verify _imagined_ behavior: you test the _shape_ of things rather than user-facing behavior, the tests go insensitive to real changes, and you commit to test structure before understanding the implementation. Work in **vertical slices** instead — one test → one implementation → repeat, each test a **tracer bullet** that responds to what the last cycle taught you.
+- If the only way to produce a red is to observe calls on a stub of an internal collaborator, the slice is wrongly chosen. Either the logic belongs in a pure function (extract it, red there), or the observable effect lives at the outer seam (assert there), or the distinction is imaginary (don't test it).
+- Expected values come from an independent source of truth — a worked example, the spec, a known-good literal. Never recompute them the way the implementation does: a tautological test passes by construction and can never disagree with the code.
 
 ## Rules of the loop
 
 - **Red before green.** Write the failing test first, then only enough code to pass it. Don't anticipate future tests or add speculative features.
-- **One slice at a time.** One seam, one test, one minimal implementation per cycle.
-- **Refactoring is not part of the loop.** It belongs to the review stage, not the red → green implementation cycle. Tests created during the loop are provisional until review decides whether they remain as durable specifications.
+- **Vertical slices.** One acceptance behavior driven to green before the next begins. Never write all tests up front — horizontal slicing verifies *imagined* behavior and commits to test structure before the implementation has taught you anything.
+- **Refactoring is not part of the loop.** It belongs to the review stage. Tests created during the loop are provisional until review: run the suite-review checklist in the tests skill (`principles.md`), and delete reds that turn out to be scaffolding rather than durable specification.
