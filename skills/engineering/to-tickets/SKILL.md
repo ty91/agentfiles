@@ -39,23 +39,37 @@ Give each ticket its **blocking edges** — the other tickets that must complete
 
 **Wide refactors are the exception to vertical slicing.** A **wide refactor** is one mechanical change — rename a column, retype a shared symbol — whose **blast radius** fans across the whole codebase, so a single edit breaks thousands of call sites at once and no vertical slice can land green. Don't force it into a tracer bullet; sequence it as **expand–contract**. First expand: add the new form beside the old so nothing breaks. Then migrate the call sites over in batches sized by blast radius (per package, per directory), each batch its own ticket blocked by the expand, keeping CI green batch to batch because the old form still exists. Finally contract: delete the old form once no caller remains, in a ticket blocked by every migrate batch. When even the batches can't stay green alone, keep the sequence but let them share an integration branch that all block a final integrate-and-verify ticket — green is promised only there.
 
-### 4. Quiz the user
+### 4. Assess each slice's feasibility
+
+The user steers with a coarse-grained understanding of the codebase and its problem domain; you are the one who just explored the code. Before presenting the breakdown, translate what you found into evidence the user can judge each slice by:
+
+- **Touch surface**: the modules/directories the slice changes, and roughly how much. Concrete paths are fine here — this evidence lives in the conversation, not the issue body.
+- **Blast radius**: how many call sites consume what the slice changes, and whether that code is shared or isolated.
+- **Precedent**: whether the codebase already has a similar pattern to imitate, or the slice breaks new ground. Novelty predicts context consumption better than file count — the implementing agent starts from a fresh context window, and exploration eats the budget.
+- **Riskiest unknown**: the one thing you are least sure about — the first thing the implementing agent would have to figure out.
+- **Confidence**: 🟢 / 🟡 / 🔴 that the slice fits a single fresh context window, with a one-line reason.
+
+**Probe before presenting a 🔴.** Codebase exploration (step 2) is optional in general; for a low-confidence slice it is not. Resolve the uncertainty with a targeted probe — grep the call sites, read the schema, check test coverage — and re-rate. If the probe cannot settle it, split the investigation into its own **spike ticket** (its deliverable is the answer, not code) that blocks the slices waiting on the answer. Never paper over uncertainty with an estimate.
+
+### 5. Quiz the user
 
 Present the proposed breakdown as a numbered list. For each ticket, show:
 
 - **Title**: short descriptive name
 - **Blocked by**: which other tickets (if any) must complete first
 - **What it delivers**: the end-to-end behaviour this ticket makes work
+- **Feasibility**: the step-4 evidence — touch surface, blast radius, precedent, riskiest unknown, confidence
 
 Ask the user:
 
 - Does the granularity feel right? (too coarse / too fine)
 - Are the blocking edges correct — does each ticket only depend on tickets that genuinely gate it?
 - Should any tickets be merged or split further?
+- Can any riskiest unknown be resolved from their domain knowledge — or does it warrant a split or a spike?
 
-Iterate until the user approves the breakdown.
+Iterate until the user approves the breakdown. When the user's domain knowledge settles a riskiest unknown ("that table is being dropped — don't handle it"), fold the answer into the ticket so the implementing agent inherits the decision instead of rediscovering the question.
 
-### 5. Publish the tickets to the configured tracker
+### 6. Publish the tickets to the configured tracker
 
 Publish the approved tickets to the tracker `/setup-repo` configured (GitHub, Linear, …).
 
