@@ -53,6 +53,17 @@ Approval standard: Approve a change when it definitely improves overall code hea
 - Do not demand sibling-surface hardening, cleanup, refactors, or follow-up architecture work unless the current diff is incorrect without that work; report such items as follow-ups.
 - Prefer the smallest correct pre-merge fix. A broader ideal design is not an actionable finding unless the current patch cannot safely land.
 
+## Generated Artifacts
+
+Some files in the diff are tool output, not authored code. Do not review them for correctness, readability, architecture, or style. Typical markers: a `@generated` or "DO NOT EDIT" header, a lockfile, or a path matching the project's codegen output (TanStack Router `routeTree.gen.ts`, Drizzle `drizzle/meta/*` snapshots, Prisma client, OpenAPI/GraphQL generated clients, protobuf stubs, `*.gen.*`, `__generated__/`). When unsure, check the generator config or the project's ignore/format config for the output path instead of guessing.
+
+Treat generated files as evidence, not as review targets:
+
+- Review the authored source that drives generation (route files, schema definitions, `.proto`, spec files) and the generator config.
+- Report a generated file only when the diff shows it is stale or inconsistent with its authored source, hand-edited, or committed against the project's convention (excluded when the project commits it, or vice versa).
+- Never propose edits inside a generated file; the fix belongs in its source or in regeneration.
+- Exception: generated database migrations still get a safety review. Destructive or locking statements (dropped column, `NOT NULL` backfill, non-concurrent index) are real risks even though the SQL was generated. Anchor such findings to the migration file and recommend the fix at the schema or migration-strategy level.
+
 ## Review Framework
 
 1. **Correctness**
@@ -107,6 +118,8 @@ Small, focused changes are easier to review, faster to merge, and safer to deplo
 - ~100 lines changed: Good. Reviewable in one sitting.
 - ~300 lines changed: Acceptable if it is a single logical change.
 - ~1000 lines changed: Too large. Split it.
+
+Generated-file lines do not count toward these budgets; size the change by authored lines.
 
 One change is a single self-contained modification that addresses one thing, includes related tests, and keeps the system functional after submission. It is one part of a feature, not the whole feature.
 

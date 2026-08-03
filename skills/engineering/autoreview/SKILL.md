@@ -45,6 +45,7 @@ After the subagent returns, treat review output as advisory. Never blindly apply
 - Reject unrealistic edge cases, speculative risks, broad rewrites, and fixes that over-complicate the codebase.
 - Remove or clearly mark findings that are unsupported, duplicate, speculative, or based on incorrect line references.
 - Demote findings anchored outside the reviewed change from in-scope blocker to follow-up.
+- Drop findings anchored in generated files unless they are about staleness, hand-editing, commit convention, or migration safety.
 - When an accepted finding shows a bug class or repeated pattern, inspect the current review scope for sibling instances.
 
 Preserve valid classifications, confidence values, and fix recommendations.
@@ -97,7 +98,7 @@ Before the first fix cycle, freeze a scope baseline: original request or issue, 
 Stop patching and report the scope break instead of continuing when:
 
 - a narrow change turns into an architecture change, protocol change, migration, or release-process change;
-- the diff grows past 2x the original files or non-test LOC without explicit approval to expand scope;
+- the diff grows past 2x the original files or non-test, non-generated LOC without explicit approval to expand scope;
 - two review-triggered patch cycles have not converged; pause and reclassify every remaining finding before another edit;
 - the best fix is "define the canonical contract first" rather than another local inference layer;
 - fixing the accepted finding would make the change no longer describe the same behavior, issue, or owner boundary.
