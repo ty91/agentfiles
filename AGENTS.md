@@ -16,7 +16,7 @@
 ## Project Defaults
 
 - Use repo package manager/runtime. Swap needs approval.
-- Inline comment: brief; only tricky, bug-prone, or formerly buggy logic.
+- Do not write any comments in the source code.
 
 ## Git
 
@@ -31,4 +31,4 @@
 - Use `gh` CLI as the default interface for GitHub work.
 - Use `linear` CLI for Linear issue-tracking tasks.
 - Python deps: use `uv` by default.
-- JavaScript/TypeScript deps: use `pnpm` by default.
+- JavaScript/TypeScript deps: follow repo settings; use `bun` by default.
