@@ -14,14 +14,14 @@ Treat fresh-agent context window as scarce. Knowledge should be a routing aid, n
    - Do not save one-off task details, private Slack transcripts, secrets/tokens, temporary debugging notes, or unverified guesses.
 
 2. Read narrowly.
-   - Start at `~/obsidian/Agents/Start Here.md`.
+   - Start at `~/obsidian/README.md`.
    - Follow only the relevant link.
    - Do not load the whole vault.
 
 3. Choose the smallest edit.
    - Prefer updating an existing specific note.
    - Add a new note only when a durable topic needs its own routing target.
-   - Keep `Start Here.md` as a concise index/map, not a detail page.
+   - Keep `README.md` as a concise index/map, not a detail page.
 
 4. Keep content short.
    - Write the minimum hint a fresh agent needs to find the right repo, document, data source, or workflow.
