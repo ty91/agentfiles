@@ -1,8 +1,16 @@
 ---
 name: implement
-description: Implement one assigned task issue end-to-end in the current codebase.
+description: Implement one assigned task issue end-to-end in place by default, or on a new branch or worktree when requested.
 disable-model-invocation: true
 ---
+
+## Execution mode
+
+Use at most one execution-mode flag. `--in-place` is the default.
+
+- `--in-place`: Work in the current checkout without creating or switching branches or worktrees. The default branch is allowed.
+- `--new-branch`: Create and switch to a new task branch from the current `HEAD`, using the current checkout.
+- `--new-worktree`: Create a new task branch and linked worktree from the current `HEAD`, then work there.
 
 ## Autonomy and authority
 
@@ -15,10 +23,12 @@ disable-model-invocation: true
 
 ## Process
 
-### 1. Prepare the worktree
+### 1. Prepare the checkout
 
-- Create a new git worktree unless already inside a non-`main` worktree.
-- Run all reads, writes, verification, and git operations inside that worktree.
+- Record the starting commit, branch, and working tree status.
+- Apply the selected execution mode.
+- Preserve pre-existing changes and keep them out of task commits.
+- Run all reads, writes, verification, and git operations in the selected execution location.
 - Install dependencies using the repository's package manager.
 
 ### 2. Understand the work and load the standards
@@ -91,13 +101,14 @@ Unless `--no-review` was passed:
 - Inspect:
   - the branch commit list,
   - the complete task diff,
-  - the final worktree status.
+  - the final working tree status.
 - Confirm:
   - every commit is coherent and belongs to the task,
   - the diff contains only task changes,
-  - the worktree is clean except for explicitly excluded pre-existing changes.
-- Create a pull request that includes:
+  - the working tree is clean except for explicitly excluded pre-existing changes.
+- If the current branch is not the default branch, create a pull request that includes:
   - a link to the task,
   - the implemented behavior,
   - important design decisions,
   - verification results.
+- If working in place on the default branch, do not create or switch branches for a pull request, and do not push unless explicitly requested.
