@@ -83,9 +83,9 @@ echo
 # --- 4. Install skills globally ---
 echo "--- Skills ---"
 if [[ "$DRY_RUN" == true ]]; then
-  echo "  Would run: npx skills add . --global --agent codex claude-code -y"
+  echo "  Would run: npx skills add $REPO_DIR --global --agent codex claude-code -y"
 else
-  npx skills add . --global --agent codex claude-code -y
+  npx skills add "$REPO_DIR" --global --agent codex claude-code -y
 fi
 echo
 
