@@ -31,5 +31,5 @@ bun ~/.claude/hooks/md-log.ts off
 - State lives at `~/.local/state/md-log/<session-id>.json` (`{enabled, path, cursor}`), keyed by `$CLAUDE_CODE_SESSION_ID`. The Stop hook and the status line read the same file.
 - The Stop hook tracks a line cursor into the session transcript JSONL, so turns interrupted with Esc are caught up on the next completed turn.
 - Messages are formatted as `> [!quote] You` and `> [!info] Claude` callouts; skill invocations are compacted to `> [!note] [skill] <name>` plus arguments.
-- `AskUserQuestion` tool calls are logged as a `> [!question] Questions` callout when presented, followed by a `> [!info] Answers` callout with the user's selections (or `> [!warning] Questions Cancelled` when interrupted).
+- `AskUserQuestion` tool calls are logged as a `> [!question] Questions` callout the moment they are presented (via a `PreToolUse` hook running the same transcript scan, so preceding assistant text keeps its order), followed by a `> [!info] Answers` callout with the user's selections (or `> [!warning] Questions Cancelled` when interrupted).
 - If messages stop appearing in the log, verify the `Stop` hook registration in the active profile's `settings.json` and that the status line still shows `md-log:<path>`.

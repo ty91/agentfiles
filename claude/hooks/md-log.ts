@@ -19,6 +19,7 @@ type LogState = {
 	enabled: boolean;
 	path?: string;
 	cursor: number;
+	skipAskJson?: string;
 };
 
 type ContentBlock = {
@@ -71,6 +72,7 @@ function readState(sessionId: string): LogState | undefined {
 			enabled: parsed.enabled,
 			path: typeof parsed.path === "string" ? parsed.path : undefined,
 			cursor: Number.isInteger(parsed.cursor) ? (parsed.cursor as number) : -1,
+			...(typeof parsed.skipAskJson === "string" ? { skipAskJson: parsed.skipAskJson } : {}),
 		};
 	} catch {
 		return undefined;
@@ -280,24 +282,18 @@ function runOff(): void {
 	console.log("Markdown conversation logging stopped");
 }
 
-async function runStop(): Promise<void> {
-	const input = JSON.parse(await Bun.stdin.text()) as {
-		session_id?: string;
-		transcript_path?: string;
-	};
-	const sessionId = input.session_id;
-	const transcriptPath = input.transcript_path;
-	if (!sessionId || !transcriptPath || !existsSync(transcriptPath)) return;
+type ScanOutcome = "inactive" | "initialized" | { emittedAsk: boolean };
 
+function scanTranscript(sessionId: string, transcriptPath: string): ScanOutcome {
 	const state = readState(sessionId);
-	if (!state?.enabled || !state.path) return;
+	if (!state?.enabled || !state.path || !existsSync(transcriptPath)) return "inactive";
 
 	const lines = readFileSync(transcriptPath, "utf8")
 		.split("\n")
 		.filter((line) => line.trim());
 	if (state.cursor < 0 || state.cursor > lines.length) {
 		writeState(sessionId, { ...state, cursor: lines.length });
-		return;
+		return "initialized";
 	}
 
 	const entries: TranscriptEntry[] = [];
@@ -324,6 +320,8 @@ async function runStop(): Promise<void> {
 		if (index >= windowStart) entries.push(entry);
 	}
 
+	let skipAskJson = state.skipAskJson;
+	let emittedAsk = false;
 	const sections: string[] = [];
 	for (const entry of entries) {
 		const content = entry.message?.content;
@@ -335,7 +333,13 @@ async function runStop(): Promise<void> {
 				for (const block of content) {
 					if (block.type !== "tool_use" || block.name !== "AskUserQuestion") continue;
 					const questions = parseAskQuestions(block.input);
-					if (questions) sections.push(formatAskPrompt(questions));
+					if (!questions) continue;
+					if (skipAskJson && JSON.stringify(block.input) === skipAskJson) {
+						skipAskJson = undefined;
+						continue;
+					}
+					sections.push(formatAskPrompt(questions));
+					emittedAsk = true;
 				}
 			}
 			continue;
@@ -363,7 +367,46 @@ async function runStop(): Promise<void> {
 	for (const section of sections) {
 		appendMarkdown(state.path, section);
 	}
-	writeState(sessionId, { ...state, cursor: lines.length });
+	const nextState: LogState = { ...state, cursor: lines.length };
+	if (skipAskJson) {
+		nextState.skipAskJson = skipAskJson;
+	} else {
+		delete nextState.skipAskJson;
+	}
+	writeState(sessionId, nextState);
+	return { emittedAsk };
+}
+
+async function readHookInput(): Promise<{
+	session_id?: string;
+	transcript_path?: string;
+	tool_name?: string;
+	tool_input?: unknown;
+}> {
+	return JSON.parse(await Bun.stdin.text());
+}
+
+async function runStop(): Promise<void> {
+	const input = await readHookInput();
+	if (!input.session_id || !input.transcript_path) return;
+	scanTranscript(input.session_id, input.transcript_path);
+}
+
+async function runAsk(): Promise<void> {
+	const input = await readHookInput();
+	if (!input.session_id || !input.transcript_path) return;
+	if (input.tool_name !== "AskUserQuestion") return;
+
+	const outcome = scanTranscript(input.session_id, input.transcript_path);
+	if (outcome === "inactive" || outcome === "initialized" || outcome.emittedAsk) return;
+
+	const questions = parseAskQuestions(input.tool_input);
+	if (!questions) return;
+
+	const state = readState(input.session_id);
+	if (!state?.enabled || !state.path) return;
+	appendMarkdown(state.path, formatAskPrompt(questions));
+	writeState(input.session_id, { ...state, skipAskJson: JSON.stringify(input.tool_input) });
 }
 
 const mode = process.argv[2];
@@ -374,11 +417,13 @@ try {
 		runOff();
 	} else if (mode === "stop") {
 		await runStop();
+	} else if (mode === "ask") {
+		await runAsk();
 	} else {
-		console.error("Usage: md-log.ts <on <md-path> | off | stop>");
+		console.error("Usage: md-log.ts <on <md-path> | off | stop | ask>");
 		process.exit(1);
 	}
 } catch (error) {
 	console.error(`md-log failed: ${error instanceof Error ? error.message : String(error)}`);
-	process.exit(mode === "stop" ? 0 : 1);
+	process.exit(mode === "stop" || mode === "ask" ? 0 : 1);
 }
