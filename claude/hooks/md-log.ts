@@ -21,13 +21,30 @@ type LogState = {
 	cursor: number;
 };
 
-type ContentBlock = { type: string; text?: string };
+type ContentBlock = {
+	type: string;
+	text?: string;
+	id?: string;
+	name?: string;
+	input?: unknown;
+	tool_use_id?: string;
+};
 
 type TranscriptEntry = {
 	type?: string;
 	isSidechain?: boolean;
 	isMeta?: boolean;
 	message?: { role?: string; content?: string | ContentBlock[] };
+	toolUseResult?: unknown;
+};
+
+type AskOption = { label?: string; description?: string };
+
+type AskQuestion = {
+	question: string;
+	header?: string;
+	options?: AskOption[];
+	multiSelect?: boolean;
 };
 
 const SKIP_PREFIXES = [
@@ -121,6 +138,92 @@ function formatSection(role: "user" | "assistant", text: string): string {
 	return `${marker}\n\n${text}`;
 }
 
+function formatCallout(type: string, title: string, body: string): string {
+	const quotedBody = body.split("\n").map((line) => (line ? `> ${line}` : ">"));
+	return [`> [!${type}] ${title}`, ...quotedBody].join("\n");
+}
+
+function parseAskQuestions(value: unknown): AskQuestion[] | undefined {
+	if (!value || typeof value !== "object") return undefined;
+	const questions = (value as { questions?: unknown }).questions;
+	if (!Array.isArray(questions)) return undefined;
+	const parsed = questions.filter(
+		(question): question is AskQuestion =>
+			!!question &&
+			typeof question === "object" &&
+			typeof (question as AskQuestion).question === "string",
+	);
+	return parsed.length > 0 ? parsed : undefined;
+}
+
+function formatAskOption(index: number, option: AskOption): string {
+	const label = typeof option.label === "string" ? option.label : "";
+	const [firstDescription = "", ...descriptionLines] =
+		(typeof option.description === "string" ? option.description : "").split("\n");
+	const heading = firstDescription
+		? `${index}. **${label}** — ${firstDescription}`
+		: `${index}. **${label}**`;
+	return [heading, ...descriptionLines.map((line) => `   ${line}`)].join("\n");
+}
+
+function formatAskPrompt(questions: AskQuestion[]): string {
+	const sections = questions.map((question, index) => {
+		const heading = question.header
+			? `**${index + 1}. ${question.header}**`
+			: `**${index + 1}.**`;
+		const selectionHint = question.multiSelect ? "\n*Multiple selections allowed.*" : "";
+		const options = (question.options ?? [])
+			.filter((option) => !!option && typeof option === "object")
+			.map((option, optionIndex) => formatAskOption(optionIndex + 1, option))
+			.join("\n");
+		return `${heading}\n${question.question}${selectionHint}${options ? `\n\n${options}` : ""}`;
+	});
+	return formatCallout("question", "Questions", sections.join("\n\n"));
+}
+
+function formatAskResult(result: unknown): string {
+	const record = result && typeof result === "object"
+		? (result as { answers?: unknown; annotations?: unknown })
+		: undefined;
+	const answers = record?.answers &&
+		typeof record.answers === "object" &&
+		!Array.isArray(record.answers)
+		? (record.answers as Record<string, unknown>)
+		: undefined;
+	if (!answers) {
+		return formatCallout("warning", "Questions Cancelled", "No answers were submitted.");
+	}
+
+	const annotations = record?.annotations &&
+		typeof record.annotations === "object" &&
+		!Array.isArray(record.annotations)
+		? (record.annotations as Record<string, unknown>)
+		: undefined;
+	const questions = parseAskQuestions(record) ??
+		Object.keys(answers).map((question) => ({ question }));
+	const sections = questions.map((question, index) => {
+		const value = answers[question.question];
+		const answerText = Array.isArray(value)
+			? value.length > 0
+				? value.map((selection) => `- ${selection}`).join("\n")
+				: "No options selected."
+			: typeof value === "string" && value.trim()
+				? value
+				: "No answer was submitted.";
+		const body = [`**${index + 1}. ${question.question}**`, "", "**Answer:**", answerText];
+		const note = annotations?.[question.question];
+		if (typeof note === "string" && note.trim()) {
+			body.push("", "**Note:**", note);
+		}
+		return body.join("\n");
+	});
+	return formatCallout(
+		"info",
+		"Answers",
+		sections.length > 0 ? sections.join("\n\n") : "No answers were submitted.",
+	);
+}
+
 function separatorFor(path: string): string {
 	const fd = openSync(path, "a+");
 	try {
@@ -197,8 +300,10 @@ async function runStop(): Promise<void> {
 		return;
 	}
 
-	const sections: string[] = [];
-	for (const line of lines.slice(state.cursor)) {
+	const entries: TranscriptEntry[] = [];
+	const windowStart = state.cursor;
+	const askIds = new Set<string>();
+	for (const [index, line] of lines.entries()) {
 		let entry: TranscriptEntry;
 		try {
 			entry = JSON.parse(line) as TranscriptEntry;
@@ -209,15 +314,50 @@ async function runStop(): Promise<void> {
 		if (entry.type !== "user" && entry.type !== "assistant") continue;
 		if (entry.message?.role !== entry.type) continue;
 
-		const text = extractText(entry.message.content);
-		if (!text) continue;
-
-		if (entry.type === "user") {
-			const loggable = loggableUserText(text);
-			if (loggable) sections.push(formatSection("user", loggable));
-		} else {
-			sections.push(formatSection("assistant", text));
+		if (entry.type === "assistant" && Array.isArray(entry.message.content)) {
+			for (const block of entry.message.content) {
+				if (block.type === "tool_use" && block.name === "AskUserQuestion" && typeof block.id === "string") {
+					askIds.add(block.id);
+				}
+			}
 		}
+		if (index >= windowStart) entries.push(entry);
+	}
+
+	const sections: string[] = [];
+	for (const entry of entries) {
+		const content = entry.message?.content;
+
+		if (entry.type === "assistant") {
+			const text = extractText(content);
+			if (text) sections.push(formatSection("assistant", text));
+			if (Array.isArray(content)) {
+				for (const block of content) {
+					if (block.type !== "tool_use" || block.name !== "AskUserQuestion") continue;
+					const questions = parseAskQuestions(block.input);
+					if (questions) sections.push(formatAskPrompt(questions));
+				}
+			}
+			continue;
+		}
+
+		if (Array.isArray(content)) {
+			const isAskResult = content.some(
+				(block) =>
+					block.type === "tool_result" &&
+					typeof block.tool_use_id === "string" &&
+					askIds.has(block.tool_use_id),
+			);
+			if (isAskResult) {
+				sections.push(formatAskResult(entry.toolUseResult));
+				continue;
+			}
+		}
+
+		const text = extractText(content);
+		if (!text) continue;
+		const loggable = loggableUserText(text);
+		if (loggable) sections.push(formatSection("user", loggable));
 	}
 
 	for (const section of sections) {
