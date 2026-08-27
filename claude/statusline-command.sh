@@ -8,6 +8,7 @@ cwd=$(echo "$input" | jq -r '.workspace.current_dir')
 model=$(echo "$input" | jq -r '.model.display_name // "unknown"')
 used_pct=$(echo "$input" | jq -r '.context_window.used_percentage // 0')
 todo_count=$(echo "$input" | jq -r '.tasks.pending_count // 0')
+session_id=$(echo "$input" | jq -r '.session_id // empty')
 
 # Get current directory basename
 dir_name=$(basename "$cwd")
@@ -51,6 +52,22 @@ else
     ctx_color=$GREEN
 fi
 
+mdlog_info=""
+if [ -n "$session_id" ]; then
+    mdlog_state="$HOME/.local/state/md-log/${session_id}.json"
+    if [ -f "$mdlog_state" ]; then
+        mdlog_path=$(jq -r 'select(.enabled == true) | .path // empty' "$mdlog_state" 2>/dev/null)
+        if [ -n "$mdlog_path" ]; then
+            case "$mdlog_path" in
+                "$cwd"/*) mdlog_display="${mdlog_path#"$cwd"/}" ;;
+                "$HOME"/*) mdlog_display="~${mdlog_path#"$HOME"}" ;;
+                *) mdlog_display="$mdlog_path" ;;
+            esac
+            mdlog_info="${GRAY}md-log:${mdlog_display}${RESET}"
+        fi
+    fi
+fi
+
 # Build output
 output="${CYAN}${username}${RESET}:${BLUE}${dir_name}${RESET}"
 
@@ -63,6 +80,10 @@ output="${output} ${MAGENTA}${model}${RESET}"
 
 if [ "$todo_count" -gt 0 ] 2>/dev/null; then
     output="${output} ${CYAN}todo:${todo_count}${RESET}"
+fi
+
+if [ -n "$mdlog_info" ]; then
+    output="${output} ${mdlog_info}"
 fi
 
 printf "%b" "$output"

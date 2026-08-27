@@ -62,6 +62,7 @@ fi
 link_item "$REPO_DIR/AGENTS.md" "$CLAUDE_DST/CLAUDE.md"
 link_item "$REPO_DIR/claude/statusline-command.sh" "$CLAUDE_DST/statusline-command.sh"
 link_item "$REPO_DIR/claude/agents" "$CLAUDE_DST/agents"
+link_item "$REPO_DIR/claude/hooks" "$CLAUDE_DST/hooks"
 echo
 
 # --- 2. ./codex/agents -> ~/.codex/agents ---
