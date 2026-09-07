@@ -1,0 +1,5 @@
+interface:
+  display_name: "Remote Mac"
+  short_description: "Find and use Taeyoung's other Mac when the task needs it"
+policy:
+  allow_implicit_invocation: true
