@@ -8,3 +8,10 @@ To prevent agents from invoking a skill implicitly or automatically, configure t
 - Codex/OpenAI: Set `policy.allow_implicit_invocation: false` in the skill's `agents/openai.yaml` file.
 
 Always keep the policies for both harnesses in sync.
+
+## Removing Skills
+
+When asked to delete a skill from this repo, also uninstall it from this machine:
+- Run `npx skills remove <skill-name> --global --yes`. Multiple names are supported. Omit `--agent` to remove all agent links.
+- Verify removal with `npx skills list --global --json`.
+- Remove only the requested skills; never use `--all`.
