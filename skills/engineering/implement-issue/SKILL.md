@@ -76,19 +76,21 @@ Do not start the next checkpoint until verification passes and the commit succee
 
 ### 5. Review and refine
 
-Unless `--no-review` was passed:
+Unless `--no-review` was passed, invoke `autoreview` after the implementation checkpoints are committed, with authorization to own in-scope self-checks, fixes, verification, and re-review through completion. Pass:
 
-1. Run `autoreview` after the implementation checkpoints are committed.
-2. Explicitly review:
-   - each TDD-added test against the suite-review checklist in the `tests` skill (`principles.md`) — in particular: if the behavior it names broke, would an outer required test already turn red? Remove or consolidate tests that fail the checklist,
-   - refactors required to make the current change coherent.
+- The task's acceptance criteria, resolved task diff and base, checkout, and excluded pre-existing changes.
+- Verification commands and results already obtained, including the code state they cover, and this skill's checkpoint commit policy.
+- These self-checks to perform before the first review:
+  - each TDD-added test against the suite-review checklist in the `tests` skill (`principles.md`) — in particular: if the behavior it names broke, would an outer required test already turn red? Remove or consolidate tests that fail the checklist,
+  - refactors required to make the current change coherent.
+- Final verification: run the full test suite, reusing a completed result if it still applies. If it cannot run, record why and the strongest verification completed instead; this is the permitted fallback unless repository requirements demand otherwise.
+
+When using `autoreview`, proceed to finalization only after it returns `COMPLETE`. For `DECISION REQUIRED` or `BLOCKED`, report the unresolved condition instead of creating a PR or claiming completion. Any subsequent substantive code or test change must return through review and affected verification before finalization.
+
+If `--no-review` was passed, skip `autoreview` and the reviewer subagent; perform the same self-checks and final verification directly, committing resulting changes under the checkpoint policy. This flag does not waive verification or authorize broader changes.
 
 ### 6. Finalize and create the pull request
 
-- Run the full test suite.
-- If it cannot run, record:
-  - why it could not run,
-  - the strongest verification completed instead.
 - Inspect:
   - the branch commit list,
   - the complete task diff,

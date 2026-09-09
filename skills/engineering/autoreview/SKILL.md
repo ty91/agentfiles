@@ -1,110 +1,65 @@
 ---
 name: autoreview
-description: Conduct a multi-axis code review with the code-reviewer subagent.
+description: Review a specified change with code-reviewer; when fixes are authorized, own the fix, verification, and re-review loop through completion.
 ---
 
-Invoke the `code-reviewer` subagent to review the target. After the subagent returns, inspect its findings against the available diff and context, remove unsupported or duplicate claims, then report the final review to the user.
+# Autoreview
 
-## Review Scope
+Own review orchestration and, when authorized, the correction loop. The `code-reviewer` subagent owns the review rubric and remains read-only. You validate its findings and own the final closeout result.
 
-The detailed five-axis rubric lives in the `code-reviewer` subagent. You own orchestration: resolve the review target, gather the relevant context, invoke the reviewer, verify the review output, and report the final result.
+## Authority and scope
 
-## Process
+A standalone request to review is review-only. An implementation workflow or an explicit request to apply fixes authorizes in-scope self-checks, fixes, and verification without asking again. Honor any explicit review-only restriction. Inherit the caller's checkout, commit policy, and exclusions; this skill does not independently authorize commits, publication, or unrelated cleanup.
 
-### Step 1: Resolve the Review Target
+Resolve the target from the request and current context: PR, branch comparison, commit range, staged changes, working tree changes, or session changes. Establish the original task, acceptance criteria, intended behavior and ownership boundary, base and target state, and pre-existing changes to exclude. Infer missing details from available evidence; ask only when ambiguity prevents a correct review or safe in-scope work.
 
-Interpret the user's target as a PR, branch, commit range, staged changes, working tree changes, or "my changes" from the current session. Ask a clarifying question only if the target is still ambiguous.
+Keep the original task scope stable while including authorized fixes in subsequent review targets. Read surrounding code as needed to understand consequences, without expanding the work into a separate audit.
 
-Do not edit code. This command is review-only; the user will explicitly ask for fixes if they want changes applied.
+## Prepare the review
 
-### Step 2: Build a Thin Review Packet
+When fixes are authorized, perform the caller's requested self-checks before the first review. For changed tests, use the applicable testing standards to assess their value; make only the cleanup or structural changes needed for the task. Keep review-only requests free of edits and project execution.
 
-Pass references, not long summaries. The `code-reviewer` subagent should independently inspect the relevant files and history.
+When fixes are authorized, establish the verification needed to complete the task, including the caller's required checks and any permitted fallback when a check cannot run. Run outstanding checks, fix failures caused by the task, and record unrelated failures separately. Reuse earlier results while their code, configuration, and environment assumptions still apply. Follow the caller's commit policy for verified changes. For review-only requests, use supplied verification evidence and report gaps.
 
-Include:
+Build a thin review packet using references rather than long summaries:
 
-- Review scope, such as `git diff main...HEAD`, `git diff --staged`, a PR number or URL, or the relevant commit range
-- Relevant reference paths or URLs, such as spec, plan, task, issue, PR description
-- Project convention files when readily identifiable, such as `AGENTS.md`, `CONTRIBUTING.md`, `context.md`, or `plan.md`
-- Any user-specified review focus or constraints
+- The exact review target and base, checkout location, exclusions, and current commit or uncommitted diff state.
+- Relevant task, spec, acceptance criteria, repository conventions, and decisions; summarize only context unavailable through those references.
+- Verification commands, results, the code state they cover, and remaining gaps.
+- On later rounds, the previous findings, their disposition, and what changed since the last review.
 
-Summarize only ephemeral conversation context that the subagent cannot access directly.
+Invoke `code-reviewer` with this packet. Let it use its own rubric and classification rules; do not duplicate those policies in the prompt. An incremental review may focus on fixes and affected paths when the rest of the target has already been reviewed and remains unchanged.
 
-### Step 3: Invoke the Reviewer
+## Validate the result
 
-Invoke the `code-reviewer` subagent with the review packet. Ask it to read the references directly, use its built-in review rubric, and return classified findings (in-scope blocker, follow-up, or stop-and-escalate) with file:line references, confidence, fix recommendations, and any verification gaps.
+Treat reviewer output as advisory. Check each finding against the relevant code path and evidence, consulting dependency contracts when needed. Remove unsupported or duplicate claims, correct locations and classifications, and retain valid confidence values and fix recommendations.
 
-Do not restate the full review rubric in this prompt; the subagent owns the review criteria.
+Apply the reviewer's classification rules consistently. Judge blocking findings by how this change causes the defect, not merely by the location of the underlying code. Evaluate generated-artifact findings by their meaningful consequences rather than dropping them based on file type. A larger required decision may justify an escalation; a preferred redesign does not.
 
-### Step 4: Inspect the Review Result
+Recompute the verdict after validating findings. Preserve incomplete coverage explicitly: `INCOMPLETE` or missing review context is not a clean review. Supply missing context and resume review when possible. Do not treat unavailable execution evidence alone as a code defect; whether it prevents task completion depends on the verification requirements established above.
 
-After the subagent returns, treat review output as advisory. Never blindly apply it.
+For review-only requests, return the validated verdict, findings, and material verification gaps. This finishes the review request, not implementation closeout.
 
-- Verify every finding by reading the real code path and adjacent files.
-- Read dependency docs/source/types when the finding depends on external behavior.
-- Reject unrealistic edge cases, speculative risks, broad rewrites, and fixes that over-complicate the codebase.
-- Remove or clearly mark findings that are unsupported, duplicate, speculative, or based on incorrect line references.
-- Demote findings anchored outside the reviewed change from in-scope blocker to follow-up.
-- Drop findings anchored in generated files unless they are about staleness, hand-editing, commit convention, or migration safety.
-- When an accepted finding shows a bug class or repeated pattern, inspect the current review scope for sibling instances.
+## Fix and re-review
 
-Preserve valid classifications, confidence values, and fix recommendations.
+When fixes are authorized:
 
-### Step 5: Report the Final Review
+1. Resolve accepted in-scope blockers with the smallest correct change. Leave follow-ups as recommendations; they do not require fixes or issue creation before completion. If an accepted escalation needs a decision outside the task, report that decision instead of expanding scope yourself.
+2. Run checks affected by the changes and satisfy any remaining required verification. Treat failures caused by a fix as part of the same work. Commit proven, in-scope outcomes when the caller's policy requires it; do not commit speculative fixes while scope or verification is unresolved.
+3. Re-review substantive code or test changes and their affected paths, then validate the result again. Keep the review packet current. Non-substantive changes need not trigger another review if the previous reasoning still applies.
 
-Report review results only. Do not make code changes.
+The final task state must be covered by both review and required verification. If a later check causes another substantive edit, return to the loop. Once those obligations are satisfied, stop; do not request another clean review or rerun unchanged checks for reassurance.
 
-Lead with findings ordered most severe first, grouped by classification: in-scope blockers, then stop-and-escalate, then follow-ups. Each concrete issue should include file:line, problem, and recommended fix. If there are no findings, say that clearly. Include remaining test gaps, verification gaps, and residual risks. Do not paste the subagent transcript verbatim unless the user asks for it.
+If fixes keep failing or findings recur, reassess the cause, evidence, and approach before another edit. Continue while a concrete, in-scope approach can make progress. There is no fixed iteration or line-count limit, but do not repeat failed approaches without new evidence or conceal a task-scope change as another patch.
 
-## Handling Disagreements
+## Closeout
 
-When resolving review disputes, apply this hierarchy:
+Return one of these outcomes to an implementation caller or a user who authorized fixes:
 
-1. **Technical facts and data** override opinions and preferences
-2. **Style guides** are the absolute authority on style matters
-3. **Software design** must be evaluated on engineering principles, not personal preference
-4. **Codebase consistency** is acceptable if it doesn't degrade overall health
+- **COMPLETE**: the final task state has been reviewed, no accepted in-scope blocker or escalation remains, required verification is satisfied through checks or a caller-permitted fallback, and any required fix commits are complete. Follow-ups may remain; disclose fallback verification and its limits.
+- **DECISION REQUIRED**: completion needs an out-of-scope decision or additional authority. Preserve the useful analysis and describe the smallest decision and available options.
+- **BLOCKED**: required context, environment, or verification cannot be obtained, or repeated fixes have failed with no new evidence supporting a viable approach. Report what remains unresolved, what was attempted, and what would enable progress.
 
-**Don't accept "I'll clean it up later."** Experience shows deferred cleanup rarely happens. Require cleanup before submission unless it's a genuine emergency. If surrounding issues can't be addressed in this change, require filing a bug with self-assignment.
+Only `COMPLETE` permits an implementation caller to proceed to PR finalization. A reviewer's `APPROVE` is code-review evidence, not a substitute for this closeout check.
 
-## Common Rationalizations
-
-| Rationalization | Reality |
-|---|---|
-| "It works, that's good enough" | Working code that's unreadable, insecure, or architecturally wrong creates debt that compounds. |
-| "I wrote it, so I know it's correct" | Authors are blind to their own assumptions. Every change benefits from another set of eyes. |
-| "We'll clean it up later" | Later never comes. The review is the quality gate -- use it. Require cleanup before merge, not after. |
-| "AI-generated code is probably fine" | AI code needs more scrutiny, not less. It's confident and plausible, even when wrong. |
-| "The tests pass, so it's good" | Tests are necessary but not sufficient. They don't catch architecture problems, security issues, or readability concerns. |
-
-## Reporting
-
-- Lead with findings, ordered most severe first and grouped by classification.
-- Include file and line references for each concrete issue.
-- If there are no findings, say so clearly.
-- Include any test gaps, verification gaps, or residual risks that remain after the review.
-- Keep the report concise; do not paste the subagent transcript verbatim unless the user asks for it.
-
-## Fix Loop
-
-This command stays review-only until the user asks to apply fixes. When they do, run this closeout loop; it is a closeout gate, not permission to rewrite the task.
-
-Before the first fix cycle, freeze a scope baseline: original request or issue, target branch, intended behavior, owner boundary, changed files, and non-test LOC.
-
-- If a review-triggered fix changes code, rerun focused tests and rerun the review.
-- Keep going until the review returns no accepted/actionable findings only while the work remains inside the original task scope.
-- Do not stack or push review-triggered fix commits while scope classification or focused proof is unresolved. Keep exploratory edits local until the cycle is proven in scope; if scope breaks, remove them from the landing lane instead of preserving them as branch history.
-
-Stop patching and report the scope break instead of continuing when:
-
-- a narrow change turns into an architecture change, protocol change, migration, or release-process change;
-- the diff grows past 2x the original files or non-test, non-generated LOC without explicit approval to expand scope;
-- two review-triggered patch cycles have not converged; pause and reclassify every remaining finding before another edit;
-- the best fix is "define the canonical contract first" rather than another local inference layer;
-- fixing the accepted finding would make the change no longer describe the same behavior, issue, or owner boundary.
-
-After the two-cycle pause, continue only when every remaining accepted finding is still an in-scope blocker. Otherwise preserve the useful analysis, identify the smallest safe landed subset if one exists, and open or request a follow-up for the larger fix. Do not keep committing speculative fixes just to satisfy the reviewer.
-
-Critical exceptions must be explicit: active data loss, crash, broken install/upgrade, release blocker, or concrete security exposure. If the exception is not one of those, it is not critical enough to blow up scope.
-
-Stop as soon as the review returns no accepted/actionable findings. Do not run an extra review just to get a nicer "clean" line, a second opinion, or clearer closeout wording.
+Keep the report concise: outcome, final target state, fixes made, remaining classified findings with file:line and confidence, verification results and material gaps, and any decision or blocker. Omit empty categories and the subagent transcript. Return control to the calling workflow when embedded in implementation; a successful review is not a reason to stop before its requested PR or other final deliverable.
