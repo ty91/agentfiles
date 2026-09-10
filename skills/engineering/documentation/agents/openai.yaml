@@ -1,4 +1,4 @@
 interface:
   display_name: "Documentation"
-  short_description: "Document decisions and durable context"
-  default_prompt: "Use $documentation to document an architectural decision as an ADR."
+  short_description: "Document contracts, operations, and decisions"
+  default_prompt: "Use $documentation to update relevant project documents for changed behavior, terminology, operating assumptions, or decisions."

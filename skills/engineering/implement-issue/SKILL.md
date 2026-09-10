@@ -58,8 +58,8 @@ A small task may have one checkpoint.
 ### 3. Implement and commit each checkpoint
 
 - Work on exactly one checkpoint at a time.
-- Use `/tdd` where possible. The test surface defaults to the outermost consumer seam per the `tests` skill; a red below it is legitimate only under that skill's justification list.
-- Never manufacture a failing test merely to begin implementation: if a checkpoint is internal plumbing, it is covered by driving the outer acceptance red green, not by a red of its own.
+- Follow the `tests` skill to select verification scope and dependencies. Use `/tdd` when the user explicitly requests test-first development.
+- Use existing tests when they already establish the checkpoint's contract. Add tests for missing behavioral evidence rather than manufacturing a failing test for every internal change.
 
 When the checkpoint is complete:
 
@@ -81,7 +81,7 @@ Unless `--no-review` was passed, invoke `autoreview` after the implementation ch
 - The task's acceptance criteria, resolved task diff and base, checkout, and excluded pre-existing changes.
 - Verification commands and results already obtained, including the code state they cover, and this skill's checkpoint commit policy.
 - These self-checks to perform before the first review:
-  - each TDD-added test against the suite-review checklist in the `tests` skill (`principles.md`) — in particular: if the behavior it names broke, would an outer required test already turn red? Remove or consolidate tests that fail the checklist,
+  - added or changed tests against the suite-review checklist in the `tests` skill (`principles.md`), considering failure detection, diagnostic value, and maintenance cost; preserve useful existing tests and verify retained coverage before removing or consolidating any,
   - refactors required to make the current change coherent.
 - Final verification: run the full test suite, reusing a completed result if it still applies. If it cannot run, record why and the strongest verification completed instead; this is the permitted fallback unless repository requirements demand otherwise.
 
