@@ -17,8 +17,8 @@ Create a GitHub pull request for the current branch.
 
 ### 1. Validate
 
-- If the current branch is `main` or `master`, ask the user how to proceed: create a new branch or abort. Do NOT create a PR from main to main.
-- If there are no commits ahead of the base branch, inform the user and stop.
+- If the current branch is `main` or `master`, automatically create a descriptively named branch and proceed. Unless the user requests otherwise, include only changes made in the current conversation session. If unrelated changes are mixed in, isolate the session's changes on a clean branch from the default branch, preserving all other work. Ask only if the scope cannot be reliably determined or separated.
+- Commit any uncommitted changes within that scope using Conventional Commits. If there are no changes to include, inform the user and stop.
 
 ### 2. Push
 
