@@ -82,6 +82,9 @@ Keep JSON extraction scoped to the known item and vault. Do not enumerate vaults
 
 ## Known working secret-write pattern
 
+Name new items in lowercase kebab-case: `service-purpose[-project][-environment]` (e.g. `cloudflare-r2-wrangler`, `supabase-postgresql-backup`); use the repository name for project-specific items and append `dev`, `staging`, or `prod` only when distinguishing environments.
+Use consistent terms for the same concept; distinguish duplicates by account, permissions, or purpose rather than `new`, `copy`, or numeric suffixes.
+
 ```bash
 OP_LOAD_DESKTOP_APP_SETTINGS=false OP_BIOMETRIC_UNLOCK_ENABLED=false \
   op item create --vault agents --category "API Credential" \
