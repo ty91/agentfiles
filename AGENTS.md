@@ -16,6 +16,7 @@
 
 ## Project Defaults
 
+- In deliverable content, omit change history and revision commentary unless explicitly requested.
 - Use repo package manager/runtime. Swap needs approval.
 - Do not write any comments in the source code.
 - Do not add any helper/supporting text when building frontend UIs unless explicitly requested or planned.

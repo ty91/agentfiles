@@ -7,6 +7,8 @@ description: Update durable project documentation when behavior, public contract
 
 Preserve the context future readers need to understand current behavior and decisions. Follow the project's documentation structure and language; use concise Korean when no language convention is specified.
 
+Describe the current state. Omit change history and revision commentary from document content unless explicitly requested.
+
 ## Workflow
 
 1. Read the README, documentation map, relevant topic documents, and ADRs. Locate the existing home for the change.
