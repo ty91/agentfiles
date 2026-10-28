@@ -17,4 +17,4 @@ A small wrapper can earn its place through naming, type conversion, or framework
 
 Place dependencies that need substitution at composition points. Choose boundaries by environment differences, ownership, and reasons for change rather than implementation count. Internal responsibilities need not become caller-visible configuration.
 
-Identify contracts and verification to preserve before changing structure. Follow [test review](../tests/principles.md) when retaining, moving, or consolidating tests. A new outer test alone does not make existing tests disposable.
+Identify contracts and verification to preserve before changing structure. Follow [Tests](../tests/SKILL.md) when retaining, moving, or consolidating tests. A new outer test alone does not make existing tests disposable.

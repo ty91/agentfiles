@@ -81,7 +81,7 @@ Unless `--no-review` was passed, invoke `autoreview` after the implementation ch
 - The task's acceptance criteria, resolved task diff and base, checkout, and excluded pre-existing changes.
 - Verification commands and results already obtained, including the code state they cover, and this skill's checkpoint commit policy.
 - These self-checks to perform before the first review:
-  - added or changed tests against the suite-review checklist in the `tests` skill (`principles.md`), considering failure detection, diagnostic value, and maintenance cost; preserve useful existing tests and verify retained coverage before removing or consolidating any,
+  - added, changed, and now-redundant tests against the `tests` skill: each kept test owns a failure no other test catches at its layer, and tests the change made redundant are removed or merged,
   - refactors required to make the current change coherent.
 - Final verification: run the full test suite, reusing a completed result if it still applies. If it cannot run, record why and the strongest verification completed instead; this is the permitted fallback unless repository requirements demand otherwise.
 
