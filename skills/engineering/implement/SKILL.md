@@ -96,7 +96,7 @@ Unless `--no-review` was passed, invoke `autoreview` after the implementation ch
 
 When using `autoreview`, proceed to finalization only after it returns `COMPLETE`. For `DECISION REQUIRED` or `BLOCKED`, report the unresolved condition instead of creating a PR or claiming completion. Any subsequent substantive code or test change must return through review and affected verification before finalization.
 
-If `--no-review` was passed, skip `autoreview` and the reviewer subagent; perform the same self-checks and final verification directly, committing resulting changes under the checkpoint policy. This flag does not waive verification or authorize broader changes.
+If `--no-review` was passed, skip `autoreview` and its reviewer; perform the same self-checks and final verification directly, committing resulting changes under the checkpoint policy. This flag does not waive verification or authorize broader changes.
 
 ### 7. Finalize and create the pull request
 

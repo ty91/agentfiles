@@ -5,7 +5,7 @@ description: Review a specified change with code-reviewer; when fixes are author
 
 # Autoreview
 
-Own review orchestration and, when authorized, the correction loop. The `code-reviewer` subagent owns the review rubric and remains read-only. You validate its findings and own the final closeout result.
+Own review orchestration and, when authorized, the correction loop. The `code-reviewer` agent owns the review rubric and remains read-only. You validate its findings and own the final closeout result.
 
 ## Authority and scope
 
@@ -29,6 +29,12 @@ Build a thin review packet using references rather than long summaries:
 - On later rounds, the previous findings, their disposition, and what changed since the last review.
 
 Invoke `code-reviewer` with this packet. Let it use its own rubric and classification rules; do not duplicate those policies in the prompt. An incremental review may focus on fixes and affected paths when the rest of the target has already been reviewed and remains unchanged.
+
+<claude-code>
+IMPORTANT: In Claude Code, there is no `code-reviewer` subagent. Do not spawn a substitute subagent and do not review the change yourself.
+
+Instead, run `scripts/codex-review.sh [checkout]` from this skill's directory in the background, passing the packet unchanged on stdin. It runs Codex with the `code-reviewer` instructions and prints only the review. A nonzero exit means no review ran; report its error instead of reviewing the change yourself.
+</claude-code>
 
 ## Validate the result
 
