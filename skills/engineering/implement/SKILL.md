@@ -114,3 +114,4 @@ If `--no-review` was passed, skip `autoreview` and its reviewer; perform the sam
   - important design decisions,
   - verification results.
 - If working in place on the default branch, do not create or switch branches for a pull request, and do not push unless explicitly requested.
+- Do not change the issue's status to done or completed after implementation.
