@@ -9,4 +9,4 @@ Consider composition when structural differences between callers produce tangled
 - Parts of one concept can live in one file. Follow the project's naming, export notation, and styling conventions.
 - When adding a part or state, check whether it belongs to the existing contract. A new state does not automatically require a new component, and reuse does not justify unrelated behavior flags.
 
-Check that representative call sites make composition readable and that input, error, and state responsibilities are easy to locate. Use [frontend.md](../tests/frontend.md) for behavioral verification.
+Check that representative call sites make composition readable and that input, error, and state responsibilities are easy to locate. Use [verify](../verify/SKILL.md) and its [frontend.md](../verify/frontend.md) for behavioral verification.

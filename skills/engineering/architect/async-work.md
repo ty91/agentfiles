@@ -18,4 +18,8 @@ For long work, use durably saved results as resume checkpoints. Check whether sa
 
 Define whether retries are automatic or manual, their attempt or time limits, which errors are retryable, and how completed results are treated. Do not assume exactly-once execution across an external effect and local persistence.
 
-Choose relevant verification from [backend.md](../tests/backend.md) and [frontend.md](../tests/frontend.md).
+First ask whether concurrent actors need the same mutable object. Prefer separate owned state merged at the read boundary. When shared writing is a real invariant, enforce it with exclusive ownership, atomic operations, or appropriate locking; instructions are not concurrency control.
+
+Read current state and apply only the difference needed to reach the goal. Check repeated execution and interruption at each meaningful boundary. A later run must be able to recognize stale claims, partial records, and temporary artifacts. Preserve the distinction between external success and locally recorded success.
+
+Use [verify](../verify/SKILL.md), then [backend.md](../verify/backend.md) or [frontend.md](../verify/frontend.md) for the affected surface.

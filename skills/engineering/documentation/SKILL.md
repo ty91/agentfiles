@@ -28,7 +28,7 @@ Express information through names or types when that makes it clear in code. Avo
 
 ## Terminology and decisions
 
-Use [domain-modeling.md](../codebase-design/domain-modeling.md) when concepts need clarification. Record settled meanings in the existing glossary or topic document; resolving a word does not require creating or updating CONTEXT.md.
+Use [architect's domain-modeling guidance](../architect/domain-modeling.md) when concepts need clarification. If resolving them changes a contract, state model, or ownership boundary, follow [architect](../architect/SKILL.md). Record settled meanings in the existing glossary or topic document; resolving a word does not require creating or updating CONTEXT.md.
 
 Preserve existing document locations and roles. [adr.md](adr.md) is the single source for decision-record creation and updates.
 

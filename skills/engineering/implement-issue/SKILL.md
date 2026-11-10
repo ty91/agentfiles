@@ -34,7 +34,8 @@ disable-model-invocation: true
   - acceptance criteria,
   - affected module interfaces,
   - explicit non-goals.
-- If tests may change, load the `tests` skill and the repo's own testing standards before deciding whether a test belongs.
+- Read [architect](../architect/SKILL.md) when the task creates or changes a contract, domain or state model, ownership, or module boundary. Complete its grounding, comparison, and contract sketch before structural implementation.
+- Read [verify](../verify/SKILL.md) and the repository's verification requirements before choosing evidence. Identify the claims, risk boundaries, and checks for each checkpoint, even when no new test is needed.
 
 ### 2. Define commit checkpoints
 
@@ -58,8 +59,8 @@ A small task may have one checkpoint.
 ### 3. Implement and commit each checkpoint
 
 - Work on exactly one checkpoint at a time.
-- Follow the `tests` skill to select verification scope and dependencies. Use `/tdd` when the user explicitly requests test-first development.
-- Use existing tests when they already establish the checkpoint's contract. Add tests for missing behavioral evidence rather than manufacturing a failing test for every internal change.
+- Follow [verify](../verify/SKILL.md) for change verification, its [regression path](../verify/regression.md) for bug fixes, and its [test-first path](../verify/test-first.md) when the user explicitly requests TDD.
+- Preserve the chosen contract and ownership. Reopen [architect](../architect/SKILL.md) when repeated workarounds or contract deviations reveal a structural problem; keep the original task scope.
 
 When the checkpoint is complete:
 
@@ -81,7 +82,7 @@ Unless `--no-review` was passed, invoke `autoreview` after the implementation ch
 - The task's acceptance criteria, resolved task diff and base, checkout, and excluded pre-existing changes.
 - Verification commands and results already obtained, including the code state they cover, and this skill's checkpoint commit policy.
 - These self-checks to perform before the first review:
-  - added, changed, and now-redundant tests against the `tests` skill: each kept test owns a failure no other test catches at its layer, and tests the change made redundant are removed or merged,
+  - added, changed, and now-redundant tests against [verify](../verify/SKILL.md) and its [test design guidance](../verify/test-design.md), preserving distinct boundary coverage,
   - refactors required to make the current change coherent.
 - Final verification: run the full test suite, reusing a completed result if it still applies. If it cannot run, record why and the strongest verification completed instead; this is the permitted fallback unless repository requirements demand otherwise.
 

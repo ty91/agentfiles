@@ -1,0 +1,6 @@
+interface:
+  display_name: "Verify"
+  short_description: "Verify contracts, regressions, and real boundaries"
+  default_prompt: "Use $verify to identify the changed claims, choose appropriate tests or real-system checks, execute authorized verification, and report evidence and gaps."
+policy:
+  allow_implicit_invocation: true

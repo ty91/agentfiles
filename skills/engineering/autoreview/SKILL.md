@@ -17,7 +17,7 @@ Keep the original task scope stable while including authorized fixes in subseque
 
 ## Prepare the review
 
-When fixes are authorized, perform the caller's requested self-checks before the first review. For changed tests, use the applicable testing standards to assess their value; make only the cleanup or structural changes needed for the task. Keep review-only requests free of edits and project execution.
+When fixes are authorized, perform the caller's requested self-checks before the first review. Read [verify](../verify/SKILL.md) for evidence selection and changed-test value, under the repository's testing standards. Read [architect](../architect/SKILL.md) before an in-scope fix changes a contract, state model, ownership, or module boundary. Make only changes needed for the task. Keep review-only requests free of edits and project execution.
 
 When fixes are authorized, establish the verification needed to complete the task, including the caller's required checks and any permitted fallback when a check cannot run. Run outstanding checks, fix failures caused by the task, and record unrelated failures separately. Reuse earlier results while their code, configuration, and environment assumptions still apply. Follow the caller's commit policy for verified changes. For review-only requests, use supplied verification evidence and report gaps.
 
@@ -25,10 +25,12 @@ Build a thin review packet using references rather than long summaries:
 
 - The exact review target and base, checkout location, exclusions, and current commit or uncommitted diff state.
 - Relevant task, spec, acceptance criteria, repository conventions, and decisions; summarize only context unavailable through those references.
-- Verification commands, results, the code state they cover, and remaining gaps.
+- Verification claims, commands, observed results, the code state they cover, and remaining gaps, as recorded by [verify](../verify/SKILL.md). Keep verified, failed, and unverified claims distinct.
 - On later rounds, the previous findings, their disposition, and what changed since the last review.
 
 Invoke `code-reviewer` with this packet. Let it use its own rubric and classification rules; do not duplicate those policies in the prompt. An incremental review may focus on fixes and affected paths when the rest of the target has already been reviewed and remains unchanged.
+
+Verification execution remains the parent's responsibility. Do not ask the read-only reviewer to run verify or require a runtime reproduction for every finding; its own evidence rubric remains authoritative for code inspection.
 
 <claude-code>
 IMPORTANT: In Claude Code, there is no `code-reviewer` subagent. Do not spawn a substitute subagent and do not review the change yourself.
