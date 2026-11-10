@@ -1,0 +1,6 @@
+interface:
+  display_name: "SWE"
+  short_description: "Route engineering work through six focused playbooks"
+  default_prompt: "Use $swe to classify this engineering task, read the matching playbook and its owning skills, and complete the requested outcome with evidence."
+policy:
+  allow_implicit_invocation: false

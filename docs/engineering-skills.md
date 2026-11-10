@@ -6,13 +6,27 @@
 
 | 영역 | 담당 | 발동 조건과 완료 기준 |
 |---|---|---|
+| 진입점 | [swe](../skills/engineering/swe/SKILL.md) | 명시적 호출 후 요청을 Feature, Bug fix, Refactoring, Design, Verification, Review 중 하나로 분류하고 해당 플레이북과 소유 스킬을 읽습니다. |
 | 실행 | [implement](../skills/engineering/implement/SKILL.md), [implement-issue](../skills/engineering/implement-issue/SKILL.md) | 할당된 구현 작업의 범위·체크포인트·완료를 관리합니다. 설계는 architect, 검증은 verify, 검토는 autoreview에 연결합니다. |
 | 설계 | [architect](../skills/engineering/architect/SKILL.md) | 계약·상태·소유권·모듈 책임을 만들거나 변경할 때 사용합니다. 호출 사례에서 구조를 도출하고 서로 다른 후보를 비교해 계약·선택 이유·검증 방법을 확정합니다. |
 | 검증 | [verify](../skills/engineering/verify/SKILL.md) | 행동·불변식·경계의 증거를 선택하고 실행합니다. 변경 검증, 회귀 검증, 명시적으로 요청된 test-first 경로를 소유합니다. 검증됨·실패·미검증을 구분합니다. |
 | 리뷰 | [autoreview](../skills/engineering/autoreview/SKILL.md), [code-reviewer](../codex/agents/code-reviewer.toml) | 검토자는 읽기 전용으로 결함과 검증 공백을 판단합니다. 부모가 실행·수정·재검증을 소유합니다. 실행 증거가 없다는 이유만으로 코드 결함을 만들어내지 않습니다. |
 | 문서 | [documentation](../skills/engineering/documentation/SKILL.md) | 확정된 계약·용어·운영 제약·선택 이유가 지속돼야 할 때 기존 문서를 갱신합니다. 설계 결정은 architect가 소유합니다. |
 
-새로운 최상위 실행 스킬은 두지 않습니다. 설계만 요청되면 설계에서 끝나며, 구현 요청에서는 설계 후 구현과 검증을 계속합니다. 프로젝트 전체 감사나 관계없는 정리는 이 연결의 권한에 포함되지 않습니다.
+swe는 분류와 연결을 담당하며, 기본 구현 경로는 implement입니다. implement-issue는 기존의 준비된 체크아웃용 진입점으로 유지합니다. 설계만 요청되면 설계에서 끝나며, 구현 요청에서는 설계 후 구현과 검증을 계속합니다. 프로젝트 전체 감사나 관계없는 정리는 이 연결의 권한에 포함되지 않습니다.
+
+## SWE 플레이북
+
+| 플레이북 | 연결과 완료 조건 |
+|---|---|
+| [Feature](../skills/engineering/swe/playbooks/feature.md) | implement가 필요한 architect, verify, autoreview를 연결해 요청된 행동을 완성합니다. |
+| [Bug fix](../skills/engineering/swe/playbooks/bug-fix.md) | verify의 회귀 경로로 실패를 확인하고 implement에서 원인 수정과 같은 재현의 통과를 확인합니다. |
+| [Refactoring](../skills/engineering/swe/playbooks/refactoring.md) | 기존 행동을 고정하고 필요한 설계를 거쳐 구조를 바꾼 뒤 동등성과 이해 부담 감소를 확인합니다. |
+| [Design](../skills/engineering/swe/playbooks/design.md) | architect의 계약·모델·대안·선택 이유와 verify의 검증 방법을 제시합니다. 설계만 요청되면 구현하지 않습니다. |
+| [Verification](../skills/engineering/swe/playbooks/verification.md) | verify로 계획·실행·검증 코드 작성 중 요청된 결과를 제공합니다. 제품 코드 수정은 별도 요청 범위를 따릅니다. |
+| [Review](../skills/engineering/swe/playbooks/review.md) | autoreview가 읽기 전용 검토 또는 허용된 수정 반복을 소유합니다. 검토만 요청되면 프로젝트를 실행하거나 수정하지 않습니다. |
+
+TDD는 별도 플레이북이 아닌 verify의 test-first 경로입니다. 작업 분해, 저장소 설정, PR 생성·병합, 충돌 해결, worktree 관리, 성능 실험, 장기 오케스트레이션에는 SWE 전용 플레이북을 두지 않습니다. 기존 스킬은 직접 사용할 수 있습니다. 구현 경로에서는 implement의 기존 체크포인트·커밋·PR 정책과 사용자의 명시적인 제한을 따릅니다.
 
 ## 원칙의 단일 소유
 
@@ -44,6 +58,8 @@
 - 읽기 전용 리뷰의 권한과 기존 실행 스킬의 체크포인트·커밋·최종 검증 의무는 유지합니다. 새 스킬이 이를 완화하지 않습니다.
 
 ## 호출과 설치
+
+swe는 Claude Code의 `disable-model-invocation: true`와 Codex의 `policy.allow_implicit_invocation: false`로 자동 호출을 막습니다. `/swe` 또는 `$swe`로 시작한 뒤에는 선택한 플레이북이 명시한 파일을 직접 읽습니다. 이 설정은 하위 스킬의 자동 호출 정책을 바꾸지 않습니다.
 
 architect와 verify는 Claude Code의 `disable-model-invocation: true`와 Codex의 `policy.allow_implicit_invocation: false`로 자동 호출을 막습니다. 사용자가 스킬을 명시적으로 호출할 수 있으며, 실행 스킬은 필요한 단계에서 두 SKILL.md를 직접 읽습니다.
 

@@ -3,6 +3,7 @@
 개인 에이전트 지침과 스킬을 관리합니다.
 
 - [엔지니어링 스킬 지도](docs/engineering-skills.md): 역할, 호출 조건, 원칙 소유권과 확장 영역
+- [SWE](skills/engineering/swe/SKILL.md): 명시적으로 호출하는 엔지니어링 진입점과 여섯 플레이북
 - [Architect](skills/engineering/architect/SKILL.md): 계약·상태·소유권·경계 설계
 - [Verify](skills/engineering/verify/SKILL.md): 변경·회귀·test-first 검증
 - [Autoreview](skills/engineering/autoreview/SKILL.md): 독립 코드 검토와 수정 완료 관리
