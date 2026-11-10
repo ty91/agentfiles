@@ -1,7 +1,7 @@
 ---
 name: verify
 description: Establish and run evidence for changed behavior, regression fixes, and behavior-preserving refactors. Use when choosing or writing tests, assessing test value, checking real system boundaries, or asked for TDD, test-first, or red-green-refactor.
-disable-model-invocation: false
+disable-model-invocation: true
 ---
 
 # Verify

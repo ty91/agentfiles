@@ -3,4 +3,4 @@ interface:
   short_description: "Design contracts, state, ownership, and boundaries"
   default_prompt: "Use $architect to ground the change, derive contracts from caller usage, compare distinct designs, and define verification before implementing."
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

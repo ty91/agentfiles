@@ -1,7 +1,7 @@
 ---
 name: architect
 description: Design contracts, domain and state models, ownership, and module boundaries before implementing structural changes. Use for API design, architecture decisions, domain modeling, or refactors that redistribute responsibilities. Compare distinct designs and verify their contracts.
-disable-model-invocation: false
+disable-model-invocation: true
 ---
 
 # Architect

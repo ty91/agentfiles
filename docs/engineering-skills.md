@@ -45,7 +45,7 @@
 
 ## 호출과 설치
 
-architect와 verify는 관련 작업에서 자동 호출을 허용합니다. Claude Code의 `disable-model-invocation: false`와 Codex의 `policy.allow_implicit_invocation: true`를 일치시킵니다. 기존 실행 스킬도 필요한 단계에서 두 SKILL.md를 직접 읽도록 연결합니다.
+architect와 verify는 Claude Code의 `disable-model-invocation: true`와 Codex의 `policy.allow_implicit_invocation: false`로 자동 호출을 막습니다. 사용자가 스킬을 명시적으로 호출할 수 있으며, 실행 스킬은 필요한 단계에서 두 SKILL.md를 직접 읽습니다.
 
 `implement`와 `implement-issue`의 명시적 호출 정책은 유지합니다. 테스트 주도 개발 요청은 verify의 test-first 경로로 처리하며 별도의 TDD 진입점은 두지 않습니다.
 
