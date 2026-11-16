@@ -1,0 +1,6 @@
+interface:
+  display_name: "Hillclimb"
+  short_description: "Improve one metric through verified experiments"
+  default_prompt: "Use $hillclimb to ground the workload, fix the target and attempt floor, validate and freeze measurement, and iterate through recorded keep-or-revert experiments."
+policy:
+  allow_implicit_invocation: false

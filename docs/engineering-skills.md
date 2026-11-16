@@ -10,6 +10,7 @@
 | 실행 | [implement](../skills/engineering/implement/SKILL.md), [implement-issue](../skills/engineering/implement-issue/SKILL.md) | 할당된 구현 작업의 범위·체크포인트·완료를 관리합니다. 설계는 architect, 검증은 verify, 검토는 autoreview에 연결합니다. |
 | 설계 | [architect](../skills/engineering/architect/SKILL.md) | 계약·상태·소유권·모듈 책임을 만들거나 변경할 때 사용합니다. 호출 사례에서 구조를 도출하고 서로 다른 후보를 비교해 계약·선택 이유·검증 방법을 확정합니다. |
 | 검증 | [verify](../skills/engineering/verify/SKILL.md) | 행동·불변식·경계의 증거를 선택하고 실행합니다. 변경 검증, 회귀 검증, 명시적으로 요청된 test-first 경로를 소유합니다. 검증됨·실패·미검증을 구분합니다. |
+| 반복 개선 | [hillclimb](../skills/engineering/hillclimb/SKILL.md) | 명시적으로 호출하여 하나의 지표를 목표와 최소 시도 횟수에 따라 개선합니다. 측정 도구 검증·고정, 가설별 채택·원복, 결정 기록과 정체 대응을 소유하며 설계는 architect, 회귀 검증은 verify에 연결합니다. |
 | 리뷰 | [autoreview](../skills/engineering/autoreview/SKILL.md), [code-reviewer](../codex/agents/code-reviewer.toml) | 검토자는 읽기 전용으로 결함과 검증 공백을 판단합니다. 부모가 실행·수정·재검증을 소유합니다. 실행 증거가 없다는 이유만으로 코드 결함을 만들어내지 않습니다. |
 | 문서 | [documentation](../skills/engineering/documentation/SKILL.md) | 확정된 계약·용어·운영 제약·선택 이유가 지속돼야 할 때 기존 문서를 갱신합니다. 설계 결정은 architect가 소유합니다. |
 
@@ -55,13 +56,14 @@ TDD는 별도 플레이북이 아닌 verify의 test-first 경로입니다. 작�
 
 - architect는 [도메인 용어](../skills/engineering/architect/domain-modeling.md), [비동기 완료·복구](../skills/engineering/architect/async-work.md), [호출자 복잡성](../skills/engineering/architect/reducing-caller-complexity.md), [대안 비교](../skills/engineering/architect/comparing-alternatives.md), [UI 구성](../skills/engineering/architect/compound-components.md)을 포함합니다.
 - verify는 [테스트 계층과 의존성](../skills/engineering/verify/test-design.md), [실제 브라우저](../skills/engineering/verify/frontend.md), [DB·작업 복구](../skills/engineering/verify/backend.md), [회귀 검증](../skills/engineering/verify/regression.md), [test-first](../skills/engineering/verify/test-first.md)를 포함합니다.
+- hillclimb은 측정의 신뢰성, 반복 실험 순서, 판단 기록을 본문에서 정의합니다. 성능 개선과 성능을 유지하는 단순화를 구분하며 목표 미달 종료를 성공으로 보고하지 않습니다. 위임·커밋·PR은 사용자의 권한 범위를 따릅니다.
 - 읽기 전용 리뷰의 권한과 기존 실행 스킬의 체크포인트·커밋·최종 검증 의무는 유지합니다. 새 스킬이 이를 완화하지 않습니다.
 
 ## 호출과 설치
 
 swe는 Claude Code의 `disable-model-invocation: true`와 Codex의 `policy.allow_implicit_invocation: false`로 자동 호출을 막습니다. `/swe` 또는 `$swe`로 시작한 뒤에는 선택한 플레이북이 명시한 파일을 직접 읽습니다. 이 설정은 하위 스킬의 자동 호출 정책을 바꾸지 않습니다.
 
-architect와 verify는 Claude Code의 `disable-model-invocation: true`와 Codex의 `policy.allow_implicit_invocation: false`로 자동 호출을 막습니다. 사용자가 스킬을 명시적으로 호출할 수 있으며, 실행 스킬은 필요한 단계에서 두 SKILL.md를 직접 읽습니다.
+architect, verify, hillclimb은 Claude Code의 `disable-model-invocation: true`와 Codex의 `policy.allow_implicit_invocation: false`로 자동 호출을 막습니다. 사용자가 스킬을 명시적으로 호출할 수 있으며, 실행 스킬은 필요한 단계에서 해당 SKILL.md를 직접 읽습니다. hillclimb은 `/hillclimb` 또는 `$hillclimb`으로 시작하는 독립 스킬이며 SWE 플레이북을 추가하지 않습니다.
 
 `implement`와 `implement-issue`의 명시적 호출 정책은 유지합니다. 테스트 주도 개발 요청은 verify의 test-first 경로로 처리하며 별도의 TDD 진입점은 두지 않습니다.
 
@@ -82,4 +84,4 @@ architect와 verify는 Claude Code의 `disable-model-invocation: true`와 Codex�
 
 ## 적용 범위
 
-pstack의 설계 후보 비교, 설계 결함 점검, 선별한 여섯 원칙, 회귀 검증 절차를 적용합니다. 전체 실행 체계, 고정 모델 배치, 필수 병렬 실행, 자동 병합, 모든 작업에 대한 대규모 검증은 포함하지 않습니다.
+pstack의 설계 후보 비교, 설계 결함 점검, 선별한 여섯 원칙, 회귀 검증 절차와 hillclimb의 측정·반복 개선 방법론을 적용합니다. 전체 실행 체계, 고정 모델 배치, 필수 병렬 실행, 자동 병합, 모든 작업에 대한 대규모 검증은 포함하지 않습니다.

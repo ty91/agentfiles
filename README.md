@@ -6,6 +6,7 @@
 - [SWE](skills/engineering/swe/SKILL.md): 명시적으로 호출하는 엔지니어링 진입점과 여섯 플레이북
 - [Architect](skills/engineering/architect/SKILL.md): 계약·상태·소유권·경계 설계
 - [Verify](skills/engineering/verify/SKILL.md): 변경·회귀·test-first 검증
+- [Hillclimb](skills/engineering/hillclimb/SKILL.md): 고정된 측정 조건에서 하나의 지표를 반복 개선
 - [Autoreview](skills/engineering/autoreview/SKILL.md): 독립 코드 검토와 수정 완료 관리
 
 `setup.sh`는 지침과 에이전트 설정을 연결하고, 스킬을 Codex와 Claude Code에 전역 설치합니다. 변경 없이 설치 작업을 확인하려면 `./setup.sh --dry-run`을 사용합니다.
