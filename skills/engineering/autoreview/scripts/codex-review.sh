@@ -18,7 +18,6 @@ LOG="$RUN_DIR/codex.log"
 if ! codex exec \
   -C "$WORKDIR" \
   -s read-only \
-  -m gpt-5.6-sol \
   -c model_reasoning_effort="high" \
   -c "developer_instructions=$INSTRUCTIONS" \
   -o "$REVIEW" \
